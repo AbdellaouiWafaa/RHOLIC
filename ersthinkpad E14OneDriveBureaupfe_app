@@ -1,0 +1,69 @@
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 79c113f..0ee2826 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -11,6 +11,8 @@[m
+ .svn/[m
+ .swiftpm/[m
+ migrate_working_dir/[m
+[32m+[m[32mdesktop.ini[m
+[32m+[m[32mThumbs.db[m
+ [m
+ # IntelliJ related[m
+ *.iml[m
+[36m@@ -21,7 +23,7 @@[m [mmigrate_working_dir/[m
+ # The .vscode folder contains launch configuration and tasks you configure in[m
+ # VS Code which you may wish to be included in version control, so this line[m
+ # is commented out by default.[m
+[31m-#.vscode/[m
+[32m+[m[32m.vscode/[m
+ [m
+ # Flutter/Dart/Pub related[m
+ **/doc/api/[m
+[36m@@ -29,9 +31,13 @@[m [mmigrate_working_dir/[m
+ .dart_tool/[m
+ .flutter-plugins[m
+ .flutter-plugins-dependencies[m
+[32m+[m[32m.packages[m
+ .pub-cache/[m
+ .pub/[m
+ /build/[m
+[32m+[m[32mbuild/[m
+[32m+[m[32mflutter_export_environment.sh[m
+[32m+[m[32mflutter_export_environment.bat[m
+ [m
+ # Symbolication related[m
+ app.*.symbols[m
+[36m@@ -39,7 +45,31 @@[m [mapp.*.symbols[m
+ # Obfuscation related[m
+ app.*.map.json[m
+ [m
+[31m-# Android Studio will place build artifacts here[m
+[32m+[m[32m# Android related[m
+[32m+[m[32mandroid/.gradle/[m
+[32m+[m[32mandroid/app/build/[m
+[32m+[m[32mandroid/local.properties[m
+ /android/app/debug[m
+ /android/app/profile[m
+ /android/app/release[m
+[32m+[m
+[32m+[m[32m# iOS related[m
+[32m+[m[32mios/Pods/[m
+[32m+[m[32mios/Flutter/Flutter.framework[m
+[32m+[m[32mios/Flutter/Flutter.podspec[m
+[32m+[m[32mios/Flutter/App.framework[m
+[32m+[m[32mios/Flutter/Generated.xcconfig[m
+[32m+[m[32mios/.symlinks/[m
+[32m+[m[32mios/Flutter/ephemeral/[m
+[32m+[m
+[32m+[m[32m# macOS related[m
+[32m+[m[32mmacos/Flutter/ephemeral/[m
+[32m+[m
+[32m+[m[32m# Windows related[m
+[32m+[m[32mwindows/flutter/ephemeral/[m
+[32m+[m
+[32m+[m[32m# Linux related[m
+[32m+[m[32mlinux/flutter/ephemeral/[m
+[32m+[m
+[32m+[m[32m# Web related[m
+[32m+[m[32mweb/flutter/ephemeral/[m
