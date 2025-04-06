@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pfe_app/components/screens/code_enter.dart';
+import 'package:pfe_app/components/screens/dashboard.dart';
+import 'package:pfe_app/components/screens/documents.dart';
 import 'package:pfe_app/components/screens/password_reset.dart';
-import 'package:pfe_app/components/screens/welcome_page.dart';
+
 
 class CreateAccountScreen extends StatelessWidget {
   const CreateAccountScreen({super.key});
@@ -22,25 +25,14 @@ class CreateAccountScreen extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen(),
-                      ),
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ResetPasswordScreen(),
-                      ),
-                    );
-                  },
+                  onPressed: ()  {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DashboardScreen(),
+                                  ),
+                                );
+                              },
                 ),
               ],
             ),
@@ -96,7 +88,14 @@ class CreateAccountScreen extends StatelessWidget {
                                     ),
                                     minimumSize: const Size(double.infinity, 50),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UploadScreen(),
+                      ),
+                    );
+                  },
                                   child: Text(
                                     "Continue",
                                     style: GoogleFonts.poppins(
@@ -136,7 +135,14 @@ class CreateAccountScreen extends StatelessWidget {
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const OtpScreen(),
+                                  ),
+                                );
+                              },
                                       child: Text(
                                         " sign in",
                                         style: GoogleFonts.poppins(
@@ -150,7 +156,14 @@ class CreateAccountScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 5),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ResetPasswordScreen(),
+                                  ),
+                                );
+                              },
                                   child: Text(
                                     "forgot your password",
                                     style: GoogleFonts.poppins(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pfe_app/components/screens/notifications.dart';
-import 'package:pfe_app/components/screens/profile_settings.dart';
+import 'package:pfe_app/components/screens/personnel_infos.dart';
 
 void main() {
   runApp(MaterialApp(

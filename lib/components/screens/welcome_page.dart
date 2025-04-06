@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/login.dart';
+import 'package:pfe_app/components/screens/first_page.dart';
+
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -16,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               // Logo
               Image.asset(
-                'C:\\Users\\thinkpad E14\\OneDrive\\Bureau\\pfe_app\\assets\\images\\both.png', // Replace with your logo path
+                "assets/images/both.png", // Replace with your logo path
                 height: 250,
               ),
               const SizedBox(height: 0), // Reduced space between logo and text
@@ -57,12 +58,12 @@ class WelcomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CreateAccountScreen(), // Replace with your next page
+                      builder: (context) => const FirstpageScreen(), // Replace with your next page
                     ),
                   );
                 },
                 child: const Icon(
-                  Icons.arrow_forward, // Forward arrow icon
+                  Icons.arrow_forward_ios, // Forward arrow icon
                   color: Color.fromARGB(255, 165, 133, 36),
                   size: 40, // Icon size
                 ),

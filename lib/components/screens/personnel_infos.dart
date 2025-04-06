@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pfe_app/components/screens/costomize_interface.dart';
+import 'package:pfe_app/components/screens/exit.dart';
 import 'package:pfe_app/components/screens/notifications.dart';
-import 'package:pfe_app/components/screens/password_reset.dart';
-import 'package:pfe_app/components/screens/edit_profile.dart'; // Import the edit profile screen
+import 'package:pfe_app/components/screens/edit_profile.dart';
+import 'package:pfe_app/components/screens/profile.dart';
+import 'package:pfe_app/components/screens/settings.dart'; // Import the edit profile screen
 
 void main() {
   runApp(MaterialApp(
@@ -29,15 +32,17 @@ class ProfileSettingsScreen extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: () {Navigator.push(
+                  onPressed: () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ResetPasswordScreen(),
+                        builder: (context) => const ProfileScreen(),
                       ),
-                    );},
+                    );
+                  },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications, color: Color.fromARGB(255, 165, 133, 36)),
+                  icon: const Icon(Icons.notifications_none, color: Color.fromARGB(255, 165, 133, 36)),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -70,14 +75,35 @@ class ProfileSettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            buildMenuItem(FontAwesomeIcons.palette, "Customizing interface"), // Replaced paintBrush with palette
-            buildMenuItem(Icons.settings, "Setting"),
+            buildMenuItem(FontAwesomeIcons.palette, "Customizing interface",onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CustomizeInterfaceScreen(),
+                  ),
+                );
+              },), // Replaced paintBrush with paletteSettingsScreen
+            buildMenuItem(Icons.settings, "Setting",onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsScreen(),
+                  ),
+                );
+              },),
             const SizedBox(height: 20),
             buildMenuItem(
-              FontAwesomeIcons.rightFromBracket, // Replaced signOutAlt with rightFromBracket
+              FontAwesomeIcons.rightFromBracket, // ConfirmLogoutScreenReplaced signOutAlt with rightFromBracket
               "Log out",
               iconColor: Colors.red,
-              textColor: Colors.white,
+              textColor: Colors.white,onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmLogoutScreen(),
+                  ),
+                );
+              },
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pfe_app/components/screens/login.dart';
-import 'package:pfe_app/components/screens/profile_settings.dart';
+
 
 void main() {
   runApp(MaterialApp(
@@ -37,17 +37,7 @@ class ResetPasswordScreen extends StatelessWidget {
                     );
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProfileSettingsScreen(),
-                      ),
-                    );
-                  },
-                ),
+                
               ],
             ),
             const SizedBox(height: 20),

@@ -1,0 +1,205 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:pfe_app/components/screens/book_details.dart';
+import 'package:pinput/pinput.dart';
+
+class OtpScreen extends StatelessWidget {
+  const OtpScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 10, 15, 58),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 10, 15, 58),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 165, 133, 36),
+            size: 30,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'Sign In',
+          style: GoogleFonts.poppins(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: 190), // Added SizedBox to push the container up
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white10,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Title Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.email,
+                              color: Color.fromARGB(255, 165, 133, 36),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "Check Your Email",
+                              style: GoogleFonts.poppins(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(
+                            Icons.close,
+                            color: Color.fromARGB(255, 165, 133, 36),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "We have sent you the code!",
+                      style: GoogleFonts.poppins(color: Colors.white70),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // OTP input
+                    Pinput(
+                      length: 4,
+                      defaultPinTheme: PinTheme(
+                        width: 50,
+                        height: 50,
+                        textStyle: GoogleFonts.poppins(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white10,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 165, 133, 36),
+                          ),
+                        ),
+                      ),
+                      onCompleted: (pin) {
+                        debugPrint("OTP Entered: $pin");
+                      },
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // Resend Text
+                    GestureDetector(
+                      onTap: () {
+                        // Here you trigger resend logic
+                        debugPrint("OTP Resent to email");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("OTP resent")),
+                        );
+                      },
+                      child: Text(
+                        "Didn't get a code? Click to resend",
+                        style: GoogleFonts.poppins(
+                          color: Color.fromARGB(255, 165, 133, 36),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: Color.fromARGB(255, 165, 133, 36)),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: const Text(
+                              "Cancel",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 165, 133, 36),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Navigate to next screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const BookListScreen(),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color.fromARGB(255, 165, 133, 36),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: const Text(
+                              "Verify",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ✅ Temporary Success Screen
+class SuccessScreen extends StatelessWidget {
+  const SuccessScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.green[100],
+      body: const Center(
+        child: Text(
+          "Verification Successful!",
+          style: TextStyle(fontSize: 22),
+        ),
+      ),
+    );
+  }
+}
