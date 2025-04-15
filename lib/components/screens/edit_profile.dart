@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/notifications.dart';
 import 'package:pfe_app/components/screens/personnel_infos.dart';
 
 void main() {
@@ -59,25 +58,20 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     );
                   },
                 ),
-                Text(
-                  "Edit profile",
-                  style: GoogleFonts.poppins(
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "Edit profile",
+                      style: GoogleFonts.poppins(
+                        fontSize: 27,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.notifications, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationSettingsScreen(),
-                      ),
-                    );
-                  },
-                ),
+                const SizedBox(width: 48),
+                
               ],
             ),
             const SizedBox(height: 20),

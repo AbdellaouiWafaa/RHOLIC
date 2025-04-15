@@ -23,7 +23,7 @@ class LanguageScreen extends StatelessWidget {
         children: [
           const Padding(
             padding: EdgeInsets.all(16.0),
-            child: Text('Suggested', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 25)),
+            child: Text('Only Avaible', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 25)),
           ),
           // Example of suggested languages (no language switching)
           ListTile(
@@ -35,7 +35,7 @@ class LanguageScreen extends StatelessWidget {
           const Divider(color: Colors.grey),
           const Padding(
             padding: EdgeInsets.all(16.0),
-            child: Text('Others', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 25)),
+            child: Text('Soon', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 25)),
           ),
           // Example of other languages (no language switching)
           ListTile(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pfe_app/components/screens/welcome_page.dart';
 
 
+
 void main() {
   runApp(const ReadaholicApp());
 }
@@ -15,7 +16,7 @@ class ReadaholicApp extends StatelessWidget {
       title: 'Readaholic',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Inter', // Use a clean sans-serif font like Inter
+        fontFamily: 'Inter', 
         primarySwatch: Colors.blue,
       ),
       home: WelcomeScreen(),

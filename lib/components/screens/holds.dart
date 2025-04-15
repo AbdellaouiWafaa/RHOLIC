@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:pfe_app/components/screens/books_shelf.dart';
 import 'package:pfe_app/components/screens/chatbox.dart';
 import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/exit.dart';
-import 'package:pfe_app/components/screens/holds.dart';
+import 'package:pfe_app/components/screens/notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pfe_app/components/screens/profile.dart';
-import 'package:pfe_app/components/screens/user_notif.dart';
 
-
-
-
-class BookListScreen extends StatefulWidget {
-  const BookListScreen({super.key});
+class HoldsListScreen extends StatefulWidget {
+  const HoldsListScreen({super.key});
 
   @override
-  _BookListScreenState createState() => _BookListScreenState();
+  _HoldsListScreenState createState() => _HoldsListScreenState();
 }
 
-class _BookListScreenState extends State<BookListScreen> {
+class _HoldsListScreenState extends State<HoldsListScreen> {
   int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
@@ -42,7 +38,7 @@ class _BookListScreenState extends State<BookListScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ConfirmLogoutScreen(),
+          builder: (context) => const DashboardScreen(),
         ),
       );
     },
@@ -64,7 +60,7 @@ class _BookListScreenState extends State<BookListScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  UserNotifScreen(),
+            builder: (context) => const NotificationSettingsScreen(),
           ),
         );
       },
@@ -121,22 +117,23 @@ class _BookListScreenState extends State<BookListScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _buildChip('Loans', '3', Colors.white, const Color.fromARGB(255, 10, 15, 58)),
+                            _buildChip('Loans', '3', const Color.fromARGB(255, 10, 15, 58),  Colors.white,
+                             onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const BookListScreen(),
+                                  ),
+                                );
+                              },
+                            ),
                             SizedBox(width: screenWidth * 0.08),
                             SizedBox(width: screenWidth * 0.08),
                             _buildChip(
                               'Holds',
                               '3',
-                              Colors.black,
-                              Colors.grey[300]!,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HoldsListScreen(),
-                                  ),
-                                );
-                              },
+                              Colors.white, const Color.fromARGB(255, 10, 15, 58),
+
                             ),
                           ],
                         ),
@@ -146,7 +143,8 @@ class _BookListScreenState extends State<BookListScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           padding: EdgeInsets.zero,
                           children: [
-                            _buildBookItem(1, 'Alice in Wonderland', 'Lewis Carroll', 'assets/images/alice.png', 0.02, 2, screenWidth),
+                            _buildBookItem(1, 'Dracula', 'Bram Stoker', 'assets/images/dracula.png', 0.02, 2, screenWidth),
+                            _buildBookItem(2, 'Frankenstein', 'Mary Shelley', 'assets/images/frankenstein.png', 0.02, 2, screenWidth),
                           ],
                         ),
                       ],
@@ -169,7 +167,7 @@ class _BookListScreenState extends State<BookListScreen> {
               child: BottomAppBar(
                 shape: const CircularNotchedRectangle(),
                 notchMargin: 5.0,
-                color: const Color.fromARGB(181, 4, 9, 55),
+                color: const Color.fromARGB(200, 10, 15, 58),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Row(
@@ -338,6 +336,33 @@ class _BookListScreenState extends State<BookListScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class HoldsScreen extends StatelessWidget {
+  final List<Map<String, String>> bookmarkedBooks;
+
+  const HoldsScreen({super.key, required this.bookmarkedBooks});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Bookmarked Books'),
+        backgroundColor: const Color.fromARGB(255, 10, 15, 58),
+      ),
+      body: ListView.builder(
+        itemCount: bookmarkedBooks.length,
+        itemBuilder: (context, index) {
+          final book = bookmarkedBooks[index];
+          return ListTile(
+            leading: Image.asset(book['image']!, width: 50, height: 50),
+            title: Text(book['title']!),
+            subtitle: Text(book['author']!),
+          );
+        },
       ),
     );
   }

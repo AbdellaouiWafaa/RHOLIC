@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 // --- Define constant colors with opacity ---
-const Color _cardBackgroundColor = Color.fromRGBO(255, 255, 255, 0.1); // White with 10% opacity
+const Color _cardBackgroundColor =  Color.fromARGB(121, 32, 46, 172); // White with 10% opacity
 const Color _secondaryTextColor = Color.fromRGBO(255, 255, 255, 0.7); // White with 70% opacity
 const Color _progressBackgroundColor = Color.fromRGBO(255, 255, 255, 0.3); // White with 30% opacity
 const Color _percentageTextColor = Color.fromRGBO(255, 255, 255, 0.8); // White with 80% opacity
-const Color _appBackgroundColor = Color(0xFF0A0E3F); // Dark blue background
+const Color _appBackgroundColor =   Color.fromARGB(121, 32, 46, 172); // Dark blue background
 // --- End of constant color definitions ---
 
 

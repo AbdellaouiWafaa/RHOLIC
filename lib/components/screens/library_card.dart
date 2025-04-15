@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/notifications.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,28 +10,27 @@ class CardScreen extends StatelessWidget {
     final ScrollController scrollController = ScrollController(); // Added ScrollController
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A32),
+      backgroundColor: const Color.fromARGB(121, 32, 46, 172),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A32),
-        elevation: 0,
+        backgroundColor: const Color.fromARGB(121, 32, 46, 172),
+        
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
           onPressed: () {
             Navigator.pop(context); // Navigate back to the previous screen
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none, color: Color.fromARGB(255, 165, 133, 36)),
-            onPressed: () {
-              Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationSettingsScreen(),
-                      ),
-                    );
-            },
+        title: const Text(
+          'Your Card',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
+        ),
+         centerTitle: true,
+        actions: [
+         
+          
         ],
       ),
       body: Center(

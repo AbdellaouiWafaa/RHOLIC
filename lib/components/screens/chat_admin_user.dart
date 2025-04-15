@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart'; // Add this in pubspec.yaml as a dependency
+import 'package:intl/intl.dart'; 
 
 class AdminChatScreen extends StatelessWidget {
   const AdminChatScreen({super.key});
@@ -27,16 +27,7 @@ class AdminChatScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: Color.fromARGB(255, 165, 133, 36),
-              size: 30,
-            ),
-            onPressed: () {},
-          ),
-        ],
+       
       ),
       body: const Padding(
         padding: EdgeInsets.all(16.0),
@@ -58,26 +49,6 @@ class _BookDiscussionState extends State<BookDiscussion> {
   final ScrollController scrollController = ScrollController();
 
   final List<Map<String, dynamic>> messages = [
-    {
-      "user": "Admin",
-      "message": "Hello, this is City Library Support. How can I help?",
-      "timestamp": DateTime.now().subtract(const Duration(minutes: 10)),
-    },
-    {
-      "user": "Chaima",
-      "message": "your system says I didn’t return ‘1984’, but I did! Why am I being fined?",
-      "timestamp": DateTime.now().subtract(const Duration(minutes: 8)),
-    },
-    {
-      "user": "Admin",
-      "message": "I’ve placed a hold on the fine and will check our after-hours bin. Expect an update within 24 hours",
-      "timestamp": DateTime.now().subtract(const Duration(minutes: 6)),
-    },
-    {
-      "user": "Chaima",
-      "message": "Thanks! I’ll wait for your email",
-      "timestamp": DateTime.now().subtract(const Duration(minutes: 5)),
-    },
   ];
 
   void sendMessage() {

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pfe_app/components/screens/books_shelf.dart';
 import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/notifications.dart';
+import 'package:pfe_app/components/screens/exit.dart';
 import 'package:pfe_app/components/screens/profile.dart';
+import 'package:pfe_app/components/screens/user_notif.dart';
 
 class ChatBoxScreen extends StatelessWidget {
   const ChatBoxScreen({super.key});
@@ -11,7 +12,7 @@ class ChatBoxScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(121, 32, 46, 172),
+      backgroundColor: const Color.fromARGB(255, 10, 15, 58),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -22,10 +23,15 @@ class ChatBoxScreen extends StatelessWidget {
             size: 30,
           ),
           onPressed: () {
-            Navigator.pop(context);
-          },
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ConfirmLogoutScreen(),
+                ),
+              );
+            },
         ),
-        actions: [
+        actions: [//
           IconButton(
             icon: const Icon(
               Icons.notifications_outlined,
@@ -36,7 +42,7 @@ class ChatBoxScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsScreen(),
+                  builder: (context) =>  UserNotifScreen(),
                 ),
               );
             },
@@ -173,7 +179,6 @@ class _BookDiscussionState extends State<BookDiscussion> {
                 FloatingActionButton(
                   backgroundColor: const Color(0xFF578FCA),
                   onPressed: () {
-                    // Add your send message logic here
                     if (messageController.text.isNotEmpty) {
                       // Add the new message to the list
                       setState(() {
@@ -273,7 +278,7 @@ class _BottomNavigation extends State<BottomNavigation> {
         child: BottomAppBar(
           shape: const CircularNotchedRectangle(),
           notchMargin: 5.0,
-          color: const Color.fromARGB(200, 10, 15, 58),
+          color: const Color.fromARGB(104, 29, 27, 86),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(

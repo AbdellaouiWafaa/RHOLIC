@@ -51,21 +51,38 @@ class WelcomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 300), // Space between text and icon
-              // Navigation Icon
+              const SizedBox(height: 370), 
+              
               GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const FirstpageScreen(), // Replace with your next page
+                      builder: (context) => const FirstpageScreen(), 
                     ),
                   );
                 },
-                child: const Icon(
-                  Icons.arrow_forward_ios, // Forward arrow icon
-                  color: Color.fromARGB(255, 165, 133, 36),
-                  size: 40, // Icon size
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FirstpageScreen(),
+                      ),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 165, 133, 36), // Gold color
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                  ),
+                  child: const Text(
+                    "Get Started",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],

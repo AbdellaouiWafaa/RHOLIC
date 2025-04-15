@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pfe_app/components/screens/costomize_interface.dart';
 import 'package:pfe_app/components/screens/exit.dart';
-import 'package:pfe_app/components/screens/notifications.dart';
 import 'package:pfe_app/components/screens/edit_profile.dart';
 import 'package:pfe_app/components/screens/profile.dart';
 import 'package:pfe_app/components/screens/settings.dart'; // Import the edit profile screen
@@ -21,7 +20,7 @@ class ProfileSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A32),
+      backgroundColor: const Color.fromARGB(121, 32, 46, 172),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
         child: Column(
@@ -41,17 +40,7 @@ class ProfileSettingsScreen extends StatelessWidget {
                     );
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.notifications_none, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationSettingsScreen(),
-                      ),
-                    );
-                  },
-                ),
+                
               ],
             ),
             const SizedBox(height: 20),

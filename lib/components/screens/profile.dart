@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-// For debugPrint
-import 'package:flutter/services.dart'; // For SystemUiOverlayStyle
+import 'package:flutter/services.dart';
 import 'package:pfe_app/components/screens/books_shelf.dart'; // Contains BookListScreen
 import 'package:pfe_app/components/screens/chat_admin_user.dart';
 import 'package:pfe_app/components/screens/chatbox.dart';
 import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/first_page.dart';
+import 'package:pfe_app/components/screens/exit.dart';
 import 'package:pfe_app/components/screens/history.dart';   
 import 'package:pfe_app/components/screens/library_card.dart';
 import 'package:pfe_app/components/screens/personnel_infos.dart';
+import 'package:pfe_app/components/screens/user_notif.dart';
 import 'package:pfe_app/components/screens/wishlist.dart';
-import 'package:pfe_app/components/screens/notifications.dart'; 
+
 
 
 void main() {
@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 27, 104), // Match primaryColor?
+        scaffoldBackgroundColor: const Color.fromARGB(255, 10, 15, 58), // Match primaryColor?
         primarySwatch: Colors.blue,
         colorScheme: ColorScheme.dark(
-           primary: const Color.fromARGB(255, 18, 27, 104), // Match primaryColor
+           primary: const Color.fromARGB(255, 10, 15, 58), // Match primaryColor
            secondary: Color.fromARGB(255, 165, 133, 36), // Match accentColor
         )
       ),
@@ -48,8 +48,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 3;
 
-  // --- Colors ---
-  final Color primaryColor = const Color.fromARGB(255, 27, 40, 154);
+
+  final Color primaryColor = const Color.fromARGB(255, 10, 15, 58);
   final Color accentColor = Color.fromARGB(255, 165, 133, 36);
   final Color textColor = Colors.white;
   final Color bottomNavBarColor = const Color.fromARGB(121, 32, 46, 172);
@@ -124,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _buildProfileListItem(context, Icons.history, 'History', accentColor, textColor, subduedIconColor),
                         _buildProfileListItem(context, Icons.list_alt, 'book loan list', accentColor, textColor, subduedIconColor),
                         _buildProfileListItem(context, Icons.checklist_rtl, 'Wishlist', accentColor, textColor, subduedIconColor),
-                        _buildProfileListItem(context, Icons.chat_bubble_outline, 'Chat Box', accentColor, textColor, subduedIconColor),
+                        _buildProfileListItem(context, Icons.chat_bubble_outline, 'Admin Chat', accentColor, textColor, subduedIconColor),
                       ],
                     ),
                   ),
@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     IconButton(
                       icon: Icon(Icons.arrow_back, color: accentColor),
                       onPressed: () {
-                         Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstpageScreen()));
+                         Navigator.push(context, MaterialPageRoute(builder: (context) => const ConfirmLogoutScreen()));
                       },
                     ),
                     Flexible(
@@ -153,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icon(Icons.notifications_none, color: accentColor),
                       // Navigate to Notifications screen
                       onPressed: () {
-                         Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationSettingsScreen()));
+                         Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserNotifScreen()));
                       },
                     ),
                   ],
@@ -282,7 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           case 'Wishlist':
             targetScreen = const WishListScreen(); // Assumes WishlistScreen is imported
             break;
-          case 'Chat Box':
+          case 'Admin Chat':
             targetScreen = const AdminChatScreen(); // Assumes ChatBoxScreen is imported
             break;
           default:

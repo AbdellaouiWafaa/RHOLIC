@@ -5,195 +5,228 @@ import 'package:pfe_app/components/screens/dashboard.dart';
 import 'package:pfe_app/components/screens/documents.dart';
 import 'package:pfe_app/components/screens/password_reset.dart';
 
-
-class CreateAccountScreen extends StatelessWidget {
+class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
+
+  @override
+  _CreateAccountScreenState createState() => _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _ccpController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _usernameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _ccpController.dispose();
+    super.dispose();
+  }
+
+  void _validateAndContinue() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const UploadScreen(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A32), // Dark blue background
-      body: 
-      Padding(
+      body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: ()  {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const DashboardScreen(),
-                                  ),
-                                );
-                              },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20), // Spacing between arrows and "Create Account"
-            Center(
-              child: Text(
-                "Create Account",
-                style: GoogleFonts.poppins(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  
-                ),
-              ),
-            ),
-            const SizedBox(height: 2), // Same spacing between "Create Account" and the container
-            Expanded(
-              child: Stack(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(25),
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  blurRadius: 8,
-                                  spreadRadius: 1,
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                _buildTextField("Name"),
-                                _buildTextField("Username"),
-                                _buildTextField("Email"),
-                                _buildTextField("Phone number"),
-                                _buildTextField("CCP number account", isPassword: true),
-                                const SizedBox(height: 12),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFC4A05D), // Gold color
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    minimumSize: const Size(double.infinity, 50),
-                                  ),
-                                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const UploadScreen(),
-                      ),
-                    );
-                  },
-                                  child: Text(
-                                    "Continue",
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 19),
-                                Row(
-                                  children: [
-                                    const Expanded(child: Divider(color: Colors.black)),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                                      child: Text(
-                                        "or",
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 17,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                    ),
-                                    const Expanded(child: Divider(color: Colors.black)),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                _buildGoogleButton(),
-                                const SizedBox(height: 15),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "you have account ?",
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const OtpScreen(),
-                                  ),
-                                );
-                              },
-                                      child: Text(
-                                        " sign in",
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          color: const Color.fromARGB(255, 198, 120, 2),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                GestureDetector(
-                                  onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ResetPasswordScreen(),
-                                  ),
-                                );
-                              },
-                                  child: Text(
-                                    "forgot your password",
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 198, 120, 2),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DashboardScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 20), // Spacing between arrows and "Create Account"
+              Center(
+                child: Text(
+                  "Create Account",
+                  style: GoogleFonts.poppins(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 2), // Same spacing between "Create Account" and the container
+              Expanded(
+                child: Stack(
+                  children: [
+                    Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(25),
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 8,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  _buildTextField("Name", _nameController),
+                                  _buildTextField("Username", _usernameController),
+                                  _buildTextField("Email", _emailController, isEmail: true),
+                                  _buildTextField("Phone number", _phoneController, isPhone: true),
+                                  _buildTextField("CCP number account", _ccpController, isPassword: true),
+                                  const SizedBox(height: 12),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFC4A05D), // Gold color
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      minimumSize: const Size(double.infinity, 50),
+                                    ),
+                                    onPressed: _validateAndContinue,
+                                    child: Text(
+                                      "Continue",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 19),
+                                  Row(
+                                    children: [
+                                      const Expanded(child: Divider(color: Colors.black)),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        child: Text(
+                                          "or",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 17,
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                      ),
+                                      const Expanded(child: Divider(color: Colors.black)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  _buildGoogleButton(),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "you have account ?",
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const OtpScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          " sign in",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            color: const Color.fromARGB(255, 198, 120, 2),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const ResetPasswordScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "forgot your password",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 15,
+                                        color: Color.fromARGB(255, 198, 120, 2),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTextField(String hint, {bool isPassword = false}) {
+  Widget _buildTextField(String hint, TextEditingController controller,
+      {bool isPassword = false, bool isEmail = false, bool isPhone = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: TextField(
+      child: TextFormField(
+        controller: controller,
         obscureText: isPassword,
+        keyboardType: isEmail
+            ? TextInputType.emailAddress
+            : isPhone
+                ? TextInputType.phone
+                : TextInputType.text,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
@@ -210,6 +243,18 @@ class CreateAccountScreen extends StatelessWidget {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
         ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "$hint cannot be empty";
+          }
+          if (isEmail && !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+            return "Enter a valid email address";
+          }
+          if (isPhone && !RegExp(r'^\d+$').hasMatch(value)) {
+            return "Enter a valid phone number";
+          }
+          return null;
+        },
       ),
     );
   }

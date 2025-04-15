@@ -58,14 +58,23 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () {Navigator.push(
+            onPressed: selectedGenres.isNotEmpty
+                ? () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                      builder: (context) => const DashboardScreen(),
-                ),
-              );},
-            child: const Text("NEXT",
-                style: TextStyle(color: Color(0xFFA58524), fontSize: 18)),
+                        builder: (context) => const DashboardScreen(),
+                      ),
+                    );
+                  }
+                : null,
+            child: Text(
+              "NEXT",
+              style: TextStyle(
+                color: selectedGenres.isNotEmpty ? const Color(0xFFA58524) : Colors.white,
+                fontSize: 18,
+              ),
+            ),
           ),
         ],
       ),

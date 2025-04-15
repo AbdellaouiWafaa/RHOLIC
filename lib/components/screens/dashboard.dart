@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:pfe_app/components/screens/books_shelf.dart';
 import 'package:pfe_app/components/screens/chatbox.dart';
 import 'package:pfe_app/components/screens/first_page.dart';
 import 'package:pfe_app/components/screens/login.dart';
-import 'package:pfe_app/components/screens/notifications.dart';
 import 'package:pfe_app/components/screens/profile.dart';
+import 'package:pfe_app/components/screens/user_notif.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -55,9 +55,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFF0A0A32),
+      backgroundColor: const Color.fromARGB(255, 10, 15, 58),
 appBar: AppBar( 
-  backgroundColor: const Color(0xFF0A0A32),
+  backgroundColor: const Color.fromARGB(255, 10, 15, 58),
   elevation: 0,
   leading: IconButton(
     icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
@@ -82,7 +82,7 @@ appBar: AppBar(
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const NotificationSettingsScreen(),
+            builder: (context) =>  UserNotifScreen(),
           ),
         );
       },
@@ -182,7 +182,7 @@ appBar: AppBar(
               child: BottomAppBar(
                 shape: CircularNotchedRectangle(),
                 notchMargin: 8.0,
-                color: const Color.fromARGB(200, 10, 15, 58),
+                color: const Color.fromARGB(104, 29, 27, 86),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Row(
@@ -291,14 +291,7 @@ appBar: AppBar(
           ),
           const SizedBox(height: 10),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BookDetailsPage(bookTitle: book['title']!),
-                ),
-              );
-            },
+            
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(book['image']!, height: 250, fit: BoxFit.cover),
@@ -365,3 +358,5 @@ class BookDetailsPage extends StatelessWidget {
     );
   }
 }
+
+
