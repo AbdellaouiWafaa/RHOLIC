@@ -64,7 +64,7 @@ class ProfileSettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            buildMenuItem(FontAwesomeIcons.palette, "Customizing interface",onTap: () {
+            buildMenuItem(FontAwesomeIcons.palette, "Reading Settings",onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(

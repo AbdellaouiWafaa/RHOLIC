@@ -121,14 +121,13 @@ class _BookListScreenState extends State<BookListScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _buildChip('Loans', '3', Colors.white, const Color.fromARGB(255, 10, 15, 58)),
-                            SizedBox(width: screenWidth * 0.08),
-                            SizedBox(width: screenWidth * 0.08),
-                            _buildChip(
-                              'Holds',
-                              '3',
-                              Colors.black,
-                              Colors.grey[300]!,
+                            _buildChip('Loans', Colors.white, const Color.fromARGB(255, 10, 15, 58)),
+                               SizedBox(width: screenWidth * 0.08),
+                              SizedBox(width: screenWidth * 0.08),
+                              _buildChip(
+                                  'Holds',
+                                Colors.black,
+                                  Colors.grey[300]!,
                               onTap: () {
                                 Navigator.push(
                                   context,
@@ -236,25 +235,17 @@ class _BookListScreenState extends State<BookListScreen> {
     );
   }
 
-  // ✅ Modified to accept onTap action
-  Widget _buildChip(String label, String count, Color textColor, Color backgroundColor, {VoidCallback? onTap}) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Chip(
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(label, style: TextStyle(color: textColor)),
-            const SizedBox(width: 5),
-            Text(count, style: TextStyle(color: textColor, fontWeight: FontWeight.bold)),
-          ],
-        ),
-        backgroundColor: backgroundColor,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      ),
-    );
-  }
+  Widget _buildChip(String label, Color textColor, Color backgroundColor, {VoidCallback? onTap}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(20),
+    child: Chip(
+      label: Text(label, style: TextStyle(color: textColor)),
+      backgroundColor: backgroundColor,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+    ),
+  );
+}
 
   Widget _buildBookItem(int rank, String title, String author, String imagePath, double progress, int daysLeft, double screenWidth) {
     return Card(

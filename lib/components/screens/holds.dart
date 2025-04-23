@@ -117,7 +117,7 @@ class _HoldsListScreenState extends State<HoldsListScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _buildChip('Loans', '3', const Color.fromARGB(255, 10, 15, 58),  Colors.white,
+                            _buildChip('Loans', const Color.fromARGB(255, 10, 15, 58),  Colors.white,
                              onTap: () {
                                 Navigator.push(
                                   context,
@@ -131,9 +131,7 @@ class _HoldsListScreenState extends State<HoldsListScreen> {
                             SizedBox(width: screenWidth * 0.08),
                             _buildChip(
                               'Holds',
-                              '3',
                               Colors.white, const Color.fromARGB(255, 10, 15, 58),
-
                             ),
                           ],
                         ),
@@ -154,7 +152,7 @@ class _HoldsListScreenState extends State<HoldsListScreen> {
               ],
             ),
           ),
-          // Positioned bottom navigation bar
+        
           Positioned(
             bottom: 0,
             left: 0,
@@ -234,20 +232,13 @@ class _HoldsListScreenState extends State<HoldsListScreen> {
     );
   }
 
-  // ✅ Modified to accept onTap action
-  Widget _buildChip(String label, String count, Color textColor, Color backgroundColor, {VoidCallback? onTap}) {
+  // Modified to remove the count parameter
+  Widget _buildChip(String label, Color textColor, Color backgroundColor, {VoidCallback? onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Chip(
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(label, style: TextStyle(color: textColor)),
-            const SizedBox(width: 5),
-            Text(count, style: TextStyle(color: textColor, fontWeight: FontWeight.bold)),
-          ],
-        ),
+        label: Text(label, style: TextStyle(color: textColor)),
         backgroundColor: backgroundColor,
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       ),

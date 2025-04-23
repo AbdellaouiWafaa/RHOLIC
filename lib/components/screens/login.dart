@@ -18,6 +18,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
   final _ccpController = TextEditingController();
 
   @override
@@ -26,6 +27,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     _usernameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _addressController.dispose();
     _ccpController.dispose();
     super.dispose();
   }
@@ -109,6 +111,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   _buildTextField("Username", _usernameController),
                                   _buildTextField("Email", _emailController, isEmail: true),
                                   _buildTextField("Phone number", _phoneController, isPhone: true),
+                                  _buildTextField("Address", _addressController),
                                   _buildTextField("CCP number account", _ccpController, isPassword: true),
                                   const SizedBox(height: 12),
                                   ElevatedButton(

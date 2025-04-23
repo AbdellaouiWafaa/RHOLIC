@@ -16,7 +16,7 @@ class CustomizeInterfaceScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Customize Interface',
+          'Reading Settings',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
