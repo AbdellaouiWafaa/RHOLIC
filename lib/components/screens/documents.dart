@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pfe_app/components/screens/code_enter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
@@ -13,8 +14,11 @@ class UploadScreen extends StatefulWidget {
 class _UploadScreenState extends State<UploadScreen> {
   final String paymentCode = "123-ABC-456";
   final String mapsUrl = "https://maps.app.goo.gl/oKo7S2rS1sTKQZoL6";
+  final ImagePicker _picker = ImagePicker();
 
   bool showCodeBar = false;
+  String? selectedFilePath;
+  String? selectedFileName;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +38,48 @@ class _UploadScreenState extends State<UploadScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 60),
-            _buildUploadButton("If you are a student", "Upload here"),
+            _buildUploadButton("If you are a student", "Upload here", () {
+              _showUploadOptions(context, isStudent: true);
+            }),
             const SizedBox(height: 40),
-            _buildUploadButton("If you are a worker", "Upload here"),
+            _buildUploadButton("If you are a worker", "Upload here", () {
+              _showUploadOptions(context, isStudent: false);
+            }),
+            
+            // Show selected file info if available
+            if (selectedFileName != null)
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 20, 30, 80),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color.fromARGB(255, 165, 133, 36)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.file_present, color: Color.fromARGB(255, 165, 133, 36)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        "Selected: $selectedFileName",
+                        style: const TextStyle(color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white70),
+                      onPressed: () {
+                        setState(() {
+                          selectedFileName = null;
+                          selectedFilePath = null;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+            
             const SizedBox(height: 120),
 
             ElevatedButton(
@@ -162,7 +205,7 @@ class _UploadScreenState extends State<UploadScreen> {
     );
   }
 
-  Widget _buildUploadButton(String title, String buttonText) {
+  Widget _buildUploadButton(String title, String buttonText, VoidCallback onPressed) {
     return Row(
       children: [
         const Icon(Icons.upload_file, color: Colors.lightBlue),
@@ -171,7 +214,7 @@ class _UploadScreenState extends State<UploadScreen> {
           child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 25)),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: onPressed,
           child: Text(buttonText, style: const TextStyle(color: Colors.lightBlue)),
         ),
       ],
@@ -198,18 +241,198 @@ class _UploadScreenState extends State<UploadScreen> {
       ],
     );
   }
-}
 
-// Replace `NextScreen` with your actual target screen
-class NextScreen extends StatelessWidget {
-  const NextScreen({super.key});
+  void _showUploadOptions(BuildContext context, {required bool isStudent}) {
+    final String userType = isStudent ? "Student" : "Worker";
+    
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color.fromARGB(255, 20, 30, 80),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "$userType Upload Options",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              // Camera option
+              _buildOptionTile(
+                icon: Icons.camera_alt,
+                title: "Take Photo",
+                description: "Use your camera to take a picture of your document",
+                onTap: () async {
+                  Navigator.pop(context);
+                  final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+                  if (photo != null) {
+                    setState(() {
+                      selectedFilePath = photo.path;
+                      selectedFileName = photo.name;
+                    });
+                  }
+                },
+              ),
+              
+              const Divider(color: Colors.white24),
+              
+              // Gallery option
+              _buildOptionTile(
+                icon: Icons.photo_library,
+                title: "Choose from Gallery",
+                description: "Select an existing image from your gallery",
+                onTap: () async {
+                  Navigator.pop(context);
+                  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    setState(() {
+                      selectedFilePath = image.path;
+                      selectedFileName = image.name;
+                    });
+                  }
+                },
+              ),
+              
+              const Divider(color: Colors.white24),
+              
+              
+              // Email option
+              _buildOptionTile(
+                icon: Icons.email,
+                title: "Email Your Document",
+                description: "Send your document to our email address",
+                onTap: () {
+                  Navigator.pop(context);
+                  _showEmailInstructionsDialog(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.green,
-      body: Center(
-        child: Text("Next Screen", style: TextStyle(color: Colors.white, fontSize: 24)),
+  Widget _buildOptionTile({
+    required IconData icon,
+    required String title,
+    required String description,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: CircleAvatar(
+        backgroundColor: const Color.fromARGB(255, 165, 133, 36),
+        child: Icon(icon, color: Colors.white),
+      ),
+      title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      subtitle: Text(
+        description,
+        style: const TextStyle(color: Colors.white70),
+      ),
+      onTap: onTap,
+    );
+  }
+
+  void _showEmailInstructionsDialog(BuildContext context) {
+    final String emailAddress = "RHOLIC@gmail.com";
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 20, 30, 80),
+        title: const Text("Email Your Document", 
+            style: TextStyle(color: Colors.white)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Please send your document to the following email address:",
+              style: TextStyle(color: Colors.white70),
+            ),
+            const SizedBox(height: 15),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 10, 15, 58),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Color.fromARGB(255, 165, 133, 36)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    emailAddress,
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 165, 133, 36),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.copy, color: Color.fromARGB(255, 165, 133, 36)),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: emailAddress));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Email copied to clipboard")),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              "Include your full name and ID in the subject line. We'll process your document within 24-48 hours.",
+              style: TextStyle(color: Colors.white70),
+            ),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 165, 133, 36),
+            ),
+            onPressed: () async {
+              Navigator.pop(context);
+              final Uri emailUri = Uri(
+                scheme: 'mailto',
+                path: emailAddress,
+                query: 'subject=Document Upload - [Your Name]&body=Please find my document attached.',
+              );
+              
+              if (await canLaunchUrl(emailUri)) {
+                await launchUrl(emailUri);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Could not open email app")),
+                );
+              }
+            },
+            child: const Text("Open Email App", style: TextStyle(color: Colors.white)),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                selectedFileName = "Email submission planned";
+                selectedFilePath = "email";
+              });
+              Navigator.pop(context);
+            },
+            child: const Text("I'll Email Later", style: TextStyle(color: Colors.white70)),
+          ),
+        ],
       ),
     );
   }
