@@ -123,13 +123,15 @@ class _SplashScreenState extends State<SplashScreen>
                   // Utiliser un Stack au lieu d'un Row pour un meilleur contrôle
                   SizedBox(
                     height: 180,
-                    width: 360, // Une largeur fixe pour contenir les deux images
+                    width:
+                        360, // Une largeur fixe pour contenir les deux images
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         // Logo à gauche
                         Positioned(
-                          left: 35, // Ajustez cette valeur pour positionner le logo
+                          left:
+                              35, // Ajustez cette valeur pour positionner le logo
                           child: AnimatedOpacity(
                             opacity: _showLogo ? 1.0 : 0.0,
                             duration: const Duration(milliseconds: 800),
@@ -142,7 +144,8 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                         // Nom de l'app à droite
                         Positioned(
-                          right: 35, // Ajustez cette valeur pour positionner le texte
+                          right:
+                              35, // Ajustez cette valeur pour positionner le texte
                           child: AnimatedOpacity(
                             opacity: _showAppName ? 1.0 : 0.0,
                             duration: const Duration(milliseconds: 700),
@@ -172,11 +175,10 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Text(
                     'Welcome to',
                     style: GoogleFonts.islandMoments(
-                      fontSize: 50,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w300,
-                      height: 1.3
-                    ),
+                        fontSize: 50,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
+                        height: 1.3),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -190,7 +192,8 @@ class _SplashScreenState extends State<SplashScreen>
                     children: [
                       // Logo à gauche
                       Positioned(
-                        left: 20, // Ajustez cette valeur pour positionner le logo
+                        left:
+                            20, // Ajustez cette valeur pour positionner le logo
                         child: AnimatedOpacity(
                           opacity: _showLogo ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 800),
@@ -203,7 +206,8 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       // Nom de l'app à droite
                       Positioned(
-                        right: 20, // Ajustez cette valeur pour positionner le texte
+                        right:
+                            20, // Ajustez cette valeur pour positionner le texte
                         child: AnimatedOpacity(
                           opacity: _showAppName ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 800),
@@ -246,16 +250,21 @@ class _SplashScreenState extends State<SplashScreen>
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Login1()), // Navigue vers Login1
+                            builder: (context) =>
+                                const Login1()), // Navigue vers Login1
                       );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 15), // Ajusté le padding pour un bouton plus large
+                          horizontal: 40,
+                          vertical:
+                              15), // Ajusté le padding pour un bouton plus large
                       decoration: BoxDecoration(
                         // Changed button color here back to golden
-                        color: const Color(0xFFB19E44).withOpacity(0.6), // Golden/brownish color like the logo
-                        borderRadius: BorderRadius.circular(30), // Kept rounded corners
+                        color: const Color(0xFFB19E44).withOpacity(
+                            0.6), // Golden/brownish color like the logo
+                        borderRadius:
+                            BorderRadius.circular(30), // Kept rounded corners
                       ),
                       child: Text(
                         'Get Started',

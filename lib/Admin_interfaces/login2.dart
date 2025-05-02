@@ -109,13 +109,16 @@ class _Login2State extends State<Login2> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
-                          borderSide: const BorderSide(color: Colors.white, width: 1.0),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 1.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.3), width: 1.0),
+                          borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.3), width: 1.0),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 15.0),
                       ),
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,

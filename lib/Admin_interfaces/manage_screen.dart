@@ -22,23 +22,28 @@ class ManageScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF121921),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Aligner les éléments à gauche
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Aligner les éléments à gauche
           children: [
             // Section de bienvenue avec photo de profil (Centrée comme dans DashboardScreen) - Structure déjà corrigée dans votre code fourni
             Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0), // Padding comme dans Dashboard
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0), // Padding comme dans Dashboard
                 child: Row(
-                  mainAxisSize: MainAxisSize.min, // Adapter la taille de la Row à son contenu
+                  mainAxisSize: MainAxisSize
+                      .min, // Adapter la taille de la Row à son contenu
                   children: [
                     const CircleAvatar(
                       radius: 36, // Taille comme dans Dashboard
-                      backgroundImage: AssetImage('assets/images/admin.png'), // Assurez-vous que l'image existe
+                      backgroundImage: AssetImage(
+                          'assets/images/admin.png'), // Assurez-vous que l'image existe
                       backgroundColor: Colors.grey, // Couleur de fallback
-                       // Si vous voulez une correspondance exacte avec DashboardContent, vous pouvez retirer le child: Text('A', ...)
-                       // child: Text('A', style: TextStyle(color: Colors.white)),
+                      // Si vous voulez une correspondance exacte avec DashboardContent, vous pouvez retirer le child: Text('A', ...)
+                      // child: Text('A', style: TextStyle(color: Colors.white)),
                     ),
-                    const SizedBox(width: 20), // Espacement comme dans Dashboard
+                    const SizedBox(
+                        width: 20), // Espacement comme dans Dashboard
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -57,7 +62,8 @@ class ManageScreen extends StatelessWidget {
 
             // Container principal avec les options de gestion
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20), // Marges latérales
+              margin: const EdgeInsets.symmetric(
+                  horizontal: 20), // Marges latérales
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: const Color(0xFF1E2A3B),
@@ -93,47 +99,64 @@ class ManageScreen extends StatelessWidget {
                     'Add New Admin',
                     'Create a new administrator account',
                     Icons.person_add,
-                    () => _navigateToForm(context, FormType.addAdmin), // Utilise FormType défini ci-dessous
+                    () => _navigateToForm(
+                        context,
+                        FormType
+                            .addAdmin), // Utilise FormType défini ci-dessous
                   ),
                   _buildManageCard(
                     context,
                     'Update Admin',
                     'Modify an existing administrator account',
                     Icons.person,
-                    () => _navigateToForm(context, FormType.updateAdmin), // Utilise FormType défini ci-dessous
+                    () => _navigateToForm(
+                        context,
+                        FormType
+                            .updateAdmin), // Utilise FormType défini ci-dessous
                   ),
                   _buildManageCard(
                     context,
                     'Delete Admin',
                     'Remove an administrator account',
                     Icons.person_remove,
-                    () => _navigateToForm(context, FormType.deleteAdmin), // Utilise FormType défini ci-dessous
+                    () => _navigateToForm(
+                        context,
+                        FormType
+                            .deleteAdmin), // Utilise FormType défini ci-dessous
                   ),
 
                   const SizedBox(
-                      height: 30), // Espacement entre les sections Admins et Members
+                      height:
+                          30), // Espacement entre les sections Admins et Members
 
                   // Cartes d'action pour les membres
-                   _buildManageCard(
+                  _buildManageCard(
                     context,
                     'Add New Member',
                     'Create a new member account',
                     Icons.person_add_alt_1,
-                    () => _navigateToForm(context, FormType.addUser), // Utilise FormType défini ci-dessous
+                    () => _navigateToForm(context,
+                        FormType.addUser), // Utilise FormType défini ci-dessous
                   ),
-                   _buildManageCard(
+                  _buildManageCard(
                     context,
                     'Update Member',
                     'Modify an existing member account',
                     Icons.person_outline,
-                    () => _navigateToForm(context, FormType.updateUser), // Utilise FormType défini ci-dessous
+                    () => _navigateToForm(
+                        context,
+                        FormType
+                            .updateUser), // Utilise FormType défini ci-dessous
                   ),
                   _buildManageCard(
                     context,
                     'Delete Member',
                     'Remove a member account',
                     Icons.person_remove_alt_1,
-                    () => _navigateToForm(context, FormType.deleteUser), // Utilise FormType défini ci-dessous
+                    () => _navigateToForm(
+                        context,
+                        FormType
+                            .deleteUser), // Utilise FormType défini ci-dessous
                   ),
                 ],
               ),
@@ -141,8 +164,10 @@ class ManageScreen extends StatelessWidget {
 
             // Bouton de sauvegarde (inchangé) - J'ajoute un Center ici aussi pour être cohérent
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Center( // Centrer le bouton
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              child: Center(
+                // Centrer le bouton
                 child: ElevatedButton(
                   onPressed: () {
                     // MODIFICATION: Utilisation de SnackBar stylisé
@@ -162,7 +187,8 @@ class ManageScreen extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1E2A3B),
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
@@ -235,7 +261,8 @@ class ManageScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                        height: 4), // Espacement entre le titre et le sous-titre
+                        height:
+                            4), // Espacement entre le titre et le sous-titre
                     Text(
                       subtitle,
                       style: GoogleFonts.montserrat(
@@ -295,7 +322,8 @@ class ManageScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UserForm( // Utilise UserForm défini ci-dessous
+        builder: (context) => UserForm(
+          // Utilise UserForm défini ci-dessous
           formType: type,
           title: title,
           buttonText: buttonText,
@@ -305,7 +333,6 @@ class ManageScreen extends StatelessWidget {
   }
 }
 
-
 enum FormType {
   addAdmin,
   updateAdmin,
@@ -314,7 +341,6 @@ enum FormType {
   updateUser,
   deleteUser,
 }
-
 
 class UserForm extends StatefulWidget {
   final FormType formType;
@@ -366,7 +392,8 @@ class _UserFormState extends State<UserForm> {
       _addressController.text = '123 Library Lane';
 
       // Pré-remplir les rôles seulement pour les admins
-      if (widget.formType == FormType.updateAdmin || widget.formType == FormType.deleteAdmin) {
+      if (widget.formType == FormType.updateAdmin ||
+          widget.formType == FormType.deleteAdmin) {
         _isLibraryAdmin = true;
         _isLibraryAssistant = true;
         _isLibraryStaff = false;
@@ -422,7 +449,8 @@ class _UserFormState extends State<UserForm> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _emailController,
-                  style: GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
+                  style:
+                      GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'example@email.com',
                     hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
@@ -466,7 +494,8 @@ class _UserFormState extends State<UserForm> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _nameController,
-                  style: GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
+                  style:
+                      GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Full Name',
                     hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
@@ -505,7 +534,8 @@ class _UserFormState extends State<UserForm> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _phoneController,
-                  style: GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
+                  style:
+                      GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: '**_**_**_**',
                     hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
@@ -544,7 +574,8 @@ class _UserFormState extends State<UserForm> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _addressController,
-                  style: GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
+                  style:
+                      GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Full Address',
                     hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
@@ -576,9 +607,9 @@ class _UserFormState extends State<UserForm> {
                 if (widget.formType == FormType.addAdmin ||
                     widget.formType == FormType.updateAdmin ||
                     widget.formType == FormType.deleteAdmin)
-                 Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
                         'Groups / Roles',
                         style: GoogleFonts.montserrat(
@@ -639,7 +670,7 @@ class _UserFormState extends State<UserForm> {
                         controlAffinity: ListTileControlAffinity.leading,
                         contentPadding: EdgeInsets.zero,
                       ),
-                   ],
+                    ],
                   ),
 
                 const SizedBox(height: 20),
@@ -658,9 +689,10 @@ class _UserFormState extends State<UserForm> {
                         print('Address: ${_addressController.text}');
 
                         if (widget.formType == FormType.addAdmin ||
-                             widget.formType == FormType.updateAdmin ||
-                             widget.formType == FormType.deleteAdmin) {
-                           print('Roles: Admin=$_isLibraryAdmin, Assistant=$_isLibraryAssistant, Staff=$_isLibraryStaff');
+                            widget.formType == FormType.updateAdmin ||
+                            widget.formType == FormType.deleteAdmin) {
+                          print(
+                              'Roles: Admin=$_isLibraryAdmin, Assistant=$_isLibraryAssistant, Staff=$_isLibraryStaff');
                         }
 
                         // MODIFICATION: Utilisation d'un SnackBar stylisé
@@ -676,10 +708,11 @@ class _UserFormState extends State<UserForm> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            backgroundColor: widget.formType == FormType.deleteAdmin ||
-                                    widget.formType == FormType.deleteUser
-                                ? Colors.red
-                                : const Color(0xFFB19E44),
+                            backgroundColor:
+                                widget.formType == FormType.deleteAdmin ||
+                                        widget.formType == FormType.deleteUser
+                                    ? Colors.red
+                                    : const Color(0xFFB19E44),
                             duration: const Duration(seconds: 3),
                           ),
                         );
@@ -687,10 +720,11 @@ class _UserFormState extends State<UserForm> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: widget.formType == FormType.deleteAdmin ||
-                              widget.formType == FormType.deleteUser
-                          ? Colors.red
-                          : const Color(0xFFB19E44),
+                      backgroundColor:
+                          widget.formType == FormType.deleteAdmin ||
+                                  widget.formType == FormType.deleteUser
+                              ? Colors.red
+                              : const Color(0xFFB19E44),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 50, vertical: 15),
                       shape: RoundedRectangleBorder(

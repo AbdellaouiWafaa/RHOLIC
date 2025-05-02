@@ -102,7 +102,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   void _showAddBookDialog() {
     final titleController = TextEditingController();
     final authorController = TextEditingController();
-    String selectedCategory = _categories[1]; // Default to first category after 'All'
+    String selectedCategory =
+        _categories[1]; // Default to first category after 'All'
     bool isAvailable = true;
 
     showDialog(
@@ -161,7 +162,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                     dropdownColor: const Color(0xFF1E2A3B),
                     value: selectedCategory,
                     isExpanded: true,
-                    icon: const Icon(Icons.arrow_drop_down, color: Color(0xFFB19E44)),
+                    icon: const Icon(Icons.arrow_drop_down,
+                        color: Color(0xFFB19E44)),
                     style: GoogleFonts.montserrat(color: Colors.white),
                     onChanged: (String? newValue) {
                       if (newValue != null && newValue != 'All') {
@@ -212,7 +214,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
               backgroundColor: const Color(0xFFB19E44),
             ),
             onPressed: () {
-              if (titleController.text.isNotEmpty && authorController.text.isNotEmpty) {
+              if (titleController.text.isNotEmpty &&
+                  authorController.text.isNotEmpty) {
                 setState(() {
                   _books.add({
                     'title': titleController.text,
@@ -389,8 +392,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                           controller: _categoryScrollController,
                           scrollDirection: Axis.horizontal,
                           physics: const BouncingScrollPhysics(
-                              parent:
-                                  AlwaysScrollableScrollPhysics()),
+                              parent: AlwaysScrollableScrollPhysics()),
                           child: Row(
                             children: [
                               const SizedBox(width: 10),

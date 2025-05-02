@@ -35,22 +35,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center, // Keep column centered for the rest of the content
+          crossAxisAlignment: CrossAxisAlignment
+              .center, // Keep column centered for the rest of the content
           children: [
-             // Added the "Profile" title here, styled like section headers
+            // Added the "Profile" title here, styled like section headers
             Padding(
-               padding: const EdgeInsets.only(top: 18.0, bottom: 16.0), // Add padding around the title
-               child: Align( // Use Align to position the text within the padding
-                 alignment: Alignment.center, // Align text to the left
-                 child: Text(
-                   'Profile',
-                   style: GoogleFonts.montserrat( // Use the same style as section titles
-                     fontSize: 30, // Increased font size
-                     fontWeight: FontWeight.w600,
-                     color: Colors.white.withOpacity(0.7), // Color from section titles
-                   ),
-                 ),
-               ),
+              padding: const EdgeInsets.only(
+                  top: 18.0, bottom: 16.0), // Add padding around the title
+              child: Align(
+                // Use Align to position the text within the padding
+                alignment: Alignment.center, // Align text to the left
+                child: Text(
+                  'Profile',
+                  style: GoogleFonts.montserrat(
+                    // Use the same style as section titles
+                    fontSize: 30, // Increased font size
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white
+                        .withOpacity(0.7), // Color from section titles
+                  ),
+                ),
+              ),
             ),
 
             // Removed the initial SizedBox(height: 20)
@@ -58,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Photo de profil
             CircleAvatar(
               radius: 60,
-               // Use FileImage if _profileImagePath is a file path, else AssetImage
+              // Use FileImage if _profileImagePath is a file path, else AssetImage
               backgroundImage: _profileImagePath.startsWith('assets/')
                   ? AssetImage(_profileImagePath) as ImageProvider<Object>
                   : FileImage(File(_profileImagePath)) as ImageProvider<Object>,
@@ -201,7 +206,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             size: 24,
           ),
           const SizedBox(width: 16),
-          Expanded( // Use Expanded to prevent overflow of long text
+          Expanded(
+            // Use Expanded to prevent overflow of long text
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -219,7 +225,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                   ),
                   maxLines: 2, // Allow text to wrap
-                  overflow: TextOverflow.ellipsis, // Add ellipsis if still overflows
+                  overflow:
+                      TextOverflow.ellipsis, // Add ellipsis if still overflows
                 ),
               ],
             ),
@@ -297,7 +304,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.white,
           ),
         ),
-        content: StatefulBuilder( // Use StatefulBuilder to update dialog UI
+        content: StatefulBuilder(
+          // Use StatefulBuilder to update dialog UI
           builder: (context, setState) {
             return SingleChildScrollView(
               child: Container(
@@ -306,7 +314,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 10),
-                     // Profile photo with edit option
+                    // Profile photo with edit option
                     GestureDetector(
                       onTap: () async {
                         // Simulate picking a new image
@@ -318,30 +326,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         //   });
                         // }
 
-                         // --- Simulation ---
-                         // Toggle between two dummy images for demo
-                         setState(() {
-                           tempProfileImagePath = tempProfileImagePath.startsWith('assets/')
-                               ? 'assets/images/dummy_profile.png' // Assume you have a dummy_profile.png
-                               : 'assets/images/admin.png';
-                         });
-                         // --- End Simulation ---
+                        // --- Simulation ---
+                        // Toggle between two dummy images for demo
+                        setState(() {
+                          tempProfileImagePath = tempProfileImagePath
+                                  .startsWith('assets/')
+                              ? 'assets/images/dummy_profile.png' // Assume you have a dummy_profile.png
+                              : 'assets/images/admin.png';
+                        });
+                        // --- End Simulation ---
                       },
                       child: CircleAvatar(
                         radius: 50,
-                         // Use FileImage if tempProfileImagePath is a file path, else AssetImage
-                        backgroundImage: tempProfileImagePath.startsWith('assets/')
-                            ? AssetImage(tempProfileImagePath) as ImageProvider<Object>
-                            : FileImage(File(tempProfileImagePath)) as ImageProvider<Object>,
+                        // Use FileImage if tempProfileImagePath is a file path, else AssetImage
+                        backgroundImage:
+                            tempProfileImagePath.startsWith('assets/')
+                                ? AssetImage(tempProfileImagePath)
+                                    as ImageProvider<Object>
+                                : FileImage(File(tempProfileImagePath))
+                                    as ImageProvider<Object>,
                         backgroundColor: Colors.grey,
-                         child: const Icon( // Add a camera icon overlay
-                            Icons.camera_alt,
-                            color: Colors.white70,
-                            size: 40,
-                         ),
+                        child: const Icon(
+                          // Add a camera icon overlay
+                          Icons.camera_alt,
+                          color: Colors.white70,
+                          size: 40,
+                        ),
                       ),
                     ),
-                     const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     _buildEditField(
                       controller: nameController,
@@ -396,7 +409,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 email = emailController.text;
                 phone = phoneController.text;
                 address = addressController.text;
-                 _profileImagePath = tempProfileImagePath; // Update the main profile image
+                _profileImagePath =
+                    tempProfileImagePath; // Update the main profile image
               });
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
@@ -441,7 +455,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder( // Use StatefulBuilder to update dialog UI
+        return StatefulBuilder(
+          // Use StatefulBuilder to update dialog UI
           builder: (context, setState) {
             return AlertDialog(
               backgroundColor: const Color(0xFF1E2A3B),
@@ -472,7 +487,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           setState(() {
                             enableNotifications = value;
                           });
-                           // In a real app, save this preference
+                          // In a real app, save this preference
                         },
                         activeColor: const Color(0xFFB19E44),
                       ),
@@ -491,7 +506,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           setState(() {
                             darkMode = value;
                           });
-                           // In a real app, apply this theme preference
+                          // In a real app, apply this theme preference
                         },
                         activeColor: const Color(0xFFB19E44),
                       ),
@@ -501,7 +516,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+                          padding:
+                              const EdgeInsets.only(left: 16.0, bottom: 8.0),
                           child: Text(
                             'Language',
                             style: GoogleFonts.montserrat(
@@ -535,7 +551,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   setState(() {
                                     language = newValue;
                                   });
-                                   // In a real app, apply this language preference
+                                  // In a real app, apply this language preference
                                   // ScaffoldMessenger.of(context).showSnackBar( // Show feedback
                                   //   SnackBar(content: Text('Language set to $newValue')),
                                   // );
@@ -571,7 +587,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFB19E44),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
                   ),
                   onPressed: () {
                     // In a real app, save preferences here
@@ -647,7 +664,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () {
               Navigator.pop(context); // Close the dialog
               // Simulate logout by navigating back (like the back arrow)
-               Navigator.pop(context); // Go back to the previous screen
+              Navigator.pop(context); // Go back to the previous screen
               // If this was the root screen, you might use SystemNavigator.pop()
               // or navigate to a dedicated login screen.
               // Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false); // Example if you have a login route

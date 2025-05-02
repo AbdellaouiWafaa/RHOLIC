@@ -99,13 +99,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ? TextField(
                 controller: _searchController,
                 autofocus: true, // Affiche automatiquement le clavier
-                style: GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
-                   decoration: InputDecoration(
-                       hintText: 'Search...',
-                       hintStyle: GoogleFonts.montserrat( 
-                       fontSize: 22, color: Colors.white.withOpacity(0.7)),
-                       border: InputBorder.none,
-                    ),
+                style:
+                    GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  hintStyle: GoogleFonts.montserrat(
+                      fontSize: 22, color: Colors.white.withOpacity(0.7)),
+                  border: InputBorder.none,
+                ),
                 onSubmitted: (value) {
                   // Traiter la recherche ici
                   print('Recherche: $value');
@@ -115,10 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               )
             : GestureDetector(
                 onTap: _startSearch,
-                child: Text(
-                  'Search...',
-                  style: appBarTitleStyle
-                ),
+                child: Text('Search...', style: appBarTitleStyle),
               ),
         centerTitle: true,
         actions: [
