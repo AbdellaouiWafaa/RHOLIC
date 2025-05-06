@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/book_details.dart';
-import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatelessWidget {
   const OtpScreen({super.key});
@@ -80,33 +79,42 @@ class OtpScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "We have sent you the code!",
+                      "We have sent you the verification code!",
                       style: GoogleFonts.poppins(color: Colors.white70),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
 
-                    // OTP input
-                    Pinput(
-                      length: 4,
-                      defaultPinTheme: PinTheme(
-                        width: 50,
-                        height: 50,
-                        textStyle: GoogleFonts.poppins(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    // Text input instead of OTP
+                    TextField(
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: "Enter verification code",
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.white60,
+                          fontSize: 16,
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.white10,
+                        filled: true,
+                        fillColor: Colors.white10,
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 165, 133, 36),
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 165, 133, 36),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 165, 133, 36),
+                            width: 2,
                           ),
                         ),
                       ),
-                      onCompleted: (pin) {
-                        debugPrint("OTP Entered: $pin");
+                      onChanged: (text) {
+                        debugPrint("Text entered: $text");
                       },
                     ),
 

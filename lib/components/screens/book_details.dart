@@ -65,7 +65,7 @@ class BookListScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => BookDetailsScreen(
-                    key: Key(books[index]["title"]), // Add a key
+                    key: Key(books[index]["title"]), 
                     bookTitle: books[index]["title"],
                     author: books[index]["author"],
                     coverImageAsset: books[index]["coverAsset"],
@@ -207,7 +207,6 @@ class BookListItem extends StatelessWidget {
   }
 }
 
-// Added enums for loan type and status
 enum LoanType {
   digital,
   physical,
@@ -385,9 +384,9 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     );
   }
 
-  // Process physical loan
+  
   void _processPhysicalLoan() {
-    // Show confirmation dialog
+  
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -471,7 +470,6 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     );
   }
 
-  // Get button text based on loan status
   String _getLoanButtonText() {
     switch (loanStatus) {
       case LoanStatus.none:
@@ -487,7 +485,6 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     }
   }
 
-  // Get button color based on loan status
   Color _getLoanButtonColor() {
     switch (loanStatus) {
       case LoanStatus.expired:
@@ -497,7 +494,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     }
   }
 
-  // Handle loan button tap based on current state
+
   void _handleLoanButtonTap() {
     switch (loanStatus) {
       case LoanStatus.none:
@@ -507,14 +504,14 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         _openBookReader();
         break;
       case LoanStatus.expired:
-        _showLoanOptionsDialog(); // Allow re-borrowing
+        _showLoanOptionsDialog();
         break;
       case LoanStatus.pickedUp:
-        // Show library location or instructions
-        _showNotification("Visit your library to pick up your book");
+       
+        _showNotification("Visit our library to pick up your book");
         break;
       default:
-        // Do nothing while downloading
+     
         break;
     }
   }
@@ -941,7 +938,6 @@ String _getPageContent(int page) {
     ]
   };
   
-   // Process all content into an array of non-empty pages
   List<String> allPages = [];
   
   // First, add the book title and author as the first page
