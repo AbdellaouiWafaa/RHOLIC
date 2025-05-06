@@ -25,31 +25,55 @@ class FirstPageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background image
-          Image.asset(
-            'assets/images/books_background.jpeg',
-            fit: BoxFit.cover,
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/bib1.png'), // Assurez-vous que ce fichier est bien votre image de bibliothèque
+            fit: BoxFit
+                .cover, // Couvre tout l'espace disponible sans déformation excessive
           ),
-
-          // Side fade overlay
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-                  Color.fromRGBO(0, 0, 0, 0.6),
-                  Colors.transparent,
-                  Colors.transparent,
-                  Color.fromRGBO(0, 0, 0, 0.6),
-                ],
+        ),
+        child: Stack(
+          // Utiliser Stack pour superposer l'overlay et le contenu
+          children: [
+            // Optional: Superposition sombre pour un meilleur contraste du texte
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(
+                    0.5), // Ajustez l'opacité au besoin (0.5 = 50% opaque)
               ),
             ),
-          ),
-
+            // Contenu (Titre et Boutons)
+            SafeArea(
+              // Utiliser SafeArea pour éviter les barres de statut et encoches
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 30.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceBetween, // Espacer le titre et les boutons
+                  crossAxisAlignment: CrossAxisAlignment
+                      .stretch, // Étirer les boutons horizontalement
+                  children: [
+                    // Titre
+                    Expanded(
+                      // Permet à la zone du titre de prendre l'espace restant
+                      child: Center(
+                        // Centre le titre dans la zone étendue
+                        child: Text(
+                          'RHOLIC Library', // Le titre de l'interface
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.islandMoments(
+                            // Utilise la police Island Moments
+                            fontSize: 60, // Ajustez la taille de la police
+                            color: Colors.white, // Couleur du texte
+                            fontWeight: FontWeight.w600, // Poids de la police
+                          ),
+                        ),
+                      ),
+                    ),
           // Buttons
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -62,14 +86,12 @@ class FirstPageScreen extends StatelessWidget {
                     // Admin buttonNewUserScreen
                     GestureDetector(
                       onTap: () {
-                          
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Login2()), 
-                            );
-                        
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>  Login2 (),
+                          ),
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -87,7 +109,7 @@ class FirstPageScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "Admin",
+                            "Sign In as Admin",
                             style: GoogleFonts.playfairDisplay( // Apply Playfair Display font
                               fontSize: 22,
                               color: Colors.white,
@@ -125,7 +147,7 @@ class FirstPageScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "Reader",
+                            "Continue As a Reader",
                             style: GoogleFonts.ebGaramond( // Apply EB Garamond font
                               fontSize: 22,
                               color: Colors.white,
@@ -142,6 +164,10 @@ class FirstPageScreen extends StatelessWidget {
           ),
         ],
       ),
+    )
+            ),
+          ]
+        ))
     );
   }
 }

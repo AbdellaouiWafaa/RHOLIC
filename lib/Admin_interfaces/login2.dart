@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dashboard_screen.dart'; // <-- Assurez-vous que ce fichier existe
 
 class Login2 extends StatefulWidget {
-  const Login2({super.key});
+  const Login2({Key? key}) : super(key: key);
 
   @override
   _Login2State createState() => _Login2State();
@@ -19,17 +19,17 @@ class _Login2State extends State<Login2> {
   }
 
   void _submitCode(String code) {
-    debugPrint('Code submitted: $code');
+    print('Code submitted: $code');
 
     if (code == 'admin123') {
-      debugPrint('Admin login successful!');
+      print('Admin login successful!');
       _codeController.clear();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     } else {
-      debugPrint('Invalid code');
+      print('Invalid code');
       _codeController.clear();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -80,7 +80,7 @@ class _Login2State extends State<Login2> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Container(color: const Color.fromARGB(102, 0, 0, 0)), // Converted from withOpacity(0.4)
+              child: Container(color: Colors.black.withOpacity(0.4)),
             ),
             Center(
               child: SingleChildScrollView(
@@ -92,17 +92,20 @@ class _Login2State extends State<Login2> {
                     TextFormField(
                       controller: _codeController,
                       obscureText: true,
-                      style: const TextStyle(color: Colors.white, fontSize: 32),
+                      style: GoogleFonts.islandMoments(
+                             color: Colors.white,
+                             fontSize: 32,
+                            fontWeight: FontWeight.w300,),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         hintText: 'Private Code Here',
                         hintStyle: GoogleFonts.islandMoments(
                           fontSize: 36,
-                          color: const Color.fromARGB(230, 255, 255, 255), // Converted from withOpacity(0.9)
+                          color: Colors.white.withOpacity(0.9),
                           fontWeight: FontWeight.w300,
                         ),
                         filled: true,
-                        fillColor: const Color.fromARGB(38, 255, 255, 255), // Converted from withOpacity(0.15)
+                        fillColor: Colors.white.withOpacity(0.15),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
                           borderSide: BorderSide.none,
@@ -114,8 +117,8 @@ class _Login2State extends State<Login2> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
-                          borderSide: const BorderSide(
-                              color: Color.fromARGB(77, 255, 255, 255), width: 1.0), // Converted from withOpacity(0.3)
+                          borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.3), width: 1.0),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 15.0),
