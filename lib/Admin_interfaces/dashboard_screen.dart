@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    print('Bouton cliqué: $index'); // Log pour déboguer
+    debugPrint('Bouton cliqué: $index'); // Log pour déboguer
   }
 
   // Méthode pour commencer la recherche
@@ -104,12 +104,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 decoration: InputDecoration(
                   hintText: 'Search...',
                   hintStyle: GoogleFonts.montserrat(
-                      fontSize: 22, color: Colors.white.withOpacity(0.7)),
+                      fontSize: 22, color: const Color.fromARGB(179, 255, 255, 255)),
                   border: InputBorder.none,
                 ),
                 onSubmitted: (value) {
                   // Traiter la recherche ici
-                  print('Recherche: $value');
+                  debugPrint('Recherche: $value');
                   // Vous pouvez garder le mode recherche ou le désactiver
                   // _endSearch();
                 },
@@ -133,7 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 size: 28,
               ),
               onPressed: () {
-                print('Notifications tapped');
+                debugPrint('Notifications tapped');
                 // Navigation vers l'écran des notifications
                 Navigator.push(
                   context,
@@ -154,8 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: const Color(0xFF1E2A3B),
         selectedItemColor:
             const Color(0xFFB19E44), // Couleur dorée quand sélectionné
-        unselectedItemColor: Colors.white
-            .withOpacity(0.7), // Couleur grise quand non sélectionné
+        unselectedItemColor: const Color.fromARGB(179, 255, 255, 255), // Converted from withOpacity(0.7)
         currentIndex:
             _selectedIndex, // Utilise l'index d'état pour déterminer l'onglet actif
         onTap: _onItemTapped, // Appelle la méthode pour changer d'écran
@@ -197,8 +196,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 class DashboardContent extends StatelessWidget {
   DashboardContent({Key? key}) : super(key: key);
 
-  // Déplacer les données et les styles de texte spécifiques au dashboard ici
-  // Données depuis la maquette (kept user's data)
+
   final int borrowedCount = 305;
   final int overdueCount = 23;
   final int fineCollected = 15;
@@ -235,11 +233,11 @@ class DashboardContent extends StatelessWidget {
 
   final TextStyle statLabelStyle = GoogleFonts.montserrat(
     fontSize: 20,
-    color: Colors.white.withOpacity(0.7),
+    color: const Color.fromARGB(179, 255, 255, 255), // Converted from withOpacity(0.7)
   );
 
   final TextStyle monthlyUsageStyle = GoogleFonts.montserrat(
-    color: Colors.white.withOpacity(0.7),
+    color: const Color.fromARGB(179, 255, 255, 255), // Converted from withOpacity(0.7)
     fontSize: 20,
     fontWeight: FontWeight.w300,
   );

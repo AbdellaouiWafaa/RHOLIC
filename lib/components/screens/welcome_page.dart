@@ -8,12 +8,12 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF050A30), // Dark blue background
+      backgroundColor: const Color(0xFF050A30), 
       body: Padding(
-        padding: const EdgeInsets.only(top: 170.0), // Adjust the top padding
+        padding: const EdgeInsets.only(top: 170.0), 
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start, // Align content to the top
+            mainAxisAlignment: MainAxisAlignment.start, 
             children: [
               // Logo
               Image.asset(
@@ -41,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                     const TextSpan(
-                      text: ' Let’s Get Reading',
+                      text: ' Let’s Get Starting',
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.white,
@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 370), 
+              const SizedBox(height: 270), 
               
               GestureDetector(
                 onTap: () {

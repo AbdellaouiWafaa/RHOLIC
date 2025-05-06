@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ManageScreen extends StatelessWidget {
-  const ManageScreen({Key? key}) : super(key: key);
+  const ManageScreen({super.key});
 
-  // Styles pour Welcome section (basique comme dans DashboardContent) - Déjà présents dans votre code fourni
+  
   final TextStyle welcomeBackStyle = const TextStyle(
     fontSize: 32,
     color: Colors.white,
@@ -348,11 +348,11 @@ class UserForm extends StatefulWidget {
   final String buttonText;
 
   const UserForm({
-    Key? key,
+    super.key,
     required this.formType,
     required this.title,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   @override
   _UserFormState createState() => _UserFormState();
@@ -453,7 +453,7 @@ class _UserFormState extends State<UserForm> {
                       GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'example@email.com',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                    hintStyle: TextStyle(color: const Color(0x80FFFFFF)), // Changed from withOpacity
                     filled: true,
                     fillColor: const Color(0xFF1E2A3B),
                     border: OutlineInputBorder(
@@ -498,7 +498,7 @@ class _UserFormState extends State<UserForm> {
                       GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Full Name',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                    hintStyle: TextStyle(color: const Color(0x80FFFFFF)), // Changed from withOpacity
                     filled: true,
                     fillColor: const Color(0xFF1E2A3B),
                     border: OutlineInputBorder(
@@ -538,7 +538,7 @@ class _UserFormState extends State<UserForm> {
                       GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: '**_**_**_**',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                    hintStyle: TextStyle(color: const Color(0x80FFFFFF)), // Changed from withOpacity
                     filled: true,
                     fillColor: const Color(0xFF1E2A3B),
                     border: OutlineInputBorder(
@@ -578,7 +578,7 @@ class _UserFormState extends State<UserForm> {
                       GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Full Address',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                    hintStyle: TextStyle(color: const Color(0x80FFFFFF)), // Changed from withOpacity
                     filled: true,
                     fillColor: const Color(0xFF1E2A3B),
                     border: OutlineInputBorder(
@@ -682,16 +682,16 @@ class _UserFormState extends State<UserForm> {
                       if (_formKey.currentState!.validate() ||
                           widget.formType == FormType.deleteAdmin ||
                           widget.formType == FormType.deleteUser) {
-                        print("Action triggered for ${widget.formType}:");
-                        print('Email: ${_emailController.text}');
-                        print('Name: ${_nameController.text}');
-                        print('Phone: ${_phoneController.text}');
-                        print('Address: ${_addressController.text}');
+                        debugPrint("Action triggered for ${widget.formType}:");
+                        debugPrint('Email: ${_emailController.text}');
+                        debugPrint('Name: ${_nameController.text}');
+                        debugPrint('Phone: ${_phoneController.text}');
+                        debugPrint('Address: ${_addressController.text}');
 
                         if (widget.formType == FormType.addAdmin ||
                             widget.formType == FormType.updateAdmin ||
                             widget.formType == FormType.deleteAdmin) {
-                          print(
+                          debugPrint(
                               'Roles: Admin=$_isLibraryAdmin, Assistant=$_isLibraryAssistant, Staff=$_isLibraryStaff');
                         }
 

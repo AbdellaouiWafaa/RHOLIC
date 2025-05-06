@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/admin_new_user.dart'; 
+import 'package:pfe_app/Admin_interfaces/login2.dart';
 import 'package:pfe_app/components/screens/genre_select.dart';
 
 void main() {
@@ -62,12 +62,14 @@ class FirstPageScreen extends StatelessWidget {
                     // Admin buttonNewUserScreen
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>  NewUserScreen(),
-                          ),
-                        );
+                          
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const Login2()), 
+                            );
+                        
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),

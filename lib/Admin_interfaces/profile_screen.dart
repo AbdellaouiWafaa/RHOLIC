@@ -51,8 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Use the same style as section titles
                     fontSize: 30, // Increased font size
                     fontWeight: FontWeight.w600,
-                    color: Colors.white
-                        .withOpacity(0.7), // Color from section titles
+                    color: const Color.fromARGB(179, 255, 255, 255), // Converted from withOpacity(0.7)
                   ),
                 ),
               ),

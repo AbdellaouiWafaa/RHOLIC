@@ -92,21 +92,21 @@ class _HoldsListScreenState extends State<HoldsListScreen> {
                           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                           child: RichText(
                             text: TextSpan(
-                              children: [
+                                children: [
                                 const TextSpan(
-                                  text: 'You currently have ',
+                                  text: 'The ',
                                   style: TextStyle(color: Color.fromARGB(255, 10, 15, 58), fontSize: 16),
                                 ),
                                 TextSpan(
-                                  text: ' 3 ',
+                                  text: ' BOOKS ',
                                   style: GoogleFonts.ebGaramond(
                                     color: const Color.fromARGB(255, 165, 133, 36),
-                                    fontSize: screenWidth * 0.08,
+                                    fontSize: screenWidth * 0.06,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 const TextSpan(
-                                  text: ' books in your stack',
+                                  text: ' You currently have in your stack',
                                   style: TextStyle(color: Color.fromARGB(255, 10, 15, 58), fontSize: 16),
                                 ),
                               ],

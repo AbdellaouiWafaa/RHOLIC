@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pfe_app/components/screens/personnel_infos.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MaterialApp(
@@ -18,8 +20,8 @@ class EditProfileScreen extends StatefulWidget {
 
 class EditProfileScreenState extends State<EditProfileScreen> {
   String selectedCountry = 'Algeria';
-  String countryCode = '+213'; // Default country code
-  String countryFlag = '🇩🇿'; // Default flag
+  String countryCode = '+213'; 
+  String countryFlag = '🇩🇿'; 
 
   final Map<String, String> countryData = {
     'Algeria': '+213',
@@ -34,6 +36,40 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   };
 
   String selectedGender = 'Female';
+
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController nickNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+
+  Future<void> submitData() async {
+    final url = Uri.parse('https://backendlibraryapp.onrender.com/update-profile');
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'fullName': fullNameController.text,
+        'nickName': nickNameController.text,
+        'email': emailController.text,
+        'phone': phoneController.text,
+        'country': selectedCountry,
+        'gender': selectedGender,
+        'address': addressController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated successfully!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to update profile.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +111,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            buildInputField("Full name", "Ahlem Boudaoud"),
-            buildInputField("Nick name", "Dream"),
-            buildInputField("Label", "xxxxxxxxxxx@gmail.com"),
-            buildPhoneField(),
+            buildInputField("Full name", "", fullNameController),
+            buildInputField("Nick name", "", nickNameController),
+            buildInputField("Label", "xxxxxxxxxxx@gmail.com", emailController),
+            buildPhoneField(phoneController),
             Row(
               children: [
                 Expanded(
@@ -106,11 +142,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ],
             ),
-            buildInputField("Address", "80 rue national, Algeria"),
-            const SizedBox(height: 20),
+            buildInputField("Address", "80 rue national, Algeria", addressController),
+            const SizedBox(height: 7),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: submitData,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 56, 152, 254),
                   padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
@@ -134,13 +170,14 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget buildInputField(String label, String value) {
+  Widget buildInputField(String label, String value, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: GoogleFonts.poppins(color: const Color.fromARGB(242, 240, 240, 240))),
         const SizedBox(height: 5),
         TextField(
+          controller: controller,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.transparent, // Transparent background
@@ -158,7 +195,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget buildPhoneField() {
+  Widget buildPhoneField(TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -177,6 +214,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(width: 10),
             Expanded(
               child: TextField(
+                controller: controller,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   filled: true,

@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'login2.dart';
 
 class Login1 extends StatelessWidget {
-  const Login1({Key? key}) : super(key: key);
+  const Login1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,7 @@ class Login1 extends StatelessWidget {
             // Optional: Superposition sombre pour un meilleur contraste du texte
             Positioned.fill(
               child: Container(
-                color: Colors.black.withOpacity(
-                    0.5), // Ajustez l'opacité au besoin (0.5 = 50% opaque)
+                color: const Color(0x80000000), // 50% opacity black
               ),
             ),
             // Contenu (Titre et Boutons)
@@ -73,9 +72,7 @@ class Login1 extends StatelessWidget {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E2A3B)
-                                .withOpacity(
-                                    0.8), // Couleur de fond foncée des boutons
+                            backgroundColor: const Color(0xCC1E2A3B), // 80% opacity dark blue
                             foregroundColor:
                                 Colors.white, // Couleur du texte des boutons
                             shape: const StadiumBorder(), // Forme de pilule
@@ -90,15 +87,13 @@ class Login1 extends StatelessWidget {
                         const SizedBox(height: 15), // Espace entre les boutons
                         ElevatedButton(
                           onPressed: () {
-                            // TODO: Logique de navigation vers l'écran principal du Lecteur
-                            print('Continue as a Reader tapped');
+                           
+                            debugPrint('Continue as a Reader tapped');
                             // Exemple de navigation :
                             // Navigator.push(context, MaterialPageRoute(builder: (context) => ReaderScreen()));
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E2A3B)
-                                .withOpacity(
-                                    0.8), // Couleur de fond foncée des boutons
+                            backgroundColor: const Color(0xCC1E2A3B), // 80% opacity dark blue
                             foregroundColor:
                                 Colors.white, // Couleur du texte des boutons
                             shape: const StadiumBorder(), // Forme de pilule

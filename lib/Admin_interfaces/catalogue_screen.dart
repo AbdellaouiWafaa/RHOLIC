@@ -126,7 +126,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                 style: GoogleFonts.montserrat(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: 'Book Title',
-                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                  hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // 50% white
                   filled: true,
                   fillColor: const Color(0xFF121921),
                   border: OutlineInputBorder(
@@ -141,7 +141,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                 style: GoogleFonts.montserrat(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: 'Author Name',
-                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                  hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // 50% white
                   filled: true,
                   fillColor: const Color(0xFF121921),
                   border: OutlineInputBorder(
@@ -360,7 +360,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                       GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Search for books...',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                    hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // 50% white
                     prefixIcon:
                         const Icon(Icons.search, color: Color(0xFFB19E44)),
                     filled: true,
@@ -380,7 +380,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        color: Colors.white.withOpacity(0.1),
+                        color: const Color(0x1AFFFFFF), // 10% white
                         width: 1,
                       ),
                     ),
@@ -445,13 +445,13 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                           child: IgnorePointer(
                             child: Container(
                               width: 40,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 gradient: LinearGradient(
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
                                   colors: [
                                     Colors.transparent,
-                                    const Color(0xFF121921).withOpacity(0.8),
+                                    Color(0xCC121921), // 80% opacity
                                   ],
                                 ),
                               ),
@@ -466,13 +466,13 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                           child: IgnorePointer(
                             child: Container(
                               width: 40,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 gradient: LinearGradient(
                                   begin: Alignment.centerRight,
                                   end: Alignment.centerLeft,
                                   colors: [
                                     Colors.transparent,
-                                    const Color(0xFF121921).withOpacity(0.8),
+                                    Color(0xCC121921), // 80% opacity
                                   ],
                                 ),
                               ),
@@ -539,9 +539,9 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                         Container(
                           width: 80,
                           height: 120,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.2),
-                            borderRadius: const BorderRadius.only(
+                          decoration: const BoxDecoration(
+                            color: Color(0x33808080), // 20% grey
+                            borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(12),
                               bottomLeft: Radius.circular(12),
                             ),
@@ -573,7 +573,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                   'by ${book['author']}',
                                   style: GoogleFonts.montserrat(
                                     fontSize: 14,
-                                    color: Colors.white.withOpacity(0.7),
+                                    color: const Color(0xB3FFFFFF), // 70% white
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -590,7 +590,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                         book['category'],
                                         style: GoogleFonts.montserrat(
                                           fontSize: 12,
-                                          color: Colors.white.withOpacity(0.7),
+                                          color: const Color(0xB3FFFFFF), // 70% white
                                         ),
                                       ),
                                     ),
@@ -600,8 +600,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                           horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
                                         color: book['available']
-                                            ? Colors.green.withOpacity(0.2)
-                                            : Colors.red.withOpacity(0.2),
+                                            ? const Color(0x33008000) // 20% green
+                                            : const Color(0x33FF0000), // 20% red
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(

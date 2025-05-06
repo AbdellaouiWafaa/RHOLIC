@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// Assurez-vous que ce fichier existe et contient la classe Login1
-import 'login1.dart'; // Import the target screen
+import 'package:pfe_app/components/screens/first_page.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -251,7 +251,7 @@ class _SplashScreenState extends State<SplashScreen>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const Login1()), // Navigue vers Login1
+                                const FirstpageScreen()), // Navigue vers Login1
                       );
                     },
                     child: Container(

@@ -4,6 +4,8 @@ import 'package:pfe_app/components/screens/code_enter.dart';
 import 'package:pfe_app/components/screens/dashboard.dart';
 import 'package:pfe_app/components/screens/documents.dart';
 import 'package:pfe_app/components/screens/password_reset.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -32,21 +34,48 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     super.dispose();
   }
 
+  Future<void> saveUserInformation(Map<String, String> userInfo) async {
+    final response = await http.post(
+      Uri.parse('https://backendlibraryapp.onrender.com/create-account'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(userInfo),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to save user information');
+    }
+  }
+
   void _validateAndContinue() {
     if (_formKey.currentState!.validate()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const UploadScreen(),
-        ),
-      );
+      final userInfo = {
+        'name': _nameController.text,
+        'username': _usernameController.text,
+        'email': _emailController.text,
+        'phone': _phoneController.text,
+        'address': _addressController.text,
+        'ccp': _ccpController.text,
+      };
+
+      saveUserInformation(userInfo).then((_) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UploadScreen(),
+          ),
+        );
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving information: $error')),
+        );
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A32), // Dark blue background
+      backgroundColor: const Color(0xFF0A0A32), 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(

@@ -7,7 +7,7 @@ class CardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = ScrollController(); // Added ScrollController
+    final ScrollController scrollController = ScrollController(); 
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(121, 32, 46, 172),
@@ -17,7 +17,7 @@ class CardScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
+            Navigator.pop(context); 
           },
         ),
         title: const Text(
@@ -43,7 +43,7 @@ class CardScreen extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  flex: 1, // Adjusted flex to make the white background smaller
+                  flex: 1, 
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -52,28 +52,28 @@ class CardScreen extends StatelessWidget {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: RotatedBox( // Rotates the content 90 degrees to the left
+                    child: RotatedBox( 
                       quarterTurns: 3,
-                      child: Column( // Use Column for vertical layout after rotation
+                      child: Column( 
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const CircleAvatar(
-                            radius: 50, // Increased the size of the CircleAvatar
+                            radius: 50, 
                             backgroundColor: Color.fromARGB(255, 0, 0, 0),
                             child: Icon(Icons.person, size: 80, color: Color.fromARGB(255, 0, 0, 0)), // Increased icon size
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            "Ahlem",
+                            "Wafaa",
                             style: GoogleFonts.ebGaramond( 
                               fontSize: 23,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 0), // Added spacing between lines
+                          const SizedBox(height: 0), 
                           Text(
-                            "Boudaoud",
-                            style: GoogleFonts.ebGaramond( // Changed font for "Boudaoud"
+                            "Abdellaoui",
+                            style: GoogleFonts.ebGaramond( 
                               fontSize: 23,
                               fontWeight: FontWeight.bold,
                             ),
@@ -116,39 +116,39 @@ class CardScreen extends StatelessWidget {
                                 );
                               },
                               child: Image.asset(
-                                'assets/images/both.png', // Path to the image
-                                width: 400, // Adjusted width
-                                height: 400, // Adjusted height
-                                fit: BoxFit.contain, // Ensures the image fits without extra space
+                                'assets/images/both.png', 
+                                width: 400, 
+                                height: 400, 
+                                fit: BoxFit.contain, 
                               ),
                             ),
-                            const SizedBox(height: 40), // Adjusted spacing
+                            const SizedBox(height: 40), 
                             GestureDetector(
                               onTap: () {
                                 scrollController.animateTo(
-                                  0, // Scroll back to the top (image)
+                                  0, 
                                   duration: const Duration(seconds: 1),
                                   curve: Curves.easeInOut,
                                 );
                               },
                               child: _buildInfoRow(Icons.phone_outlined, "05 58 13 88 09"),
                             ),
-                            const SizedBox(height: 10), // Existing spacing
+                            const SizedBox(height: 10), 
                             GestureDetector(
                               onTap: () {
                                 scrollController.animateTo(
-                                  0, // Scroll back to the top (image)
+                                  0, 
                                   duration: const Duration(seconds: 1),
                                   curve: Curves.easeInOut,
                                 );
                               },
                               child: _buildInfoRow(Icons.location_on, "13000 TLEMCEN    ALGERIA"),
                             ),
-                            const SizedBox(height: 10), // Existing spacing
+                            const SizedBox(height: 10), 
                             GestureDetector(
                               onTap: () {
                                 scrollController.animateTo(
-                                  0, // Scroll back to the top (image)
+                                  0, 
                                   duration: const Duration(seconds: 1),
                                   curve: Curves.easeInOut,
                                 );

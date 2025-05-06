@@ -12,13 +12,15 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  final String paymentCode = "123-ABC-456";
+  final String paymentCode = "0023456789 45";  
   final String mapsUrl = "https://maps.app.goo.gl/oKo7S2rS1sTKQZoL6";
   final ImagePicker _picker = ImagePicker();
 
   bool showCodeBar = false;
   String? selectedFilePath;
   String? selectedFileName;
+  String? receiptPath;
+  String? receiptName;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class _UploadScreenState extends State<UploadScreen> {
               _showUploadOptions(context, isStudent: false);
             }),
             
-            // Show selected file info if available
+            
             if (selectedFileName != null)
               Container(
                 margin: const EdgeInsets.only(top: 20),
@@ -100,7 +102,7 @@ class _UploadScreenState extends State<UploadScreen> {
 
             const SizedBox(height: 40),
 
-            // Google Maps row
+           
             _buildClickableRow(
               icon: Icons.place,
               title: "Please visit our library location",
@@ -118,10 +120,10 @@ class _UploadScreenState extends State<UploadScreen> {
 
             const SizedBox(height: 20),
 
-            // Show code row and trigger visibility
+                          // Show CCP number row and trigger visibility
             _buildClickableRow(
               icon: Icons.credit_card_outlined,
-              title: "Our code to send money",
+              title: "Our CCP number for payment",
               linkText: "here",
               onTap: () {
                 setState(() {
@@ -139,7 +141,7 @@ class _UploadScreenState extends State<UploadScreen> {
                   Clipboard.setData(ClipboardData(text: paymentCode));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Code copied to clipboard!"),
+                      content: Text("CCP number copied to clipboard!"),
                       duration: Duration(seconds: 2),
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -171,15 +173,56 @@ class _UploadScreenState extends State<UploadScreen> {
                   ),
                 ),
               ),
+              
+           
+            const SizedBox(height: 20),
+            _buildClickableRow(
+              icon: Icons.receipt_long,
+              title: "Upload payment receipt",
+              linkText: "upload",
+              onTap: _uploadReceipt,
+            ),
+            
+           
+            if (receiptName != null)
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 20, 30, 80),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color.fromARGB(255, 165, 133, 36)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.receipt, color: Color.fromARGB(255, 165, 133, 36)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        "Receipt: $receiptName",
+                        style: const TextStyle(color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white70),
+                      onPressed: () {
+                        setState(() {
+                          receiptName = null;
+                          receiptPath = null;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
 
             const Spacer(),
 
-            // Done button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate to the new screen when "Done" is clicked
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -203,6 +246,24 @@ class _UploadScreenState extends State<UploadScreen> {
         ),
       ),
     );
+  }
+
+  // NEW METHOD: Handle receipt upload
+  void _uploadReceipt() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        receiptPath = image.path;
+        receiptName = image.name;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Receipt uploaded successfully"),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   Widget _buildUploadButton(String title, String buttonText, VoidCallback onPressed) {
