@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/profile.dart';
+import 'package:RHOLIC/components/screens/profile.dart';
 
 void main() {
   runApp(const WishListScreen());

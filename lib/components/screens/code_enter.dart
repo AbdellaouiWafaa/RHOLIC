@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/book_details.dart';
+import 'package:RHOLIC/components/screens/book_details.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatelessWidget {

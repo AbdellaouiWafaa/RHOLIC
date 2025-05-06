@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/first_page.dart';
+import 'package:RHOLIC/components/screens/first_page.dart';
 
 
 class WelcomeScreen extends StatelessWidget {

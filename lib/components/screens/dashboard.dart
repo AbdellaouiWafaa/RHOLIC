@@ -1,10 +1,10 @@
- import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/books_shelf.dart';
-import 'package:pfe_app/components/screens/chatbox.dart';
-import 'package:pfe_app/components/screens/first_page.dart';
-import 'package:pfe_app/components/screens/login.dart';
-import 'package:pfe_app/components/screens/profile.dart';
-import 'package:pfe_app/components/screens/user_notif.dart';
+import 'package:flutter/material.dart';
+import 'package:RHOLIC/components/screens/books_shelf.dart';
+import 'package:RHOLIC/components/screens/chatbox.dart';
+import 'package:RHOLIC/components/screens/first_page.dart';
+import 'package:RHOLIC/components/screens/login.dart';
+import 'package:RHOLIC/components/screens/profile.dart';
+import 'package:RHOLIC/components/screens/user_notif.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

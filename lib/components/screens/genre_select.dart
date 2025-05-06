@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/code_enter.dart';
-import 'package:pfe_app/components/screens/dashboard.dart';
+import 'package:RHOLIC/components/screens/code_enter.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
 
 class GenreSelectionScreen extends StatefulWidget {
   const GenreSelectionScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/dashboard.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
 
 
 class BookListScreen extends StatelessWidget {
@@ -409,7 +409,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                "${widget.bookTitle} will be available for pickup at your library within 24 hours.",
+                "${widget.bookTitle} will be available for pickup at our library within 24 hours.",
                 style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),

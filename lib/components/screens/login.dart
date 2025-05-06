@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/code_enter.dart';
-import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/documents.dart';
-import 'package:pfe_app/components/screens/password_reset.dart';
+import 'package:RHOLIC/components/screens/code_enter.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
+import 'package:RHOLIC/components/screens/documents.dart';
+import 'package:RHOLIC/components/screens/password_reset.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

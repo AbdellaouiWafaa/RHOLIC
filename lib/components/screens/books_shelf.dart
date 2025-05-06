@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/chatbox.dart';
-import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/exit.dart';
-import 'package:pfe_app/components/screens/holds.dart';
+import 'package:RHOLIC/components/screens/chatbox.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
+import 'package:RHOLIC/components/screens/exit.dart';
+import 'package:RHOLIC/components/screens/holds.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/profile.dart';
-import 'package:pfe_app/components/screens/user_notif.dart';
+import 'package:RHOLIC/components/screens/profile.dart';
+import 'package:RHOLIC/components/screens/user_notif.dart';
 
 
 

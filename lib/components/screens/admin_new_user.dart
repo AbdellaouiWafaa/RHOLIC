@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/admin_loan.dart';
-import 'package:pfe_app/components/screens/admin_messages.dart';
+import 'package:RHOLIC/components/screens/admin_loan.dart';
+import 'package:RHOLIC/components/screens/admin_messages.dart';
 
 
 class NewUserScreen extends StatelessWidget {

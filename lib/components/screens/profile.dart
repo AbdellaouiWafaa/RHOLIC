@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pfe_app/components/screens/books_shelf.dart'; // Contains BookListScreen
-import 'package:pfe_app/components/screens/chat_admin_user.dart';
-import 'package:pfe_app/components/screens/chatbox.dart';
-import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/exit.dart';
-import 'package:pfe_app/components/screens/history.dart';   
-import 'package:pfe_app/components/screens/library_card.dart';
-import 'package:pfe_app/components/screens/personnel_infos.dart';
-import 'package:pfe_app/components/screens/user_notif.dart';
-import 'package:pfe_app/components/screens/wishlist.dart';
+import 'package:RHOLIC/components/screens/books_shelf.dart'; 
+import 'package:RHOLIC/components/screens/chat_admin_user.dart';
+import 'package:RHOLIC/components/screens/chatbox.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
+import 'package:RHOLIC/components/screens/exit.dart';
+import 'package:RHOLIC/components/screens/history.dart';   
+import 'package:RHOLIC/components/screens/library_card.dart';
+import 'package:RHOLIC/components/screens/personnel_infos.dart';
+import 'package:RHOLIC/components/screens/user_notif.dart';
+import 'package:RHOLIC/components/screens/wishlist.dart';
 
 
 
@@ -113,9 +113,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         // Profile Info
-                        Text('Ahlem Boudaoud', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: textColor), textAlign: TextAlign.center),
+                        Text('Wafaa Abdellaoui', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: textColor), textAlign: TextAlign.center),
                         SizedBox(height: 8),
-                        Text('ahlemboudaoud@gmail.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
+                        Text('w.abdellaoui90@gmail.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
                         SizedBox(height: 70),
                         // --- List Items ---
                         // Calls to _buildProfileListItem now handle navigation internally via onTap

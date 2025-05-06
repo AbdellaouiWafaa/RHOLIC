@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/admin_messages.dart';
-import 'package:pfe_app/components/screens/admin_new_user.dart';
+import 'package:RHOLIC/components/screens/admin_messages.dart';
+import 'package:RHOLIC/components/screens/admin_new_user.dart';
 
 class AdminLoanScreen extends StatelessWidget {
   final List<Map<String, dynamic>> reservedBooks = [

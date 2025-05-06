@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/first_page.dart';
+import 'package:RHOLIC/components/screens/first_page.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -124,35 +124,19 @@ class _SplashScreenState extends State<SplashScreen>
                   SizedBox(
                     height: 180,
                     width:
-                        360, // Une largeur fixe pour contenir les deux images
+                        400, // Une largeur fixe pour contenir les deux images
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        // Logo à gauche
+                        // Logo et Nom de l'app
                         Positioned(
-                          left:
-                              35, // Ajustez cette valeur pour positionner le logo
-                          child: AnimatedOpacity(
-                            opacity: _showLogo ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 800),
-                            child: Image.asset(
-                              'assets/images/app_logo.png',
-                              height: 140,
-                              width: 140,
-                            ),
-                          ),
-                        ),
-                        // Nom de l'app à droite
-                        Positioned(
-                          right:
-                              35, // Ajustez cette valeur pour positionner le texte
                           child: AnimatedOpacity(
                             opacity: _showAppName ? 1.0 : 0.0,
                             duration: const Duration(milliseconds: 700),
                             child: Image.asset(
-                              'assets/images/rholic.png',
-                              height: 160,
-                              width: 240,
+                              'assets/images/both.png',
+                              height: 200, // Increased height
+                              width: 300, // Increased width
                             ),
                           ),
                         ),
@@ -174,55 +158,53 @@ class _SplashScreenState extends State<SplashScreen>
                   duration: const Duration(milliseconds: 600),
                   child: Text(
                     'Welcome to',
-                    style: GoogleFonts.islandMoments(
-                        fontSize: 50,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
-                        height: 1.3),
+                    style: GoogleFonts.playfairDisplay(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 1),
 
                 // Utiliser un Stack au lieu d'un Row
                 SizedBox(
                   height: 160,
-                  width: 320, // Largeur fixe pour contenir les deux images
+                  width: 360, // Largeur fixe pour contenir les deux images
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Logo à gauche
+                      // Logo et Nom de l'app
                       Positioned(
-                        left:
-                            20, // Ajustez cette valeur pour positionner le logo
-                        child: AnimatedOpacity(
-                          opacity: _showLogo ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 800),
-                          child: Image.asset(
-                            'assets/images/app_logo.png',
-                            height: 140,
-                            width: 140,
-                          ),
-                        ),
-                      ),
-                      // Nom de l'app à droite
-                      Positioned(
-                        right:
-                            20, // Ajustez cette valeur pour positionner le texte
                         child: AnimatedOpacity(
                           opacity: _showAppName ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 800),
                           child: Image.asset(
-                            'assets/images/rholic.png',
-                            height: 160,
-                            width: 240,
+                            'assets/images/both.png',
+                            height: 200, // Increased height
+                            width: 300, // Increased width
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 30),
+                const SizedBox(height: 1),
+                // Library text below the logo
+                AnimatedOpacity(
+                  opacity: _showWelcome ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 600),
+                  child: Text(
+                    'Library',
+                    style: GoogleFonts.playfairDisplay(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                     
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 100),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: AnimatedOpacity(
@@ -231,16 +213,15 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Text(
                       'Discover a limitless world of reading, where every book brings you closer to a new adventure.',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.islandMoments(
-                        fontSize: 32,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
-                        height: 1.3,
-                      ),
+                      style: GoogleFonts.playfairDisplay(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 70),
                 AnimatedOpacity(
                   opacity: _showGetStarted ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 1000),
@@ -256,20 +237,20 @@ class _SplashScreenState extends State<SplashScreen>
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical:
-                              15), // Ajusté le padding pour un bouton plus large
+                        horizontal: 20, // Reduced padding
+                        vertical: 10, // Reduced padding
+                      ),
                       decoration: BoxDecoration(
                         // Changed button color here back to golden
                         color: const Color(0xFFB19E44).withOpacity(
                             0.6), // Golden/brownish color like the logo
                         borderRadius:
-                            BorderRadius.circular(30), // Kept rounded corners
+                            BorderRadius.circular(20), // Adjusted corner radius
                       ),
                       child: Text(
                         'Get Started',
-                        style: GoogleFonts.islandMoments(
-                          fontSize: 36, // Increased font size slightly
+                        style: GoogleFonts.playfairDisplay(
+                          fontSize: 24, // Reduced font size
                           color: Colors.white, // Text color remains white
                           fontWeight: FontWeight.w600,
                         ),

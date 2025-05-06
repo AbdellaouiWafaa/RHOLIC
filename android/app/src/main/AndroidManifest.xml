@@ -2,7 +2,7 @@
     package="com.example.pfe_app">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="pfe_app"
+        android:label="RHOLIC"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

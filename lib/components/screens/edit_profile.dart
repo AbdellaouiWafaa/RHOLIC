@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/personnel_infos.dart';
+import 'package:RHOLIC/components/screens/personnel_infos.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -131,7 +131,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     },
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 15),
                 Expanded(
                   child: buildDropdown(
                     "Genre",

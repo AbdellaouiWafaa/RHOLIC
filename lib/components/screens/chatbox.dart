@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/books_shelf.dart';
-import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/exit.dart';
-import 'package:pfe_app/components/screens/profile.dart';
-import 'package:pfe_app/components/screens/user_notif.dart';
+import 'package:RHOLIC/components/screens/books_shelf.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
+import 'package:RHOLIC/components/screens/exit.dart';
+import 'package:RHOLIC/components/screens/profile.dart';
+import 'package:RHOLIC/components/screens/user_notif.dart';
 
 class ChatBoxScreen extends StatelessWidget {
   const ChatBoxScreen({super.key});

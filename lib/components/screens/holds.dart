@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/books_shelf.dart';
-import 'package:pfe_app/components/screens/chatbox.dart';
-import 'package:pfe_app/components/screens/dashboard.dart';
-import 'package:pfe_app/components/screens/notifications.dart';
+import 'package:RHOLIC/components/screens/books_shelf.dart';
+import 'package:RHOLIC/components/screens/chatbox.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
+import 'package:RHOLIC/components/screens/notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/profile.dart';
+import 'package:RHOLIC/components/screens/profile.dart';
 
 class HoldsListScreen extends StatefulWidget {
   const HoldsListScreen({super.key});

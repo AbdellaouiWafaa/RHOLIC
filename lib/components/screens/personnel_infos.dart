@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/components/screens/costomize_interface.dart';
-import 'package:pfe_app/components/screens/exit.dart';
-import 'package:pfe_app/components/screens/edit_profile.dart';
-import 'package:pfe_app/components/screens/profile.dart';
-import 'package:pfe_app/components/screens/settings.dart'; // Import the edit profile screen
+import 'package:RHOLIC/components/screens/costomize_interface.dart';
+import 'package:RHOLIC/components/screens/exit.dart';
+import 'package:RHOLIC/components/screens/edit_profile.dart';
+import 'package:RHOLIC/components/screens/profile.dart';
+import 'package:RHOLIC/components/screens/settings.dart'; // Import the edit profile screen
 
 void main() {
   runApp(MaterialApp(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pfe_app/components/screens/languages.dart'; // Assuming this path is correct
-import 'package:pfe_app/components/screens/notifications.dart'; // Assuming this path is correct
+import 'package:RHOLIC/components/screens/languages.dart'; // Assuming this path is correct
+import 'package:RHOLIC/components/screens/notifications.dart'; // Assuming this path is correct
 import 'package:share_plus/share_plus.dart'; // <-- Import share_plus
 
 class SettingsScreen extends StatelessWidget {

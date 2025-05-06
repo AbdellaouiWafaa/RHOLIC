@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pfe_app/Admin_interfaces/login2.dart';
-import 'package:pfe_app/components/screens/genre_select.dart';
+import 'package:RHOLIC/Admin_interfaces/login2.dart';
+import 'package:RHOLIC/components/screens/genre_select.dart';
 
 void main() {
   runApp(const FirstpageScreen());
