@@ -29,61 +29,59 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   final List<Map<String, dynamic>> _messages = [
     // Messages from a regular user to admin
     {
-      'senderId': 'user1',
-      'senderName': 'Utilisateur Alpha',
-      'message': 'Bonjour, j\'ai un problème avec mon compte.',
-      'time': 'Hier 14:00',
-      'isCurrentUser': false,
-      'isStaff': false, // Regular user
-      'id': 'msg_user1_1',
-    },
-    {
-      'senderId': 'admin_user_me', // Message sent by the logged-in admin
-      'senderName': 'Admin Moi',
-      'message': 'Bonjour Utilisateur Alpha, comment puis-je vous aider?',
-      'time': 'Hier 14:05',
-      'isCurrentUser': true,
-      'isStaff': true, // Logged-in user is staff
-      'id': 'msg_admin_me_1',
-    },
-    {
-      'senderId': 'user1',
-      'senderName': 'Utilisateur Alpha',
-      'message': 'Je n\'arrive pas à renouveler un livre.',
-      'time': 'Hier 14:10',
-      'isCurrentUser': false,
-      'isStaff': false,
-      'id': 'msg_user1_2',
-    },
-    // Messages between admins (visible to logged-in admin)
-    {
-      'senderId': 'admin2',
-      'senderName': 'Admin Beta',
-      'message':
-          'Salut Admin Moi, as-tu vu la nouvelle procédure pour les emprunts?',
-      'time': 'Ce matin 9:30',
-      'isCurrentUser': false,
-      'isStaff': true, // Another admin
-      'id': 'msg_admin2_1',
-    },
-    {
-      'senderId': 'admin_user_me', // Message sent by the logged-in admin
-      'senderName': 'Admin Moi',
-      'message': 'Oui, je suis en train de la lire. Elle semble plus efficace.',
-      'time': 'Ce matin 9:35',
-      'isCurrentUser': true,
-      'isStaff': true, // Logged-in user is staff
-      'id': 'msg_admin_me_2',
-    },
-    {
-      'senderId': 'admin2',
-      'senderName': 'Admin Beta',
-      'message': 'Effectivement. On devrait en discuter pendant la réunion.',
-      'time': 'Ce matin 9:40',
-      'isCurrentUser': false,
-      'isStaff': true, // Another admin
-      'id': 'msg_admin2_2',
-    },
+    'senderId': 'user1',
+    'senderName': 'User Alpha',
+    'message': 'Hello, I have a problem with my account.',
+    'time': 'Yesterday 2:00 PM',
+    'isCurrentUser': false,
+    'isStaff': false,
+    'id': 'msg_user1_1',
+  },
+  {
+    'senderId': 'admin_user_me',
+    'senderName': 'Admin Me',
+    'message': 'Hello User Alpha, how can I help you?',
+    'time': 'Yesterday 2:05 PM',
+    'isCurrentUser': true,
+    'isStaff': true,
+    'id': 'msg_admin_me_1',
+  },
+  {
+    'senderId': 'user1',
+    'senderName': 'User Alpha',
+    'message': "I can't renew a book.",
+    'time': 'Yesterday 2:10 PM',
+    'isCurrentUser': false,
+    'isStaff': false,
+    'id': 'msg_user1_2',
+  },
+  {
+    'senderId': 'admin2',
+    'senderName': 'Admin Beta',
+    'message': 'Hi Admin Me, did you see the new procedure for borrowing?',
+    'time': 'This morning 9:30 AM',
+    'isCurrentUser': false,
+    'isStaff': true,
+    'id': 'msg_admin2_1',
+  },
+  {
+    'senderId': 'admin_user_me',
+    'senderName': 'Admin Me',
+    'message': "Yes, I'm reading it. It seems more efficient.",
+    'time': 'This morning 9:35 AM',
+    'isCurrentUser': true,
+    'isStaff': true,
+    'id': 'msg_admin_me_2',
+  },
+  {
+    'senderId': 'admin2',
+    'senderName': 'Admin Beta',
+    'message': 'Indeed. We should discuss it during the meeting.',
+    'time': 'This morning 9:40 AM',
+    'isCurrentUser': false,
+    'isStaff': true,
+    'id': 'msg_admin2_2',
+  },
   ];
 
   // Liste simulée de notifications pour la démonstration
@@ -154,26 +152,26 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     // Example of a notification for a new message from a regular user (User-to-Admin)
     {
-      'type': 'chat_message',
-      'title': 'New Message from Utilisateur Alpha',
-      'message': 'Je n\'arrive pas à renouveler un livre.',
-      'time': 'Hier 14:10',
-      'isRead': false, // Unread
-      'details': 'Message in chat: Je n\'arrive pas à renouveler un livre.',
-      'relatedMessageId': 'msg_user1_2',
-      'id': 'notif_chat_user_incoming',
-    },
+      "type": "chat_message",
+      "title": "New Message from User Alpha",
+      "message": "I can't renew a book.",
+      "time": "Yesterday 2:10 PM",
+      "isRead": false,
+      "details": "Message in chat: I can't renew a book.",
+      "relatedMessageId": "msg_user1_2",
+      "id": "notif_chat_user_incoming"
+   },
+
     // Example of a notification for a new message from another admin (Admin-to-Admin)
     {
-      'type': 'chat_message',
-      'title': 'New Message from Admin Beta',
-      'message': 'Effectivement. On devrait en discuter pendant la réunion.',
-      'time': 'Ce matin 9:40',
-      'isRead': false, // Unread
-      'details':
-          'Message in chat: Effectivement. On devrait en discuter pendant la réunion.',
-      'relatedMessageId': 'msg_admin2_2',
-      'id': 'notif_chat_admin_incoming',
+      "type": "chat_message",
+      "title": "New Message from Admin Beta",
+      "message": "Indeed. We should discuss it during the meeting.",
+      "time": "This morning 9:40 AM",
+      "isRead": false,
+      "details": "Message in chat: Indeed. We should discuss it during the meeting.",
+      "relatedMessageId": "msg_admin2_2",
+      "id": "notif_chat_admin_incoming"
     },
     {
       'type': 'borrow_request',
@@ -194,7 +192,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
       'time': '5d ago',
       'isRead': true,
       'details':
-          'Thank you for returning "The Great Gatsby" by F. Scott Fitzgerald. The book was returned in good condition with no damage noted.',
+          '"The Great Gatsby" by F. Scott Fitzgerald. The book was returned in good condition with no damage noted.',
       'id': 'notif_return_2', // Added unique ID
     },
     {

@@ -93,9 +93,10 @@ class _Login2State extends State<Login2> {
                       controller: _codeController,
                       obscureText: true,
                       style: GoogleFonts.islandMoments(
-                             color: Colors.white,
-                             fontSize: 32,
-                            fontWeight: FontWeight.w300,),
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w300,
+                      ),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         hintText: 'Private Code Here',
@@ -112,16 +113,22 @@ class _Login2State extends State<Login2> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 1.0),
+                          borderSide: const BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
                           borderSide: BorderSide(
-                              color: Colors.white.withOpacity(0.3), width: 1.0),
+                            color: Colors.white.withOpacity(0.3),
+                            width: 1.0,
+                          ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 15.0),
+                          horizontal: 20.0,
+                          vertical: 15.0,
+                        ),
                       ),
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
