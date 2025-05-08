@@ -51,6 +51,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     },
   ];
 
+  // Map to track which books have been added
+  Map<int, bool> addedBooks = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,7 +164,7 @@ appBar: AppBar(
                         }
                         return Transform.scale(
                           scale: value,
-                          child: bookCard(context, books[index]),
+                          child: bookCard(context, books[index], index),
                         );
                       },
                     );
@@ -260,7 +263,10 @@ appBar: AppBar(
     );
   }
 
-  Widget bookCard(BuildContext context, Map<String, String> book) {
+  Widget bookCard(BuildContext context, Map<String, String> book, int index) {
+    // Default to false if not in map
+    bool isAdded = addedBooks[index] ?? false;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -316,21 +322,19 @@ appBar: AppBar(
                   ),
                 ),
               ),
+              Spacer(), // Add spacer to push the add icon to the right
               IconButton(
-                icon: const Icon(
-                  Icons.bookmark_border_rounded,
-                  color: Color.fromARGB(255, 255, 255, 255),
+                icon: Icon(
+                  isAdded ? Icons.check : Icons.add,
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   size: 25,
                 ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  size: 25,
-                ),
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    // Toggle the added state for this book
+                    addedBooks[index] = !isAdded;
+                  });
+                },
               ),
             ],
           ),
@@ -358,4 +362,3 @@ class BookDetailsPage extends StatelessWidget {
     );
   }
 }
-

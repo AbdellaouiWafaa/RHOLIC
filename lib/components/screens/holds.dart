@@ -15,10 +15,21 @@ class HoldsListScreen extends StatefulWidget {
 
 class _HoldsListScreenState extends State<HoldsListScreen> {
   int _selectedIndex = 1;
+  List<Map<String, String>> bookmarkedBooks = [];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  void _addBookToHolds(String title, String author, String imagePath) {
+    setState(() {
+      bookmarkedBooks.add({
+        'title': title,
+        'author': author,
+        'image': imagePath,
+      });
     });
   }
 
@@ -229,6 +240,17 @@ class _HoldsListScreenState extends State<HoldsListScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HoldsScreen(bookmarkedBooks: bookmarkedBooks),
+            ),
+          );
+        },
+        child: const Icon(Icons.bookmark),
+      ),
     );
   }
 
@@ -316,9 +338,11 @@ class _HoldsListScreenState extends State<HoldsListScreen> {
                           style: TextStyle(color: Color.fromARGB(255, 10, 15, 58)),
                         ),
                       ),
-                      Text(
-                        "Due in $daysLeft days",
-                        style: const TextStyle(color: Color.fromARGB(195, 101, 19, 13)),
+                      IconButton(
+                        icon: const Icon(Icons.add, color: Color.fromARGB(255, 10, 15, 58)),
+                        onPressed: () {
+                          _addBookToHolds(title, author, imagePath);
+                        },
                       ),
                     ],
                   ),
