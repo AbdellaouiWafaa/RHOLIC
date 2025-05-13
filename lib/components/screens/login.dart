@@ -198,7 +198,7 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
                                           _addressController,
                                         ),
                                         _buildTextField(
-                                          "CCP number account",
+                                          "CCP account number",
                                           _ccpController,
                                           isPassword: true,
                                         ),
@@ -207,7 +207,7 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: const Color(
                                               0xFFC4A05D,
-                                            ), // Gold color
+                                            ),
                                             foregroundColor: Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(8),
@@ -341,7 +341,7 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: controller,
-        obscureText: isPassword,
+        obscureText: isPassword && hint != "CCP account number", 
         keyboardType: isEmail
             ? TextInputType.emailAddress
             : isPhone
@@ -356,7 +356,7 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: Colors.pinkAccent),
           ),
-          suffixIcon: isPassword
+          suffixIcon: isPassword && hint != "CCP account number"
               ? const Icon(
                   Icons.visibility_off,
                   color: Color.fromARGB(255, 212, 133, 7),

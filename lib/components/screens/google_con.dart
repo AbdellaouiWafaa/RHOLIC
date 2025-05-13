@@ -1,3 +1,4 @@
+import 'package:RHOLIC/components/screens/code_enter.dart';
 import 'package:flutter/material.dart';
 
 
@@ -122,7 +123,16 @@ class _GoogleLoginScreenState extends State<GoogleLoginScreen> {
                     
                     // Next Button
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                       
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>  OtpScreen (),
+                          ),
+                        );
+                     
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         foregroundColor: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:RHOLIC/components/screens/google_con.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/login.dart';
@@ -55,17 +56,16 @@ class ResetPasswordScreen extends StatelessWidget {
             TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                hintText: "Email",
+                hintText: "New password",
                 hintStyle: const TextStyle(color: Color.fromARGB(178, 94, 94, 94)),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
-                ),
-                suffixIcon: const Icon(Icons.visibility, color: Color.fromARGB(178, 94, 94, 94)),
+                ),),
               ),
-            ),
+           
             const SizedBox(height: 20),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
@@ -76,7 +76,12 @@ class ResetPasswordScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () { Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const GoogleLoginScreen(),
+          ),
+        );},
               icon: Image.asset(
                 "assets/images/Google__G__logo.svg.png",
                 height: 24,
