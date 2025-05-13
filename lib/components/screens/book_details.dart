@@ -290,7 +290,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                 context: context,
                 icon: Icons.smartphone,
                 title: "Digital (5 days offline)",
-                description: "Download to read on this device",
+                description: "Download to read on this app",
                 onTap: () {
                   setState(() {
                     selectedLoanType = LoanType.digital;
@@ -378,7 +378,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
           bookTitle: widget.bookTitle,
           author: widget.author,
           coverImageAsset: widget.coverImageAsset,
-          expiryDate: DateTime.now().add(const Duration(days: 5)), // Example expiry date
+          expiryDate: DateTime.now().add(const Duration(days: 5)),
         ),
       ),
     );
@@ -1166,10 +1166,10 @@ String _getPageContent(int page) {
                   child: Transform.rotate(
                     angle: -0.2,
                     child: Text(
-                      "RHOLIC",
+                      "RHOLIC RHOLIC RHOLIC RHOLIC RHOLIC RHOLIC",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -1338,7 +1338,7 @@ String _getPageContent(int page) {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            "This book has been securely downloaded to your device for offline reading until ${widget.expiryDate.day}/${widget.expiryDate.month}/${widget.expiryDate.year}.",
+                            "This book has been securely downloaded in your app until ${widget.expiryDate.day}/${widget.expiryDate.month}/${widget.expiryDate.year}.",
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 12,

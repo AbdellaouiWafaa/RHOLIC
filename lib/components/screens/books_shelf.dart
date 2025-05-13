@@ -1,7 +1,7 @@
+import 'package:RHOLIC/components/screens/first_page.dart';
 import 'package:flutter/material.dart';
 import 'package:RHOLIC/components/screens/chatbox.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
-import 'package:RHOLIC/components/screens/exit.dart';
 import 'package:RHOLIC/components/screens/holds.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/profile.dart';
@@ -42,7 +42,7 @@ class _BookListScreenState extends State<BookListScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ConfirmLogoutScreen(),
+          builder: (context) => const FirstpageScreen(),
         ),
       );
     },

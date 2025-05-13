@@ -1,10 +1,10 @@
+import 'package:RHOLIC/components/screens/first_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:RHOLIC/components/screens/books_shelf.dart'; 
 import 'package:RHOLIC/components/screens/chat_admin_user.dart';
 import 'package:RHOLIC/components/screens/chatbox.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
-import 'package:RHOLIC/components/screens/exit.dart';
 import 'package:RHOLIC/components/screens/history.dart';   
 import 'package:RHOLIC/components/screens/library_card.dart';
 import 'package:RHOLIC/components/screens/personnel_infos.dart';
@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     IconButton(
                       icon: Icon(Icons.arrow_back, color: accentColor),
                       onPressed: () {
-                         Navigator.push(context, MaterialPageRoute(builder: (context) => const ConfirmLogoutScreen()));
+                         Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstpageScreen()));
                       },
                     ),
                     Flexible(
