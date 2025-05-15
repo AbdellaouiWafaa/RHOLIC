@@ -1,4 +1,3 @@
-import 'package:RHOLIC/components/screens/google_con.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/code_enter.dart';
@@ -228,34 +227,6 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
                                         ),
                                         const SizedBox(height: 19),
                                         Row(
-                                          children: [
-                                            const Expanded(
-                                              child:
-                                                  Divider(color: Colors.black),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                              ),
-                                              child: Text(
-                                                "or",
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 17,
-                                                  color: Colors.black54,
-                                                ),
-                                              ),
-                                            ),
-                                            const Expanded(
-                                              child:
-                                                  Divider(color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        _buildGoogleButton(),
-                                        const SizedBox(height: 15),
-                                        Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
@@ -379,40 +350,6 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
           }
           return null;
         },
-      ),
-    );
-  }
-
-  Widget _buildGoogleButton() {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.black,
-        side: const BorderSide(color: Colors.black),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        minimumSize: const Size(double.infinity, 50),
-      ),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const GoogleLoginScreen(),
-          ),
-        );
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/images/Google__G__logo.svg.png",
-            height: 24,
-            width: 24,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            "Continue with Google",
-            style: GoogleFonts.poppins(fontSize: 16),
-          ),
-        ],
       ),
     );
   }

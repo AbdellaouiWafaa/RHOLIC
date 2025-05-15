@@ -167,7 +167,7 @@ class OtpScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const BookListScreen(),
+                                  builder: (context) => getAliceInWonderlandDetailsScreen(),
                                 ),
                               );
                             },
