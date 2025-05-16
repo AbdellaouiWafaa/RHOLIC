@@ -40,15 +40,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       'image': 'assets/images/dracula.png',
     },
     {
-      'title': 'Frankenstein',
-      'author': 'Mary Shelley',
-      'image': 'assets/images/frankenstein.png',
-    },
-    {
       'title': 'Alice Wonderlands',
       'author': 'Lewis Carroll',
       'image': 'assets/images/alice.png',
     },
+    {
+      'title': 'Frankenstein',
+      'author': 'Mary Shelley',
+      'image': 'assets/images/frankenstein.png',
+    },
+    
   ];
 
   // Map to track which books have been added
@@ -279,12 +280,12 @@ appBar: AppBar(
               fontSize: 15,
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           Text(
             book['title']!,
             style: TextStyle(
               color: const Color.fromARGB(255, 0, 0, 0),
-              fontSize: 25,
+              fontSize: 23,
               fontWeight: FontWeight.bold,
             ),
           ),

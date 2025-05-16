@@ -1,4 +1,4 @@
-import 'package:RHOLIC/components/screens/book_details.dart';
+import 'package:RHOLIC/components/screens/book_reader.dart';
 import 'package:RHOLIC/components/screens/first_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -114,7 +114,11 @@ class CurrentlyReading extends StatelessWidget {
                   onPressed: () { Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => getAliceInWonderlandDetailsScreen(),
+                                  builder: (context) => BookReaderScreen(
+                                    bookTitle: 'Alice in Wonderland',
+                                    author: 'Lewis Carroll',
+                                    expiryDate: DateTime.now(),
+                                  ),
                                 ),
                               );},
                   style: ElevatedButton.styleFrom(

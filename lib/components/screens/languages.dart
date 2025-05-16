@@ -33,26 +33,7 @@ class LanguageScreen extends StatelessWidget {
             title: const Text('English (UK)', style: TextStyle(color: Colors.white)),
           ),
           const Divider(color: Colors.grey),
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Soon', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 25)),
-          ),
-          // Example of other languages (no language switching)
-          ListTile(
-            title: const Text('Arabic', style: TextStyle(color: Colors.white)),
-          ),
-          ListTile(
-            title: const Text('French', style: TextStyle(color: Colors.white)),
-          ),
-          ListTile(
-            title: const Text('Spanish', style: TextStyle(color: Colors.white)),
-          ),
-          ListTile(
-            title: const Text('Hindi', style: TextStyle(color: Colors.white)),
-          ),
-          ListTile(
-            title: const Text('Mandarin', style: TextStyle(color: Colors.white)),
-          ),
+
         ],
       ),
     );

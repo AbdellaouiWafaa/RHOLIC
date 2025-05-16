@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: NotificationSettingsScreen(),
-  ));
-}
-
 class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
 
@@ -33,51 +26,66 @@ class NotificationSettingsScreenState extends State<NotificationSettingsScreen> 
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0F3A),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      "Notifications",
-                      style: GoogleFonts.poppins(
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        "Notifications",
+                        style: GoogleFonts.poppins(
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
+                  const SizedBox(width: 48), // Placeholder to balance the space for the back button
+                ],
+              ),
+              const SizedBox(height: 20),
+              // Wrap everything below the header in Expanded and SingleChildScrollView
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildSection("Common"),
+                      buildToggle("General Notification"),
+                      buildToggle("Sound"),
+                      buildToggle("Vibrate"),
+                      const Divider(color: Colors.white24),
+                      buildSection("System & services update"),
+                      buildToggle("App updates"),
+                      buildToggle("Bill Reminder"),
+                      buildToggle("Promotion"),
+                      buildToggle("Discount Available"),
+                      buildToggle("Payment Request"),
+                      const Divider(color: Colors.white24),
+                      buildSection("Others"),
+                      buildToggle("New Service Available"),
+                      buildToggle("New Tips Available"),
+                      // Add some bottom padding for better scrolling experience
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 48), // Placeholder to balance the space for the back button
-              ],
-            ),
-            const SizedBox(height: 20),
-            buildSection("Common"),
-            buildToggle("General Notification"),
-            buildToggle("Sound"),
-            buildToggle("Vibrate"),
-            const Divider(color: Colors.white24),
-            buildSection("System & services update"),
-            buildToggle("App updates"),
-            buildToggle("Bill Reminder"),
-            buildToggle("Promotion"),
-            buildToggle("Discount Available"),
-            buildToggle("Payment Request"),
-            const Divider(color: Colors.white24),
-            buildSection("Others"),
-            buildToggle("New Service Available"),
-            buildToggle("New Tips Available"),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -109,7 +117,6 @@ class NotificationSettingsScreenState extends State<NotificationSettingsScreen> 
           ),
           SwitchTheme(
             data: SwitchThemeData(
-              // Removed invalid 'thumbShape' parameter
               thumbColor: WidgetStateProperty.resolveWith<Color>(
                 (states) {
                   if (states.contains(WidgetState.selected)) {
