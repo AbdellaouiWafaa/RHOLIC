@@ -252,7 +252,7 @@ class _BookDiscussionState extends State<BookDiscussion> {
                 children: [
                   Expanded(
                     child: Text(
-                      "Replying to ${replyingToUser}",
+                      "Replying to $replyingToUser",
                       style: const TextStyle(color: Colors.white70),
                     ),
                   ),
@@ -272,7 +272,7 @@ class _BookDiscussionState extends State<BookDiscussion> {
                     controller: messageController,
                     decoration: InputDecoration(
                       hintText: replyingToUser != null 
-                          ? "Reply to ${replyingToUser}..." 
+                          ? "Reply to $replyingToUser..." 
                           : "Type a message...",
                       filled: true,
                       fillColor: Colors.white,

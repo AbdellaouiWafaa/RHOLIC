@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ManageScreen extends StatelessWidget {
-  ManageScreen({Key? key}) : super(key: key);
+  ManageScreen({super.key});
 
   // Styles pour Welcome section (basique comme dans DashboardContent) - Déjà présents dans votre code fourni
   final TextStyle welcomeBackStyle = GoogleFonts.islandMoments(
@@ -371,11 +371,11 @@ class UserForm extends StatefulWidget {
   final String buttonText;
 
   const UserForm({
-    Key? key,
+    super.key,
     required this.formType,
     required this.title,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   @override
   _UserFormState createState() => _UserFormState();

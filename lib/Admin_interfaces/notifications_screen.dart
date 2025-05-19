@@ -4,7 +4,7 @@ import 'dart:async'; // Import for Timer
 import 'dart:math'; // Import for random simulation
 
 class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key});
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();

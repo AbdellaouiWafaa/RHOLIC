@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-
-// Removed unused import: 'dart:convert';
+import 'dart:io';
+//import: 'dart:convert';
 
 const String backendBaseUrl ='https://backendapp-production-3be4.up.railway.app';
 
@@ -28,6 +28,24 @@ class _UploadScreenState extends State<UploadScreen> {
   
   bool _isUploading = false;
 
+  // Helper function to validate if a file is a PDF
+  bool _isPDF(String filePath) {
+    if (filePath == "email") return true; // Special case for email option
+    
+    // Check file extension
+    return filePath.toLowerCase().endsWith('.pdf');
+  }
+  
+  // Function to show error if file is not PDF
+  void _showNotPDFError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Only PDF files are allowed. Please select a PDF document."),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
   Future<void> uploadFileToBackend(String filePath, String fileName) async {
     setState(() {
       _isUploading = true;
@@ -37,8 +55,10 @@ class _UploadScreenState extends State<UploadScreen> {
     final request = http.MultipartRequest('POST', url);
 
     try {
-      request.files.add(await http.MultipartFile.fromPath('file', filePath));
+      // Change field name from 'file' to 'pdf' and add 'email' field
+      request.files.add(await http.MultipartFile.fromPath('pdf', filePath));
       request.fields['fileName'] = fileName;
+      request.fields['email'] = 'RHOLIC@email.com';
 
       final response = await request.send();
 
@@ -64,6 +84,69 @@ class _UploadScreenState extends State<UploadScreen> {
     }
   }
 
+  Future<void> _pickPDF() async {
+    // Since we can't use FilePicker, we'll use a document picker from ImagePicker
+    // and then validate if it's a PDF
+    try {
+      final XFile? pickedFile = await _picker.pickMedia();
+      
+      if (pickedFile != null) {
+        final String path = pickedFile.path;
+        final String fileName = pickedFile.name;
+        
+        // Check if the file is a PDF by examining its extension
+        if (path.toLowerCase().endsWith('.pdf')) {
+          setState(() {
+            selectedFilePath = path;
+            selectedFileName = fileName;
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Please select a PDF file only")),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error picking file: $e")),
+      );
+    }
+  }
+
+  Future<void> _uploadReceiptAsPDF() async {
+    try {
+      final XFile? pickedFile = await _picker.pickMedia();
+      
+      if (pickedFile != null) {
+        final String path = pickedFile.path;
+        final String fileName = pickedFile.name;
+        
+        // Check if the file is a PDF
+        if (path.toLowerCase().endsWith('.pdf')) {
+          setState(() {
+            receiptPath = path;
+            receiptName = fileName;
+          });
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Receipt uploaded successfully"),
+              duration: Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Please select a PDF file only")),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error picking file: $e")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +189,7 @@ class _UploadScreenState extends State<UploadScreen> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.file_present, color: Color.fromARGB(255, 165, 133, 36)),
+                          const Icon(Icons.picture_as_pdf, color: Color.fromARGB(255, 165, 133, 36)),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
@@ -223,7 +306,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     icon: Icons.receipt_long,
                     title: "Upload payment receipt",
                     linkText: "upload",
-                    onTap: _uploadReceipt,
+                    onTap: _uploadReceiptAsPDF,
                   ),
                   
                  
@@ -238,7 +321,7 @@ class _UploadScreenState extends State<UploadScreen> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.receipt, color: Color.fromARGB(255, 165, 133, 36)),
+                          const Icon(Icons.picture_as_pdf, color: Color.fromARGB(255, 165, 133, 36)),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
@@ -267,6 +350,22 @@ class _UploadScreenState extends State<UploadScreen> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (selectedFilePath != null && selectedFileName != null) {
+                          if (selectedFilePath == "email") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('You chose to email your document. No file to upload.')),
+                            );
+                            return;
+                          }
+                          if (!_isPDF(selectedFilePath!)) {
+                            _showNotPDFError();
+                            return;
+                          }
+                          if (!File(selectedFilePath!).existsSync()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('File not found. Please select the file again.')),
+                            );
+                            return;
+                          }
                           await uploadFileToBackend(selectedFilePath!, selectedFileName!);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -300,24 +399,6 @@ class _UploadScreenState extends State<UploadScreen> {
         ],
       ),
     );
-  }
-
- 
-  void _uploadReceipt() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        receiptPath = image.path;
-        receiptName = image.name;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Receipt uploaded successfully"),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
   }
 
   Widget _buildUploadButton(String title, String buttonText, VoidCallback onPressed) {
@@ -383,50 +464,23 @@ class _UploadScreenState extends State<UploadScreen> {
               ),
               const SizedBox(height: 20),
               
-             
               _buildOptionTile(
-                icon: Icons.camera_alt,
-                title: "Take Photo",
-                description: "Use your camera to take a picture of your document",
+                icon: Icons.picture_as_pdf,
+                title: "Select PDF Document",
+                description: "Choose a PDF file from your device",
                 onTap: () async {
                   Navigator.pop(context);
-                  final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-                  if (photo != null) {
-                    setState(() {
-                      selectedFilePath = photo.path;
-                      selectedFileName = photo.name;
-                    });
-                  }
+                  await _pickPDF();
                 },
               ),
               
               const Divider(color: Colors.white24),
-              
-              
-              _buildOptionTile(
-                icon: Icons.photo_library,
-                title: "Choose from Gallery",
-                description: "Select an existing image from your gallery",
-                onTap: () async {
-                  Navigator.pop(context);
-                  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    setState(() {
-                      selectedFilePath = image.path;
-                      selectedFileName = image.name;
-                    });
-                  }
-                },
-              ),
-              
-              const Divider(color: Colors.white24),
-              
               
               // Email option
               _buildOptionTile(
                 icon: Icons.email,
-                title: "Email Your Document",
-                description: "Send your document to our email address",
+                title: "Email Your PDF Document",
+                description: "Send your PDF document to our email address",
                 onTap: () {
                   Navigator.pop(context);
                   _showEmailInstructionsDialog(context);
@@ -467,14 +521,14 @@ class _UploadScreenState extends State<UploadScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color.fromARGB(255, 20, 30, 80),
-        title: const Text("Email Your Document", 
+        title: const Text("Email Your PDF Document", 
             style: TextStyle(color: Colors.white)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Please send your document to the following email address:",
+              "Please send your PDF document to the following email address:",
               style: TextStyle(color: Colors.white70),
             ),
             const SizedBox(height: 15),
@@ -509,7 +563,7 @@ class _UploadScreenState extends State<UploadScreen> {
             ),
             const SizedBox(height: 15),
             const Text(
-              "Include your full name and ID in the subject line. We'll process your document within 24-48 hours.",
+              "Include your full name and ID in the subject line. We'll process your PDF document within 24-48 hours.",
               style: TextStyle(color: Colors.white70),
             ),
           ],
@@ -524,7 +578,7 @@ class _UploadScreenState extends State<UploadScreen> {
               final Uri emailUri = Uri(
                 scheme: 'mailto',
                 path: emailAddress,
-                query: 'subject=Document Upload - [Your Name]&body=Please find my document attached.',
+                query: 'subject=PDF Document Upload - [Your Name]&body=Please find my PDF document attached.',
               );
               
               if (await canLaunchUrl(emailUri)) {
@@ -540,7 +594,7 @@ class _UploadScreenState extends State<UploadScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                selectedFileName = "Email submission planned";
+                selectedFileName = "Email PDF submission planned";
                 selectedFilePath = "email";
               });
               Navigator.pop(context);

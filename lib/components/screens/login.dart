@@ -41,12 +41,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 Future<void> saveUserInformation(Map<String, String> userInfo) async {
   final url = '$backendBaseUrl/api/create-account';
   debugPrint('Sending request to: $url');
+  
 
   final response = await http.post(
-    Uri.parse(url),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode(userInfo),
-  );
+  Uri.parse(url),
+  headers: {'Content-Type': 'application/json'},
+  body: jsonEncode(userInfo),
+).timeout(const Duration(seconds: 10));
+
 
   debugPrint('Status code: ${response.statusCode}');
   debugPrint('Raw response: ${response.body}');
