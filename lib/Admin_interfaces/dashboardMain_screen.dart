@@ -7,13 +7,9 @@ import 'profileMain_screen.dart';
 import 'notifications_screen.dart';
 
 // Convertir en StatefulWidget
-<<<<<<< HEAD:lib/Admin_interfaces/dashboardMain_screen.dart
+
 class DashboardMainScreen extends StatefulWidget {
   const DashboardMainScreen({super.key});
-=======
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
->>>>>>> 5f3a6cf1e07751e46e55751a0eeb03174728805c:lib/Admin_interfaces/dashboard_screen.dart
 
   @override
   State<DashboardMainScreen> createState() => _DashboardMainScreenState();
@@ -141,21 +137,12 @@ class DashboardContent extends StatelessWidget {
   // Données depuis la maquette (kept user's data)
   final int borrowedCount = 1;
   final int overdueCount = 0;
-<<<<<<< HEAD:lib/Admin_interfaces/dashboardMain_screen.dart
-  final int fineCollected = 1;
-  final int newUsers = 1;
-  final int inactiveUsers = 2;
-  final int activeUsers = 1 ;
-  final int totalTitles = 5;
-  final int totalMembers = 4;
-=======
-  final int fineCollected = 2;
-  final int newUsers = 1;
-  final int inactiveUsers = 1;
-  final int activeUsers = 1;
-  final int totalTitles = 5;
-  final int totalMembers = 2;
->>>>>>> 5f3a6cf1e07751e46e55751a0eeb03174728805c:lib/Admin_interfaces/dashboard_screen.dart
+  final int totalTitles = 120; // Example value, replace with your data source
+  final int totalMembers = 45; // Example value, replace with your data source
+  final int fineCollected = 300; // Example value, replace with your data source
+  final int newUsers = 5; // Example value, replace with your data source
+  final int inactiveUsers = 2; // Example value, replace with your data source
+  final int activeUsers = 43; // Example value, replace with your data source
 
   // Styles pour Welcome section (basique comme demandé pour Welcome/Jane)
  final TextStyle welcomeBackStyle = GoogleFonts.islandMoments(

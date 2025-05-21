@@ -5,7 +5,6 @@ import 'dart:math'; // Import for random simulation
 // Import necessary packages for opening URLs (for the document preview simulation)
 import 'package:url_launcher/url_launcher.dart';
 
-<<<<<<< HEAD
 class DummyUserData {
   // Use a static list to simulate data storage across the application
   static final List<Map<String, dynamic>> _existingUsers = [
@@ -54,10 +53,6 @@ class DummyUserData {
 
 class NotificationsScreen extends StatefulWidget { 
   const NotificationsScreen({Key? key}) : super(key: key);
-=======
-class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({super.key});
->>>>>>> 5f3a6cf1e07751e46e55751a0eeb03174728805c
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();

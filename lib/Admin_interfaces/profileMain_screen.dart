@@ -5,13 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'dart:io'; // For File class
 
-<<<<<<< HEAD:lib/Admin_interfaces/profileMain_screen.dart
 class ProfileMainScreen extends StatefulWidget {
   const ProfileMainScreen({Key? key}) : super(key: key);
-=======
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
->>>>>>> 5f3a6cf1e07751e46e55751a0eeb03174728805c:lib/Admin_interfaces/profile_screen.dart
 
   @override
   State<ProfileMainScreen> createState() => _ProfileMainScreenState();
