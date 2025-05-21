@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dashboardMain_screen.dart'; // <-- Assurez-vous que ce fichier existe
 
 class Login2 extends StatefulWidget {
-  const Login2({Key? key}) : super(key: key);
+  const Login2({super.key});
 
   @override
   _Login2State createState() => _Login2State();

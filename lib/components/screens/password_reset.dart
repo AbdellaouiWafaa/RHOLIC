@@ -55,42 +55,17 @@ class ResetPasswordScreen extends StatelessWidget {
             TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                hintText: "Email",
+                hintText: "New password",
                 hintStyle: const TextStyle(color: Color.fromARGB(178, 94, 94, 94)),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
-                ),
-                suffixIcon: const Icon(Icons.visibility, color: Color.fromARGB(178, 94, 94, 94)),
+                ),),
               ),
-            ),
+           
             const SizedBox(height: 20),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {},
-              icon: Image.asset(
-                "assets/images/Google__G__logo.svg.png",
-                height: 24,
-                width: 24,
-              ),
-              label: const Text(
-                "Continue with Google",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontStyle: FontStyle.normal,
-                  color: Color.fromARGB(178, 94, 94, 94),
-                ),
-              ),
-            ),
             const SizedBox(height: 30),
             OutlinedButton(
               style: OutlinedButton.styleFrom(

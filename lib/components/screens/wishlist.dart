@@ -148,20 +148,9 @@ class BookItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const LinearProgressIndicator(
-                  value: 0,
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                  minHeight: 6,
-                ),
+               
                 const SizedBox(height: 4),
-                const Text(
-                  '0% completed',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
+                
                 const SizedBox(height: 12),
                 Row(
                   children: [

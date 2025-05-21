@@ -1,8 +1,9 @@
+import 'package:RHOLIC/components/screens/book_reader.dart';
+import 'package:RHOLIC/components/screens/first_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/books_shelf.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
-import 'package:RHOLIC/components/screens/exit.dart';
 import 'package:RHOLIC/components/screens/profile.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
 
@@ -26,7 +27,7 @@ class ChatBoxScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ConfirmLogoutScreen(),
+                  builder: (context) => const FirstpageScreen(),
                 ),
               );
             },
@@ -105,15 +106,21 @@ class CurrentlyReading extends StatelessWidget {
                   style: GoogleFonts.poppins(fontSize: 12, color: Colors.white70),
                 ),
                 const SizedBox(height: 10),
-                const LinearProgressIndicator(value: 0.75, color: Colors.blue),
+                
                 const SizedBox(height: 10),
-                Text(
-                  "75% completed",
-                  style: GoogleFonts.poppins(fontSize: 12, color: Colors.white70),
-                ),
+                
                 const SizedBox(height: 22),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () { Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BookReaderScreen(
+                                    bookTitle: 'Alice in Wonderland',
+                                    author: 'Lewis Carroll',
+                                    expiryDate: DateTime.now(),
+                                  ),
+                                ),
+                              );},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 165, 133, 36),
                     foregroundColor: Colors.white,
@@ -138,11 +145,86 @@ class BookDiscussion extends StatefulWidget {
 
 class _BookDiscussionState extends State<BookDiscussion> {
   final TextEditingController messageController = TextEditingController();
-  // List to store all discussion messages
-  final List<Map<String, String>> messages = [
-    {"user": "Chaimaa", "message": "The plot twist in chapter 7 was incredible!"},
-    {"user": "Wafaa", "message": "The characters development is amazing"},
+  // Enhanced message structure to include ID, reactions, and replies
+  final List<Map<String, dynamic>> messages = [
+    {
+      "id": "1",
+      "user": "Chaimaa", 
+      "message": "The plot twist in chapter 7 was incredible!",
+      "reactions": {"❤️": 2, "👍": 1},
+      "replies": [
+        {"user": "Wafaa", "message": "I know! I didn't see it coming!"}
+      ]
+    },
+    {
+      "id": "2",
+      "user": "Wafaa", 
+      "message": "The characters development is amazing",
+      "reactions": {"👍": 3},
+      "replies": []
+    },
   ];
+  
+  // To track which message is being replied to
+  String? replyingToId;
+  String? replyingToUser;
+
+  void addReaction(String messageId, String reaction) {
+    setState(() {
+      final messageIndex = messages.indexWhere((msg) => msg["id"] == messageId);
+      if (messageIndex != -1) {
+        if (messages[messageIndex]["reactions"].containsKey(reaction)) {
+          messages[messageIndex]["reactions"][reaction]++;
+        } else {
+          messages[messageIndex]["reactions"][reaction] = 1;
+        }
+      }
+    });
+  }
+
+  void setReplyTo(String messageId, String user) {
+    setState(() {
+      replyingToId = messageId;
+      replyingToUser = user;
+    });
+  }
+
+  void cancelReply() {
+    setState(() {
+      replyingToId = null;
+      replyingToUser = null;
+    });
+  }
+
+  void sendMessage() {
+    if (messageController.text.isNotEmpty) {
+      setState(() {
+        if (replyingToId != null) {
+          // Add reply to the specified message
+          final messageIndex = messages.indexWhere((msg) => msg["id"] == replyingToId);
+          if (messageIndex != -1) {
+            messages[messageIndex]["replies"].add({
+              "user": "You",
+              "message": messageController.text,
+            });
+          }
+          // Clear reply state
+          replyingToId = null;
+          replyingToUser = null;
+        } else {
+          // Add as a new message
+          messages.add({
+            "id": (messages.length + 1).toString(),
+            "user": "You",
+            "message": messageController.text,
+            "reactions": {},
+            "replies": [],
+          });
+        }
+        messageController.clear();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,11 +235,34 @@ class _BookDiscussionState extends State<BookDiscussion> {
       ),
       child: Column(
         children: [
-          // Display all messages
-          ...messages.map((msg) => DiscussionMessage(
-                user: msg["user"]!,
-                message: msg["message"]!,
+          ...messages.map((msg) => DiscussionMessageCard(
+                messageId: msg["id"],
+                user: msg["user"],
+                message: msg["message"],
+                reactions: msg["reactions"],
+                replies: msg["replies"],
+                onReply: () => setReplyTo(msg["id"], msg["user"]),
+                onReaction: (reaction) => addReaction(msg["id"], reaction),
               )),
+          if (replyingToUser != null)
+            Container(
+              color: Colors.black26,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Replying to $replyingToUser",
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white70),
+                    onPressed: cancelReply,
+                  ),
+                ],
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
@@ -166,7 +271,9 @@ class _BookDiscussionState extends State<BookDiscussion> {
                   child: TextField(
                     controller: messageController,
                     decoration: InputDecoration(
-                      hintText: "Type a message...",
+                      hintText: replyingToUser != null 
+                          ? "Reply to $replyingToUser..." 
+                          : "Type a message...",
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -178,19 +285,7 @@ class _BookDiscussionState extends State<BookDiscussion> {
                 const SizedBox(width: 10),
                 FloatingActionButton(
                   backgroundColor: const Color(0xFF578FCA),
-                  onPressed: () {
-                    if (messageController.text.isNotEmpty) {
-                      // Add the new message to the list
-                      setState(() {
-                        messages.add({
-                          "user": "You", // You can change this to the current user's name
-                          "message": messageController.text,
-                        });
-                      });
-                      // Clear the text field
-                      messageController.clear();
-                    }
-                  },
+                  onPressed: sendMessage,
                   child: const Icon(Icons.send, color: Colors.white),
                 ),
               ],
@@ -202,11 +297,25 @@ class _BookDiscussionState extends State<BookDiscussion> {
   }
 }
 
-class DiscussionMessage extends StatelessWidget {
+class DiscussionMessageCard extends StatelessWidget {
+  final String messageId;
   final String user;
   final String message;
+  final Map<String, dynamic> reactions;
+  final List<dynamic> replies;
+  final VoidCallback onReply;
+  final Function(String) onReaction;
 
-  const DiscussionMessage({super.key, required this.user, required this.message});
+  const DiscussionMessageCard({
+    super.key, 
+    required this.messageId,
+    required this.user, 
+    required this.message, 
+    required this.reactions,
+    required this.replies,
+    required this.onReply,
+    required this.onReaction,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -217,28 +326,124 @@ class DiscussionMessage extends StatelessWidget {
         color: Colors.white10,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
-            radius: 20,
-            backgroundColor: Color(0xFF303030),
-            child: Icon(Icons.account_circle, size: 32, color: Colors.grey),
+          // Main message
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CircleAvatar(
+                radius: 20,
+                backgroundColor: Color(0xFF303030),
+                child: Icon(Icons.account_circle, size: 32, color: Colors.grey),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 165, 133, 36),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(message, style: GoogleFonts.poppins(fontSize: 14, color: Colors.white)),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          
+          // Reactions display
+          if (reactions.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(top: 8, left: 50),
+              child: Wrap(
+                spacing: 8,
+                children: reactions.entries.map((entry) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      "${entry.key} ${entry.value}",
+                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          
+          // Replies
+          if (replies.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(top: 10, left: 50),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white12,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: replies.map<Widget>((reply) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          reply["user"],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 165, 133, 36),
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          reply["message"],
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          
+          // Action buttons for reply and reactions
+          Padding(
+            padding: const EdgeInsets.only(top: 8, left: 50),
+            child: Row(
               children: [
-                Text(
-                  user,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 165, 133, 36),
+                TextButton.icon(
+                  icon: const Icon(Icons.reply, size: 16, color: Colors.white70),
+                  label: const Text('Reply', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  onPressed: onReply,
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minimumSize: Size.zero,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(message, style: GoogleFonts.poppins(fontSize: 14, color: Colors.white)),
+                const SizedBox(width: 8),
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.add_reaction, size: 16, color: Colors.white70),
+                  tooltip: 'Add reaction',
+                  color: const Color.fromARGB(255, 30, 35, 78),
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(value: '👍', child: Text('👍 Like')),
+                    const PopupMenuItem(value: '❤️', child: Text('❤️ Love')),
+                    const PopupMenuItem(value: '😂', child: Text('😂 Laugh')),
+                    const PopupMenuItem(value: '😮', child: Text('😮 Wow')),
+                    const PopupMenuItem(value: '😢', child: Text('😢 Sad')),
+                  ],
+                  onSelected: onReaction,
+                ),
               ],
             ),
           ),

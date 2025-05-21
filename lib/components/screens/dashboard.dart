@@ -40,16 +40,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
       'image': 'assets/images/dracula.png',
     },
     {
-      'title': 'Frankenstein',
-      'author': 'Mary Shelley',
-      'image': 'assets/images/frankenstein.png',
-    },
-    {
       'title': 'Alice Wonderlands',
       'author': 'Lewis Carroll',
       'image': 'assets/images/alice.png',
     },
+    {
+      'title': 'Frankenstein',
+      'author': 'Mary Shelley',
+      'image': 'assets/images/frankenstein.png',
+    },
+    
   ];
+
+  // Map to track which books have been added
+  Map<int, bool> addedBooks = {};
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +165,7 @@ appBar: AppBar(
                         }
                         return Transform.scale(
                           scale: value,
-                          child: bookCard(context, books[index]),
+                          child: bookCard(context, books[index], index),
                         );
                       },
                     );
@@ -260,7 +264,10 @@ appBar: AppBar(
     );
   }
 
-  Widget bookCard(BuildContext context, Map<String, String> book) {
+  Widget bookCard(BuildContext context, Map<String, String> book, int index) {
+    // Default to false if not in map
+    bool isAdded = addedBooks[index] ?? false;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -273,12 +280,12 @@ appBar: AppBar(
               fontSize: 15,
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           Text(
             book['title']!,
             style: TextStyle(
               color: const Color.fromARGB(255, 0, 0, 0),
-              fontSize: 25,
+              fontSize: 23,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -316,21 +323,19 @@ appBar: AppBar(
                   ),
                 ),
               ),
+              Spacer(), // Add spacer to push the add icon to the right
               IconButton(
-                icon: const Icon(
-                  Icons.bookmark_border_rounded,
-                  color: Color.fromARGB(255, 255, 255, 255),
+                icon: Icon(
+                  isAdded ? Icons.check : Icons.add,
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   size: 25,
                 ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  size: 25,
-                ),
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    // Toggle the added state for this book
+                    addedBooks[index] = !isAdded;
+                  });
+                },
               ),
             ],
           ),
@@ -358,4 +363,3 @@ class BookDetailsPage extends StatelessWidget {
     );
   }
 }
-

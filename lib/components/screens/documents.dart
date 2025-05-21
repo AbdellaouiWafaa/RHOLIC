@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:RHOLIC/components/screens/code_enter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'dart:convert';
+
+const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
@@ -12,7 +16,7 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  final String paymentCode = "0023456789 45";  
+  final String paymentCode = "0023456789 45";
   final String mapsUrl = "https://maps.app.goo.gl/oKo7S2rS1sTKQZoL6";
   final ImagePicker _picker = ImagePicker();
 
@@ -22,10 +26,183 @@ class _UploadScreenState extends State<UploadScreen> {
   String? receiptPath;
   String? receiptName;
 
+  bool _isUploading = false;
+
+  bool _isPDF(String filePath) {
+    if (filePath == "email") return true;
+    return filePath.toLowerCase().endsWith('.pdf');
+  }
+
+  void _showNotPDFError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Only PDF files are allowed. Please select a PDF document."),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
+  Future<void> uploadFileToBackend(String filePath, String fileName) async {
+    setState(() {
+      _isUploading = true;
+    });
+
+    final url = Uri.parse('$backendBaseUrl/api/upload-pdf');
+    final request = http.MultipartRequest('POST', url);
+
+    try {
+      // Debug the request details
+      debugPrint('Uploading to URL: ${request.url}');
+      
+      // Add PDF file
+      final pdfFile = await http.MultipartFile.fromPath('pdf', filePath);
+      request.files.add(pdfFile);
+      debugPrint('Adding PDF file: ${pdfFile.filename}, size: ${await File(filePath).length()} bytes');
+      
+      // Add receipt if available
+      if (receiptPath != null && receiptName != null) {
+        final receiptFile = await http.MultipartFile.fromPath('receipt', receiptPath!);
+        request.files.add(receiptFile);
+        debugPrint('Adding receipt file: ${receiptFile.filename}, size: ${await File(receiptPath!).length()} bytes');
+      }
+      
+      // Add fields
+      request.fields['fileName'] = fileName;
+      request.fields['email'] = 'RHOLIC@email.com';
+      // Add userId field - the server is likely looking for this based on the error
+      request.fields['userId'] = 'RHOLIC'; // Or use a real user ID if available
+      // Alternative user identifiers that might be expected
+      request.fields['username'] = 'RHOLIC';
+      request.fields['user'] = 'RHOLIC';
+      debugPrint('Request fields: ${request.fields}');
+      
+      // Add headers that might be useful
+      request.headers['Accept'] = 'application/json';
+      // Add authorization header if needed
+      // request.headers['Authorization'] = 'Bearer YOUR_TOKEN_HERE';
+      debugPrint('Request headers: ${request.headers}');
+
+      // Send request and get detailed response
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      
+      // Debug the response
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Files uploaded successfully!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+        
+        // Clear the selected files on success if desired
+        setState(() {
+          selectedFileName = null;
+          selectedFilePath = null;
+          receiptName = null;
+          receiptPath = null;
+        });
+      } else {
+        String errorDetails = '';
+        try {
+          // Try to parse error details from JSON response
+          final errorJson = jsonDecode(response.body);
+          errorDetails = errorJson['message'] ?? errorJson['error'] ?? '';
+        } catch (e) {
+          // If not JSON or missing expected fields, use raw body
+          errorDetails = response.body;
+        }
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Upload failed (${response.statusCode}): $errorDetails"),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    } catch (error) {
+      debugPrint('Upload error: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("An error occurred during upload: $error"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
+    }
+  }
+
+  Future<void> _pickPDF() async {
+    try {
+      final XFile? pickedFile = await _picker.pickMedia();
+      if (pickedFile != null) {
+        final String path = pickedFile.path;
+        final String fileName = pickedFile.name;
+        
+        debugPrint('Picked file: $fileName, path: $path');
+        
+        if (path.toLowerCase().endsWith('.pdf')) {
+          setState(() {
+            selectedFilePath = path;
+            selectedFileName = fileName;
+          });
+        } else {
+          _showNotPDFError();
+        }
+      }
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error picking file: $e")),
+      );
+    }
+  }
+
+  Future<void> _uploadReceiptAsPDF() async {
+    try {
+      final XFile? pickedFile = await _picker.pickMedia();
+      if (pickedFile != null) {
+        final String path = pickedFile.path;
+        final String fileName = pickedFile.name;
+        
+        debugPrint('Picked receipt: $fileName, path: $path');
+        
+        if (path.toLowerCase().endsWith('.pdf')) {
+          setState(() {
+            receiptPath = path;
+            receiptName = fileName;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Receipt uploaded successfully"),
+              duration: Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } else {
+          _showNotPDFError();
+        }
+      }
+    } catch (e) {
+      debugPrint('Error picking receipt: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error picking receipt file: $e")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 10, 15, 58),
+      backgroundColor:const Color.fromARGB(255, 10, 15, 58),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 10, 15, 58),
         elevation: 0,
@@ -34,236 +211,247 @@ class _UploadScreenState extends State<UploadScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 60),
-            _buildUploadButton("If you are a student", "Upload here", () {
-              _showUploadOptions(context, isStudent: true);
-            }),
-            const SizedBox(height: 40),
-            _buildUploadButton("If you are a worker", "Upload here", () {
-              _showUploadOptions(context, isStudent: false);
-            }),
-            
-            
-            if (selectedFileName != null)
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 20, 30, 80),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color.fromARGB(255, 165, 133, 36)),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.file_present, color: Color.fromARGB(255, 165, 133, 36)),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        "Selected: $selectedFileName",
-                        style: const TextStyle(color: Colors.white),
-                        overflow: TextOverflow.ellipsis,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 40),
+                  _buildUploadButton("If you are a student", "Upload here", () {
+                    _showUploadOptions(context, isStudent: true);
+                  }),
+                  const SizedBox(height: 20),
+                  _buildUploadButton("If you are a worker", "Upload here", () {
+                    _showUploadOptions(context, isStudent: false);
+                  }),
+                  if (selectedFileName != null)
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 20, 30, 80),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color.fromARGB(255, 165, 133, 36)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.picture_as_pdf, color: Color.fromARGB(255, 165, 133, 36)),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              "Selected: $selectedFileName",
+                              style: const TextStyle(color: Colors.white),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white70),
+                            onPressed: () {
+                              setState(() {
+                                selectedFileName = null;
+                                selectedFilePath = null;
+                              });
+                            },
+                          )
+                        ],
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white70),
-                      onPressed: () {
-                        setState(() {
-                          selectedFileName = null;
-                          selectedFilePath = null;
-                        });
-                      },
-                    )
-                  ],
-                ),
-              ),
-            
-            const SizedBox(height: 120),
-
-            ElevatedButton(
-              onPressed: null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey,
-                disabledBackgroundColor: const Color.fromARGB(255, 20, 97, 173),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              child: const SizedBox(
-                height: 60,
-                width: 180,
-                child: Center(
-                  child: Text("PAYMENT WAYS :", style: TextStyle(color: Colors.white70, fontSize: 22)),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 40),
-
-           
-            _buildClickableRow(
-              icon: Icons.place,
-              title: "Please visit our library location",
-              linkText: "here",
-              onTap: () async {
-                if (await canLaunchUrl(Uri.parse(mapsUrl))) {
-                  await launchUrl(Uri.parse(mapsUrl));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Could not open Google Maps")),
-                  );
-                }
-              },
-            ),
-
-            const SizedBox(height: 20),
-
-                          // Show CCP number row and trigger visibility
-            _buildClickableRow(
-              icon: Icons.credit_card_outlined,
-              title: "Our CCP number for payment",
-              linkText: "here",
-              onTap: () {
-                setState(() {
-                  showCodeBar = true;
-                });
-              },
-            ),
-
-            const SizedBox(height: 10),
-
-            // Only show this if user clicked 'here'
-            if (showCodeBar)
-              GestureDetector(
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: paymentCode));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("CCP number copied to clipboard!"),
-                      duration: Duration(seconds: 2),
-                      behavior: SnackBarBehavior.floating,
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                      disabledBackgroundColor: const Color.fromARGB(255, 20, 97, 173),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  margin: const EdgeInsets.only(top: 5),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 20, 30, 80),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Color.fromARGB(255, 165, 133, 36), width: 1.5),
+                    child: const SizedBox(
+                      height: 60,
+                      width: 200,
+                      child: Center(
+                        child: Text("PAYMENT WAYS:", style: TextStyle(color: Colors.white70, fontSize: 22)),
+                      ),
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        paymentCode,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 165, 133, 36),
-                          letterSpacing: 1.2,
-                          fontWeight: FontWeight.w600,
+                  const SizedBox(height: 40),
+                  _buildClickableRow(
+                    icon: Icons.place,
+                    title: "Please visit our library location",
+                    linkText: "here",
+                    onTap: () async {
+                      if (await canLaunchUrl(Uri.parse(mapsUrl))) {
+                        await launchUrl(Uri.parse(mapsUrl));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Could not open Google Maps")),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildClickableRow(
+                    icon: Icons.credit_card_outlined,
+                    title: "Our CCP number for payment",
+                    linkText: "here",
+                    onTap: () {
+                      setState(() {
+                        showCodeBar = true;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 5),
+                  if (showCodeBar)
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: paymentCode));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("CCP number copied to clipboard!"),
+                            duration: Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                        margin: const EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 20, 30, 80),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Color.fromARGB(255, 165, 133, 36), width: 1.5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              paymentCode,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 165, 133, 36),
+                                letterSpacing: 1.2,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Icon(Icons.copy, color: Color.fromARGB(255, 165, 133, 36)),
+                          ],
                         ),
                       ),
-                      const Icon(Icons.copy, color: Color.fromARGB(255, 165, 133, 36)),
-                    ],
+                    ),
+                  const SizedBox(height: 20),
+                  _buildClickableRow(
+                    icon: Icons.receipt_long,
+                    title: "Upload payment receipt",
+                    linkText: "upload",
+                    onTap: _uploadReceiptAsPDF,
                   ),
-                ),
-              ),
-              
-           
-            const SizedBox(height: 20),
-            _buildClickableRow(
-              icon: Icons.receipt_long,
-              title: "Upload payment receipt",
-              linkText: "upload",
-              onTap: _uploadReceipt,
-            ),
-            
-           
-            if (receiptName != null)
-              Container(
-                margin: const EdgeInsets.only(top: 10),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 20, 30, 80),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color.fromARGB(255, 165, 133, 36)),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.receipt, color: Color.fromARGB(255, 165, 133, 36)),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        "Receipt: $receiptName",
-                        style: const TextStyle(color: Colors.white),
-                        overflow: TextOverflow.ellipsis,
+                  if (receiptName != null)
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 20, 30, 80),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color.fromARGB(255, 165, 133, 36)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.picture_as_pdf, color: Color.fromARGB(255, 165, 133, 36)),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              "Receipt: $receiptName",
+                              style: const TextStyle(color: Colors.white),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white70),
+                            onPressed: () {
+                              setState(() {
+                                receiptName = null;
+                                receiptPath = null;
+                              });
+                            },
+                          )
+                        ],
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white70),
-                      onPressed: () {
-                        setState(() {
-                          receiptName = null;
-                          receiptPath = null;
-                        });
+                  const SizedBox(height: 40),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (selectedFilePath != null && selectedFileName != null) {
+                          if (selectedFilePath == "email") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('You chose to email your document. No file to upload.')),
+                            );
+                            return;
+                          }
+                          if (!_isPDF(selectedFilePath!)) {
+                            _showNotPDFError();
+                            return;
+                          }
+                          
+                          // Check if file exists
+                          final file = File(selectedFilePath!);
+                          if (!await file.exists()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('File not found. Please select the file again.')),
+                            );
+                            return;
+                          }
+                          
+                          // Check file size
+                          final fileSize = await file.length();
+                          debugPrint('File size: ${fileSize / 1024 / 1024} MB');
+                          
+                          // Many servers have upload limits, warn if file is large
+                          if (fileSize > 10 * 1024 * 1024) { // 10MB
+                            // Show warning but allow upload
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Warning: File is large (>10MB). Upload may fail if server has size restrictions.'),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                          
+                          await uploadFileToBackend(selectedFilePath!, selectedFileName!);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('No file selected to upload.')),
+                          );
+                        }
                       },
-                    )
-                  ],
-                ),
-              ),
-
-            const Spacer(),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OtpScreen(), // Replace with your actual screen
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 165, 133, 36),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(13.0),
+                        child: Text("Done", style: TextStyle(fontSize: 22, color: Colors.white)),
+                      ),
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 165, 133, 36),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(13.0),
-                  child: Text("Done", style: TextStyle(fontSize: 22, color: Colors.white)),
-                ),
+                  ),
+                  const SizedBox(height: 90),
+                ],
               ),
             ),
-
-            const SizedBox(height: 90),
-          ],
-        ),
+          ),
+          if (_isUploading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: CircularProgressIndicator(color: Color.fromARGB(255, 165, 133, 36)),
+              ),
+            ),
+        ],
       ),
     );
-  }
-
-  // NEW METHOD: Handle receipt upload
-  void _uploadReceipt() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        receiptPath = image.path;
-        receiptName = image.name;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Receipt uploaded successfully"),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
   }
 
   Widget _buildUploadButton(String title, String buttonText, VoidCallback onPressed) {
@@ -305,7 +493,6 @@ class _UploadScreenState extends State<UploadScreen> {
 
   void _showUploadOptions(BuildContext context, {required bool isStudent}) {
     final String userType = isStudent ? "Student" : "Worker";
-    
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color.fromARGB(255, 20, 30, 80),
@@ -328,51 +515,20 @@ class _UploadScreenState extends State<UploadScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              
-              // Camera option
               _buildOptionTile(
-                icon: Icons.camera_alt,
-                title: "Take Photo",
-                description: "Use your camera to take a picture of your document",
+                icon: Icons.picture_as_pdf,
+                title: "Select PDF Document",
+                description: "Choose a PDF file from your device",
                 onTap: () async {
                   Navigator.pop(context);
-                  final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-                  if (photo != null) {
-                    setState(() {
-                      selectedFilePath = photo.path;
-                      selectedFileName = photo.name;
-                    });
-                  }
+                  await _pickPDF();
                 },
               ),
-              
               const Divider(color: Colors.white24),
-              
-              // Gallery option
-              _buildOptionTile(
-                icon: Icons.photo_library,
-                title: "Choose from Gallery",
-                description: "Select an existing image from your gallery",
-                onTap: () async {
-                  Navigator.pop(context);
-                  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    setState(() {
-                      selectedFilePath = image.path;
-                      selectedFileName = image.name;
-                    });
-                  }
-                },
-              ),
-              
-              const Divider(color: Colors.white24),
-              
-              
-              // Email option
               _buildOptionTile(
                 icon: Icons.email,
-                title: "Email Your Document",
-                description: "Send your document to our email address",
+                title: "Email Your PDF Document",
+                description: "Send your PDF document to our email address",
                 onTap: () {
                   Navigator.pop(context);
                   _showEmailInstructionsDialog(context);
@@ -408,19 +564,17 @@ class _UploadScreenState extends State<UploadScreen> {
 
   void _showEmailInstructionsDialog(BuildContext context) {
     final String emailAddress = "RHOLIC@gmail.com";
-    
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color.fromARGB(255, 20, 30, 80),
-        title: const Text("Email Your Document", 
-            style: TextStyle(color: Colors.white)),
+        title: const Text("Email Your PDF Document", style: TextStyle(color: Colors.white)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Please send your document to the following email address:",
+              "Please send your PDF document to the following email address:",
               style: TextStyle(color: Colors.white70),
             ),
             const SizedBox(height: 15),
@@ -455,7 +609,7 @@ class _UploadScreenState extends State<UploadScreen> {
             ),
             const SizedBox(height: 15),
             const Text(
-              "Include your full name and ID in the subject line. We'll process your document within 24-48 hours.",
+              "Include your full name and ID in the subject line. We'll process your PDF document within 24-48 hours.",
               style: TextStyle(color: Colors.white70),
             ),
           ],
@@ -470,9 +624,8 @@ class _UploadScreenState extends State<UploadScreen> {
               final Uri emailUri = Uri(
                 scheme: 'mailto',
                 path: emailAddress,
-                query: 'subject=Document Upload - [Your Name]&body=Please find my document attached.',
+                query: 'subject=PDF Document Upload - [Your Name]&body=Please find my PDF document attached.',
               );
-              
               if (await canLaunchUrl(emailUri)) {
                 await launchUrl(emailUri);
               } else {
@@ -486,7 +639,7 @@ class _UploadScreenState extends State<UploadScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                selectedFileName = "Email submission planned";
+                selectedFileName = "Email PDF submission planned";
                 selectedFilePath = "email";
               });
               Navigator.pop(context);

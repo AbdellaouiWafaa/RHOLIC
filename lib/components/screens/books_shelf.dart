@@ -1,8 +1,7 @@
+import 'package:RHOLIC/components/screens/first_page.dart';
 import 'package:flutter/material.dart';
 import 'package:RHOLIC/components/screens/chatbox.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
-import 'package:RHOLIC/components/screens/exit.dart';
-import 'package:RHOLIC/components/screens/holds.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/profile.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
@@ -42,7 +41,7 @@ class _BookListScreenState extends State<BookListScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ConfirmLogoutScreen(),
+          builder: (context) => const FirstpageScreen(),
         ),
       );
     },
@@ -122,21 +121,6 @@ class _BookListScreenState extends State<BookListScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             _buildChip('Loans', Colors.white, const Color.fromARGB(255, 10, 15, 58)),
-                               SizedBox(width: screenWidth * 0.08),
-                              SizedBox(width: screenWidth * 0.08),
-                              _buildChip(
-                                  'Holds',
-                                Colors.black,
-                                  Colors.grey[300]!,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HoldsListScreen(),
-                                  ),
-                                );
-                              },
-                            ),
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.01),

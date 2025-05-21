@@ -2,209 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
 
 
-class BookListScreen extends StatelessWidget {
-  const BookListScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(121, 32, 46, 172),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(121, 32, 46, 172),
-        title: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
-              onPressed: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                      builder: (context) => const DashboardScreen(),
-                ),
-              );},
-            ),
-            const Text('Books details', style: TextStyle(color: Colors.white)),
-          ],
-        ),
-        elevation: 0,
-        automaticallyImplyLeading: false, // Remove default back button
+BookDetailsScreen getAliceInWonderlandDetailsScreen() {
+  return BookDetailsScreen(
+    key: const Key('Alice in Wonderland'),
+    bookTitle: "Alice in Wonderland",
+    author: "Lewis Carroll",
+    coverImageAsset: 'assets/images/alice.png',
+    description: "Alice's Adventures in Wonderland by Lewis Carroll is a classic children's novel written in the mid-19th century. The story follows a young girl named Alice who, feeling bored and sleepy while sitting by a riverbank, encounters a White Rabbit and follows it down a rabbit hole, plunging into a fantastical world filled with curious creatures and whimsical adventures. The opening of the book introduces Alice as she daydreams about her surroundings before spotting the White Rabbit, who is both flustered and animated. Curious, Alice pursues the Rabbit and finds herself tumbling down a deep rabbit hole, leading to a curious hall filled with doors, all locked. After experiencing a series of bizarre changes in size from eating and drinking mysterious substances, she begins exploring this new world, initially frustrated by her newfound challenges as she navigates her size and the peculiar inhabitants she meets. The narrative sets the tone for Alice's whimsical and often nonsensical adventures that characterize the entire tale.",
+    rating: 4.7,
+    totalRatings: 4,
+    reviews: [
+      ReviewModel(
+        userName: "Emma T.",
+        userAvatarUrl: "https://example.com/avatar1.jpg",
+        date: "March 15, 2025",
+        rating: 4.5,
+        comment: "I couldn't put this book down! The world-building is incredible and the characters are so well developed. The romance subplot adds just the right amount of tension to the story.",
+        likes: 28,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: 3, 
-        itemBuilder: (context, index) {
-          // Sample book data with adjusted data for 3 books
-          final List<Map<String, dynamic>> books = [
-            {
-              "title": "Dracula",
-              "author": "Bram Stoker",
-              "coverAsset": 'assets/images/dracula.png',
-              "rating": 4.8,
-            },
-            {
-              "title": "Frankenstein",
-              "author": "Mary Shelley",
-              "coverAsset": 'assets/images/frankenstein.png',
-              "rating": 4.6,
-            },
-            {
-              "title": "Alice in Wonderland",
-              "author": "Lewis Carroll",
-              "coverAsset": 'assets/images/alice.png',
-              "rating": 4.7,
-            },
-          ];
-          
-          return BookListItem(
-            title: books[index]["title"],
-            author: books[index]["author"],
-            coverAsset: books[index]["coverAsset"],
-            rating: books[index]["rating"],
-            onTap: () {
-              // When the book item is tapped, navigate to BookDetailsScreen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BookDetailsScreen(
-                    key: Key(books[index]["title"]), 
-                    bookTitle: books[index]["title"],
-                    author: books[index]["author"],
-                    coverImageAsset: books[index]["coverAsset"],
-                    description: "Alice's Adventures in Wonderland by Lewis Carroll is a classic children's novel written in the mid-19th century. The story follows a young girl named Alice who, feeling bored and sleepy while sitting by a riverbank, encounters a White Rabbit and follows it down a rabbit hole, plunging into a fantastical world filled with curious creatures and whimsical adventures. The opening of the book introduces Alice as she daydreams about her surroundings before spotting the White Rabbit, who is both flustered and animated. Curious, Alice pursues the Rabbit and finds herself tumbling down a deep rabbit hole, leading to a curious hall filled with doors, all locked. After experiencing a series of bizarre changes in size from eating and drinking mysterious substances, she begins exploring this new world, initially frustrated by her newfound challenges as she navigates her size and the peculiar inhabitants she meets. The narrative sets the tone for Alice's whimsical and often nonsensical adventures that characterize the entire tale.",
-                    rating: books[index]["rating"],
-                    totalRatings: 3245,
-                    reviews: [
-                      ReviewModel(
-                        userName: "Emma T.",
-                        userAvatarUrl: "https://example.com/avatar1.jpg",
-                        date: "March 15, 2025",
-                        rating: 4.5,
-                        comment: "I couldn't put this book down! The world-building is incredible and the characters are so well developed. The romance subplot adds just the right amount of tension to the story.",
-                        likes: 28,
-                      ),
-                      ReviewModel(
-                        userName: "James R.",
-                        userAvatarUrl: "https://example.com/avatar2.jpg",
-                        date: "March 10, 2025",
-                        rating: 5.0,
-                        comment: "One of the best fantasy books I've read this year. The dragon training sequences are thrilling and the political intrigue keeps you guessing until the end.",
-                        likes: 43,
-                      ),
-                      ReviewModel(
-                        userName: "Sarah M.",
-                        userAvatarUrl: "https://example.com/avatar3.jpg",
-                        date: "March 5, 2025",
-                        rating: 4.8,
-                        comment: "The character development in this book is phenomenal. I love how the protagonist grows throughout the story and faces her fears.",
-                        likes: 35,
-                      ),
-                      ReviewModel(
-                        userName: "David L.",
-                        userAvatarUrl: "https://example.com/avatar4.jpg",
-                        date: "February 28, 2025",
-                        rating: 4.7,
-                        comment: "The action scenes are so well written! I felt like I was right there with the characters during the dragon flights.",
-                        likes: 22,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
+      ReviewModel(
+        userName: "James R.",
+        userAvatarUrl: "https://example.com/avatar2.jpg",
+        date: "March 10, 2025",
+        rating: 5.0,
+        comment: "One of the best fantasy books I've read this year. The dragon training sequences are thrilling and the political intrigue keeps you guessing until the end.",
+        likes: 43,
       ),
-    );
-  }
-}
-
-// Book list item widget
-class BookListItem extends StatelessWidget {
-  final String title;
-  final String author;
-  final String coverAsset;
-  final double rating;
-  final VoidCallback onTap;
-
-  const BookListItem({
-    super.key,
-    required this.title,
-    required this.author,
-    required this.coverAsset,
-    required this.rating,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap, 
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Book cover - changed to use Asset
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                coverAsset,
-                height: 120,
-                width: 80,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 120,
-                    width: 80,
-                    color: Colors.grey[800],
-                    child: const Icon(Icons.book, color: Colors.white),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-            // Book details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    author,
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 14),
-                      const SizedBox(width: 4),
-                      Text(
-                        rating.toString(),
-                        style: TextStyle(
-                          color: Colors.grey[300],
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      ReviewModel(
+        userName: "Sarah M.",
+        userAvatarUrl: "https://example.com/avatar3.jpg",
+        date: "March 5, 2025",
+        rating: 4.8,
+        comment: "The character development in this book is phenomenal. I love how the protagonist grows throughout the story and faces her fears.",
+        likes: 35,
       ),
-    );
-  }
+      ReviewModel(
+        userName: "David L.",
+        userAvatarUrl: "https://example.com/avatar4.jpg",
+        date: "February 28, 2025",
+        rating: 4.7,
+        comment: "The action scenes are so well written! I felt like I was right there with the characters during the dragon flights.",
+        likes: 22,
+      ),
+    ],
+  );
 }
 
 enum LoanType {
@@ -254,6 +95,17 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
   LoanStatus loanStatus = LoanStatus.none;
   DateTime? expiryDate;
   
+  // Add controllers and state for new review
+  final TextEditingController _commentController = TextEditingController();
+  double _userRating = 0.0;
+  bool _isSubmittingReview = false;
+
+  // Placeholder for getting the logged-in user's name
+  String getLoggedInUserName() {
+
+    return 'Current User';
+  }
+
   void _scrollToReviews() {
     setState(() {
       showAllReviews = true;
@@ -290,7 +142,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                 context: context,
                 icon: Icons.smartphone,
                 title: "Digital (5 days offline)",
-                description: "Download to read on this device",
+                description: "Download to read on this app",
                 onTap: () {
                   setState(() {
                     selectedLoanType = LoanType.digital;
@@ -378,7 +230,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
           bookTitle: widget.bookTitle,
           author: widget.author,
           coverImageAsset: widget.coverImageAsset,
-          expiryDate: DateTime.now().add(const Duration(days: 5)), // Example expiry date
+          expiryDate: DateTime.now().add(const Duration(days: 5)),
         ),
       ),
     );
@@ -519,7 +371,36 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _commentController.dispose();
     super.dispose();
+  }
+
+  void _submitReview() {
+    if (_userRating == 0.0 || _commentController.text.trim().isEmpty) {
+      _showNotification('Please provide a rating and a comment.');
+      return;
+    }
+    setState(() {
+      _isSubmittingReview = true;
+    });
+    
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        widget.reviews.insert(0, ReviewModel(
+          userName: getLoggedInUserName(),
+          userAvatarUrl: 'https://example.com/default_avatar.png', // Replace with actual avatar if available
+          date: "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}",
+          rating: _userRating,
+          comment: _commentController.text.trim(),
+          likes: 0,
+        ));
+        _userRating = 0.0;
+        _commentController.clear();
+        _isSubmittingReview = false;
+        showAllReviews = true;
+      });
+      _showNotification('Thank you for your review!');
+    });
   }
 
   @override
@@ -531,7 +412,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const DashboardScreen()),
+              (route) => false,
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -726,6 +613,77 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                       ...widget.reviews
                           .take(showAllReviews ? widget.reviews.length : 2)
                           .map((review) => InteractiveReviewCard(review: review)),
+                      const SizedBox(height: 24),
+                      // New review form
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: List.generate(5, (index) {
+                                return IconButton(
+                                  icon: Icon(
+                                    _userRating > index ? Icons.star : Icons.star_border,
+                                    color: Colors.amber,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _userRating = (index + 1).toDouble();
+                                    });
+                                  },
+                                );
+                              }),
+                            ),
+                            const SizedBox(height: 8),
+                         
+                            TextField(
+                              controller: _commentController,
+                              maxLines: 1,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                hintText: 'Write a Review...',
+                                hintStyle: TextStyle(color: Colors.grey[400]),
+                                filled: true,
+                                fillColor: Colors.grey[850],
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                onPressed: _isSubmittingReview ? null : _submitReview,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromARGB(255, 165, 133, 36),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: _isSubmittingReview
+                                    ? const SizedBox(
+                                        width: 18,
+                                        height: 18,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                      )
+                                    : const Text(
+                                        'Submit',
+                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -1166,10 +1124,10 @@ String _getPageContent(int page) {
                   child: Transform.rotate(
                     angle: -0.2,
                     child: Text(
-                      "RHOLIC",
+                      "RHOLIC RHOLIC RHOLIC RHOLIC RHOLIC RHOLIC",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -1338,7 +1296,7 @@ String _getPageContent(int page) {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            "This book has been securely downloaded to your device for offline reading until ${widget.expiryDate.day}/${widget.expiryDate.month}/${widget.expiryDate.year}.",
+                            "This book has been securely downloaded in your app until ${widget.expiryDate.day}/${widget.expiryDate.month}/${widget.expiryDate.year}.",
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 12,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CatalogueScreen extends StatefulWidget {
-  const CatalogueScreen({Key? key}) : super(key: key);
+  const CatalogueScreen({super.key});
 
   @override
   State<CatalogueScreen> createState() => _CatalogueScreenState();
@@ -431,7 +431,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                     ),
                                   ),
                                 );
-                              }).toList(),
+                              }),
                               const SizedBox(width: 10),
                             ],
                           ),
