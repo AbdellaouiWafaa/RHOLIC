@@ -5,24 +5,24 @@ import 'package:google_fonts/google_fonts.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'dart:io'; // For File class
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileNormalScreen extends StatefulWidget {
+  const ProfileNormalScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileNormalScreen> createState() => _ProfileNormalScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileNormalScreenState extends State<ProfileNormalScreen> {
   // Données fictives pour l'exemple
-  String userName = "Jane Doe";
+  String userName = "Amey Stone";
   String userRole = "Administrator";
-  String email = "jane.doe@gmail.com";
-  String phone = "+213 5 12 99 **";
-  String joinDate = "15/03/2022";
+  String email = "amey.stone@gmail.com";
+  String phone = "+213 5 12 77 **";
+  String joinDate = "25/03/2022";
   String address = "123 Library Street, Algiers";
 
   // Simulate profile image path (can be asset or a file path if using image_picker)
-  String _profileImagePath = 'assets/images/admin.png'; // Initial image
+  String _profileImagePath = 'assets/images/admin2.png'; // Initial image
 
   // Uncomment if using image_picker
   // final ImagePicker _picker = ImagePicker();
@@ -134,25 +134,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
 
-            // Removed Change Password action tile as requested
-            // _buildActionTile(
-            //   Icons.lock_outline,
-            //   "Change Password",
-            //   "Update your security credentials",
-            //   () {
-            //     _showChangePasswordDialog();
-            //   },
-            // ),
-
-            _buildActionTile(
-              Icons.settings_outlined,
-              "Preferences",
-              "Manage app settings and notifications",
-              () {
-                _showPreferencesDialog();
-              },
-            ),
-
+             _buildActionTile(
+               Icons.lock_outline,
+               "Change Password",
+               "Update your security credentials",
+               () {
+                 _showChangePasswordDialog();
+               },
+             ),
+             
             _buildActionTile(
               Icons.logout,
               "Logout",
@@ -331,7 +321,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           tempProfileImagePath = tempProfileImagePath
                                   .startsWith('assets/')
                               ? 'assets/images/dummy_profile.png' // Assume you have a dummy_profile.png
-                              : 'assets/images/admin.png';
+                              : 'assets/images/admin2.png';
                         });
                         // --- End Simulation ---
                       },
@@ -440,189 +430,174 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Removed the Change Password dialog function as requested
-  // void _showChangePasswordDialog() { ... }
+  // Dialog for changing password
+ // Dans la méthode _showChangePasswordDialog, ajoutez le texte "Forgot your password?"
+void _showChangePasswordDialog() {
+  final currentPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  // Interface pour les préférences
-  void _showPreferencesDialog() {
-    bool enableNotifications = true; // Example initial value
-    bool darkMode = true; // Example initial value
-    String language = 'English'; // Example initial value
-
-    final languages = ['English', 'Français', 'العربية'];
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          // Use StatefulBuilder to update dialog UI
-          builder: (context, setState) {
-            return AlertDialog(
-              backgroundColor: const Color(0xFF1E2A3B),
-              title: Text(
-                'Preferences',
-                style: GoogleFonts.montserrat(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: const Color(0xFF1E2A3B),
+      title: Text(
+        'Change Password',
+        style: GoogleFonts.montserrat(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildEditField(
+              controller: currentPasswordController,
+              label: 'Current Password',
+              icon: Icons.lock_outline,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
+            ),
+            const SizedBox(height: 8),
+            // Ajout du lien "Forgot your password?"
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Ferme le dialogue actuel
+                  _showForgotPasswordDialog(); // Ouvre le nouveau dialogue
+                },
+                child: Text(
+                  'Forgot your password?',
+                  style: GoogleFonts.montserrat(
+                    fontSize: 14,
+                    color: const Color(0xFFB19E44),
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 10),
-                    ListTile(
-                      title: Text(
-                        'Notifications',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      trailing: Switch(
-                        value: enableNotifications,
-                        onChanged: (value) {
-                          setState(() {
-                            enableNotifications = value;
-                          });
-                          // In a real app, save this preference
-                        },
-                        activeColor: const Color(0xFFB19E44),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Dark Mode',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      trailing: Switch(
-                        value: darkMode,
-                        onChanged: (value) {
-                          setState(() {
-                            darkMode = value;
-                          });
-                          // In a real app, apply this theme preference
-                        },
-                        activeColor: const Color(0xFFB19E44),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 16.0, bottom: 8.0),
-                          child: Text(
-                            'Language',
-                            style: GoogleFonts.montserrat(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF121921),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              isExpanded: true,
-                              dropdownColor: const Color(0xFF1E2A3B),
-                              value: language,
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                color: Color(0xFFB19E44),
-                              ),
-                              onChanged: (String? newValue) {
-                                if (newValue != null) {
-                                  setState(() {
-                                    language = newValue;
-                                  });
-                                  // In a real app, apply this language preference
-                                  // ScaffoldMessenger.of(context).showSnackBar( // Show feedback
-                                  //   SnackBar(content: Text('Language set to $newValue')),
-                                  // );
-                                }
-                              },
-                              items: languages.map<DropdownMenuItem<String>>(
-                                (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+            ),
+            const SizedBox(height: 16),
+            _buildEditField(
+              controller: newPasswordController,
+              label: 'New Password',
+              icon: Icons.lock_open_outlined,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
+            ),
+            const SizedBox(height: 16),
+            _buildEditField(
+              controller: confirmPasswordController,
+              label: 'Confirm New Password',
+              icon: Icons.lock_outline,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        // ... (le reste du code reste inchangé)
+      ],
+    ),
+  );
+}
+
+// Ajoutez cette nouvelle méthode pour afficher le dialogue de récupération
+void _showForgotPasswordDialog() {
+  final emailController = TextEditingController(text: email);
+
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: const Color(0xFF1E2A3B),
+      title: Text(
+        'Password Recovery',
+        style: GoogleFonts.montserrat(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Enter your email to receive a recovery code',
+              style: GoogleFonts.montserrat(
+                fontSize: 16,
+                color: Colors.white70,
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    'Cancel',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
+            ),
+            const SizedBox(height: 20),
+            _buildEditField(
+              controller: emailController,
+              label: 'Email',
+              icon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'We will send you a code to recover your account',
+              style: GoogleFonts.montserrat(
+                fontSize: 14,
+                color: Colors.white70,
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'Cancel',
+            style: GoogleFonts.montserrat(
+              fontSize: 16,
+              color: Colors.white70,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFB19E44),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          ),
+          onPressed: () {
+            // Ici vous devriez implémenter la logique d'envoi du code
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Recovery code sent to ${emailController.text}',
+                  style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFB19E44),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                  ),
-                  onPressed: () {
-                    // In a real app, save preferences here
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Preferences saved successfully!',
-                          style: GoogleFonts.montserrat(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        backgroundColor: Colors.green,
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Save',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+              ),
             );
           },
-        );
-      },
-    );
-  }
-
+          child: Text(
+            'Send Code',
+            style: GoogleFonts.montserrat(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
   // Interface pour la déconnexion
   void _showLogoutDialog() {
     showDialog(
@@ -688,6 +663,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String label,
     required IconData icon,
     TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -706,6 +682,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         TextField(
           controller: controller,
           keyboardType: keyboardType,
+          obscureText: obscureText,
           style: GoogleFonts.montserrat(
             fontSize: 16,
             color: Colors.white,

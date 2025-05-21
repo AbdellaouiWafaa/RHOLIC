@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:RHOLIC/Admin_interfaces/login2.dart';
+import 'package:RHOLIC/Admin_interfaces/login2.dart' as login2main;
 import 'package:RHOLIC/components/screens/genre_select.dart';
 
 void main() {
@@ -89,7 +89,7 @@ class FirstPageScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>  Login2 (),
+                            builder: (context) =>  login2main.Login2(),
                           ),
                         );
                       },

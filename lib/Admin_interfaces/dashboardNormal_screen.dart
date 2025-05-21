@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 // Importez les écrans pour les différentes sections depuis leurs fichiers respectifs
-import 'manage_screen.dart';
+import 'manageNormal_screen.dart';
 import 'catalogue_screen.dart';
-import 'profile_screen.dart';
+import 'profileNormal_screen.dart';
 import 'notifications_screen.dart';
 
 // Convertir en StatefulWidget
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+class DashboardNormalScreen extends StatefulWidget {
+  const DashboardNormalScreen({Key? key}) : super(key: key);
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<DashboardNormalScreen> createState() => _DashboardNormalScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardNormalScreenState extends State<DashboardNormalScreen> {
   int _selectedIndex = 0; // Index de l'élément sélectionné dans la NavBar
   // Contrôleur pour le TextField de recherche
-  final TextEditingController _searchController = TextEditingController();
-  // Variable pour suivre l'état de la recherche (activée ou non)
-  bool _isSearching = false;
+
 
   // Liste des widgets à afficher pour chaque élément de la NavBar
   late final List<Widget> _screens;
@@ -30,17 +28,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // Initialiser les écrans ici
     _screens = [
       DashboardContent(), // Le contenu de votre tableau de bord actuel
-       ManageScreen(), // Importé depuis manage_screen.dart
+      ManageNormalScreen(), // Importé depuis manageMain_screen.dart
       const CatalogueScreen(), // Importé depuis catalogue_screen.dart
-      const ProfileScreen(), // Importé depuis profile_screen.dart
+      const ProfileNormalScreen(), // Importé depuis profile_screen.dart
     ];
-  }
-
-  @override
-  void dispose() {
-    // Libérer le contrôleur à la fin du cycle de vie du widget
-    _searchController.dispose();
-    super.dispose();
   }
 
   // Méthode appelée lorsque l'on clique sur un élément de la NavBar
@@ -52,28 +43,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     print('Bouton cliqué: $index'); // Log pour déboguer
   }
 
-  // Méthode pour commencer la recherche
-  void _startSearch() {
-    setState(() {
-      _isSearching = true;
-    });
-    // Cela va automatiquement afficher le clavier
-  }
-
-  // Méthode pour terminer la recherche
-  void _endSearch() {
-    setState(() {
-      _isSearching = false;
-      _searchController.clear();
-    });
-    // Cela cachera le clavier
-    FocusScope.of(context).unfocus();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final TextStyle appBarTitleStyle = GoogleFonts.montserrat(
-      fontSize: 22,
+    final TextStyle appBarTitleStyle = GoogleFonts.islandMoments(
+      fontSize: 32,
       color: Colors.white,
       fontWeight: FontWeight.w600,
     );
@@ -83,47 +56,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       appBar: AppBar(
         backgroundColor: const Color(0xFF1E2A3B),
-        elevation: 4.0,
-        leading: _isSearching
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: _endSearch,
-              )
-            : IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-        title: _isSearching
-            ? TextField(
-                controller: _searchController,
-                autofocus: true, // Affiche automatiquement le clavier
-                style:
-                    GoogleFonts.montserrat(fontSize: 18, color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  hintStyle: GoogleFonts.montserrat(
-                      fontSize: 22, color: Colors.white.withOpacity(0.7)),
-                  border: InputBorder.none,
-                ),
-                onSubmitted: (value) {
-                  // Traiter la recherche ici
-                  print('Recherche: $value');
-                  // Vous pouvez garder le mode recherche ou le désactiver
-                  // _endSearch();
-                },
-              )
-            : GestureDetector(
-                onTap: _startSearch,
-                child: Text('Search...', style: appBarTitleStyle),
-              ),
-        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          'RHOLIC',
+          style: appBarTitleStyle,
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white, size: 28),
-            onPressed: _startSearch,
-          ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: IconButton(
@@ -138,7 +76,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const NotificationsScreen(),
+                    builder: (context) => NotificationsScreen(),
                   ),
                 );
               },
@@ -199,14 +137,14 @@ class DashboardContent extends StatelessWidget {
 
   // Déplacer les données et les styles de texte spécifiques au dashboard ici
   // Données depuis la maquette (kept user's data)
-  final int borrowedCount = 305;
-  final int overdueCount = 23;
-  final int fineCollected = 15;
-  final int newUsers = 2;
-  final int inactiveUsers = 42;
-  final int activeUsers = 1913;
-  final int totalTitles = 103447;
-  final int totalMembers = 1955;
+  final int borrowedCount = 1;
+  final int overdueCount = 0;
+  final int fineCollected = 1;
+  final int newUsers = 1;
+  final int inactiveUsers = 2;
+  final int activeUsers = 1 ;
+  final int totalTitles = 5;
+  final int totalMembers = 4;
 
   // Styles pour Welcome section (basique comme demandé pour Welcome/Jane)
  final TextStyle welcomeBackStyle = GoogleFonts.islandMoments(
@@ -266,7 +204,7 @@ class DashboardContent extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 36,
-                    backgroundImage: AssetImage('assets/images/admin.png'),
+                    backgroundImage: AssetImage('assets/images/admin2.png'),
                     backgroundColor: Colors.grey,
                   ),
                   const SizedBox(width: 20),
@@ -275,7 +213,7 @@ class DashboardContent extends StatelessWidget {
                     children: [
                       Text('Welcome Back,',
                           style: welcomeBackStyle), // Basic TextStyle
-                      Text('Jane', style: adminNameStyle), // Basic TextStyle
+                      Text('Amey', style: adminNameStyle), // Basic TextStyle
                     ],
                   ),
                 ],

@@ -1,6 +1,7 @@
+import 'package:RHOLIC/Admin_interfaces/dashboardNormal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dashboard_screen.dart'; // <-- Assurez-vous que ce fichier existe
+import 'dashboardMain_screen.dart'; // <-- Assurez-vous que ce fichier existe
 
 class Login2 extends StatefulWidget {
   const Login2({Key? key}) : super(key: key);
@@ -20,15 +21,23 @@ class _Login2State extends State<Login2> {
 
   void _submitCode(String code) {
     print('Code submitted: $code');
-
-    if (code == 'admin123') {
+if (code == '077007') {
       print('Admin login successful!');
       _codeController.clear();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const DashboardNormalScreen()),
+      );}
+
+else if (code == 'admin123') {
+      print('Admin login successful!');
+      _codeController.clear();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardMainScreen()),
       );
-    } else {
+    } 
+else {
       print('Invalid code');
       _codeController.clear();
       ScaffoldMessenger.of(context).showSnackBar(
