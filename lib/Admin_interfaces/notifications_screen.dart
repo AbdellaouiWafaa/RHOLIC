@@ -10,14 +10,19 @@ class DummyUserData {
   static final List<Map<String, dynamic>> _existingUsers = [
     // Example of existing users - Add users here initially or via DummyUserData.addUser()
     {
-      'fullName': 'Existing User One',
+      'fullName': 'User One',
       'email': 'user1@example.com',
       'id': 'user_existing_1',
     },
     {
-      'fullName': 'Existing User Two',
+      'fullName': 'User Two',
       'email': 'user2@example.com',
       'id': 'user_existing_2',
+    },
+    {
+      'fullName': 'Chaimaa BOUZEROUATA',
+      'email': 'chaimaa.bouzerouata@gmail.com',
+      'id': 'chaimaa_bouzerouata',
     },
     {
       'fullName': 'Admin Beta',
@@ -51,28 +56,25 @@ class DummyUserData {
   }
 }
 
-class NotificationsScreen extends StatefulWidget { 
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
-  
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen>
     with SingleTickerProviderStateMixin {
   bool _showUserSelectionDialog = false; // Pour afficher la liste des utilisateurs
-  List<Map<String, dynamic>> _selectedUsers = []; // Pour stocker les utilisateurs sélectionnés
-  bool _selectAllUsers = false; 
+List<Map<String, dynamic>> _selectedUsers = []; // Pour stocker les utilisateurs sélectionnés
+bool _selectAllUsers = false; // Pour sélectionner tous les utilisateurs
   late TabController _tabController;
   bool _showMessaging = false;
   bool _showBroadcastDialog =
       false; // Pour gérer l'affichage du dialogue d'envoi de notifications
   final TextEditingController _messageController = TextEditingController();
-  final TextEditingController _broadcastTitleController =
-      TextEditingController(); // Pour le titre de la notification
-  final TextEditingController _broadcastMessageController =
-      TextEditingController(); // Pour le message de la notification
+  final TextEditingController _broadcastTitleController = TextEditingController(); // Pour le titre de la notification
+  final TextEditingController _broadcastMessageController = TextEditingController();// Pour le message de la notification
   final ScrollController _chatScrollController = ScrollController();
 
   // Pour la séparation des discussions
@@ -279,7 +281,6 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabSelection);
-
     // Filtrer les notifications de type "fine" dès le départ (conserve l'intention d'origine)
     _allNotifications.removeWhere(
       (notification) => notification['type'] == 'fine',
@@ -411,70 +412,198 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     }
   }
 
-  // Fonction pour envoyer une notification à tous les utilisateurs
-  void _sendBroadcastNotification(String title, String message) {
-    if (title.isEmpty || message.isEmpty) {
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Title and message cannot be empty',
-            style: GoogleFonts.montserrat(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    // Create new notification
-    final newNotification = {
-      'type': 'broadcast',
-      'title': title,
-      'message': message,
-      'time': 'Just now',
-      'isRead': false,
-      'details': 'Broadcast message: $message',
-      'id': 'notif_broadcast_${DateTime.now().millisecondsSinceEpoch}',
-      'needsAction': false,
-    };
-
-    setState(() {
-      // Add to notifications list
-      _allNotifications.insert(0, newNotification);
-
-      // Re-filter notifications based on the current tab
-      _handleTabSelection();
-    });
-
-    // Reset text controllers
-    _broadcastTitleController.clear();
-    _broadcastMessageController.clear();
-
-    // Close the dialog
-    setState(() {
-      _showBroadcastDialog = false;
-    });
-
-    // Show success message
+  // méthode _sendBroadcastNotification pour prendre en compte les utilisateurs sélectionnés
+void _sendBroadcastNotification(String title, String message) {
+  if (title.isEmpty || message.isEmpty) {
+    // Show error message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Notification sent to all users',
+          'Title and message cannot be empty',
           style: GoogleFonts.montserrat(
             fontSize: 16,
             color: Colors.white,
             fontWeight: FontWeight.w500,
           ),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
       ),
     );
+    return;
   }
+
+  // Create new notification
+  final newNotification = {
+    'type': 'broadcast',
+    'title': title,
+    'message': message,
+    'time': 'Just now',
+    'isRead': false,
+    'details': 'Broadcast message: $message',
+    'id': 'notif_broadcast_${DateTime.now().millisecondsSinceEpoch}',
+    'needsAction': false,
+    'recipients': _selectedUsers.isEmpty ? 'All Users' : '${_selectedUsers.length} Selected Users',
+  };
+
+  setState(() {
+    // Add to notifications list
+    _allNotifications.insert(0, newNotification);
+
+    // Re-filter notifications based on the current tab
+    _handleTabSelection();
+  });
+
+  // Reset text controllers
+  _broadcastTitleController.clear();
+  _broadcastMessageController.clear();
+
+  // Close the dialog
+  setState(() {
+    _showBroadcastDialog = false;
+    _selectedUsers = []; // Réinitialiser la liste des utilisateurs sélectionnés
+    _selectAllUsers = false;
+  });
+
+  // Show success message
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        _selectedUsers.isEmpty 
+          ? 'Notification sent to all selected users'
+          : 'Notification sent to ${_selectedUsers.length} users',
+        style: GoogleFonts.montserrat(
+          fontSize: 16,
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      backgroundColor: Colors.green,
+    ),
+  );
+}
+
+// Ajoutez cette méthode pour construire le dialogue de sélection des utilisateurs
+Widget _buildUserSelectionDialog() {
+  // Obtenez la liste de tous les utilisateurs réguliers (non-admin)
+  final List<Map<String, dynamic>> allUsers = DummyUserData.getRegularUsers();
+  
+  return AlertDialog(
+    backgroundColor: const Color(0xFF1E2A3B),
+    title: Text(
+      'Select Recipients',
+      style: GoogleFonts.montserrat(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    content: Container(
+      width: double.maxFinite,
+      height: MediaQuery.of(context).size.height * 0.5,
+      child: Column(
+        children: [
+          // Option to select all users
+          CheckboxListTile(
+            title: Text(
+              'Select All Users',
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            value: _selectAllUsers,
+            activeColor: const Color(0xFFB19E44),
+            checkColor: Colors.white,
+            onChanged: (value) {
+              setState(() {
+                _selectAllUsers = value ?? false;
+                if (_selectAllUsers) {
+                  _selectedUsers = List.from(allUsers);
+                } else {
+                  _selectedUsers = [];
+                }
+              });
+            },
+          ),
+          Divider(color: Colors.white30),
+          Expanded(
+            child: ListView.builder(
+              itemCount: allUsers.length,
+              itemBuilder: (context, index) {
+                final user = allUsers[index];
+                // Check if this user is already selected
+                final bool isSelected = _selectedUsers.any((selectedUser) => 
+                  selectedUser['id'] == user['id']);
+                
+                return CheckboxListTile(
+                  title: Text(
+                    user['fullName'] ?? 'Unknown User',
+                    style: GoogleFonts.montserrat(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    user['email'] ?? 'No email',
+                    style: GoogleFonts.montserrat(color: Colors.white70, fontSize: 12),
+                  ),
+                  value: isSelected,
+                  activeColor: const Color(0xFFB19E44),
+                  checkColor: Colors.white,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value ?? false) {
+                        // Add to selected users if not already there
+                        if (!isSelected) {
+                          _selectedUsers.add(user);
+                        }
+                      } else {
+                        // Remove from selected users
+                        _selectedUsers.removeWhere((selectedUser) => 
+                          selectedUser['id'] == user['id']);
+                      }
+                      
+                      // Update "select all" checkbox based on selection state
+                      _selectAllUsers = _selectedUsers.length == allUsers.length;
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {
+          setState(() {
+            _showUserSelectionDialog = false;
+            _selectedUsers = [];
+            _selectAllUsers = false;
+          });
+        },
+        child: Text(
+          'Cancel',
+          style: GoogleFonts.montserrat(color: Colors.white),
+        ),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _broadcastTitleController.clear(); 
+            _broadcastMessageController.clear(); 
+            _showUserSelectionDialog = false;
+            _showBroadcastDialog = true;
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFB19E44),
+        ),
+        child: Text(
+          'Continue',
+          style: GoogleFonts.montserrat(color: Colors.white),
+        ),
+      ),
+    ],
+  );
+}
 
   // Placeholder function for handling new user confirmation/rejection
   void _handleNewUserRequest(Map<String, dynamic> notification, bool confirm) {
@@ -529,28 +658,24 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   }
 
   void _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      setState(() {
-        switch (_tabController.index) {
-          case 0: // All
-            _filteredNotifications = List.from(_allNotifications);
-            break;
-          case 1: // Unread
-            _filteredNotifications =
-                _allNotifications
-                    .where((notification) => !notification['isRead'])
-                    .toList();
-            break;
-          case 2: // Read
-            _filteredNotifications =
-                _allNotifications
-                    .where((notification) => notification['isRead'])
-                    .toList();
-            break;
-        }
-      });
+  setState(() {
+    switch (_tabController.index) {
+      case 0: // All - toutes les notifications
+        _filteredNotifications = [..._allNotifications];
+        break;
+      case 1: // Unread - seulement non lues
+        _filteredNotifications = _allNotifications
+            .where((notification) => !notification['isRead'])
+            .toList();
+        break;
+      case 2: // Read - seulement lues
+        _filteredNotifications = _allNotifications
+            .where((notification) => notification['isRead'])
+            .toList();
+        break;
     }
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -613,39 +738,49 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   }
 
   void _markAsRead(Map<String, dynamic> notificationToMark) {
-    // Check if the notification is already read to avoid unnecessary setState calls
-    if (notificationToMark['isRead']) return;
+  setState(() {
+    // 1. Trouver la notification dans la liste complète
+    final originalIndex = _findNotificationIndexById(notificationToMark['id']);
+    
+    if (originalIndex != -1) {
+      // 2. Marquer comme lue dans la liste principale
+      _allNotifications[originalIndex]['isRead'] = true;
 
-    setState(() {
-      final originalIndex = _findNotificationIndexById(
-        notificationToMark['id'],
-      );
-
-      if (originalIndex != -1) {
-        _allNotifications[originalIndex]['isRead'] = true;
-
-        // Update the filtered list separately if needed
-        // If on Unread tab, remove it
-        _filteredNotifications.removeWhere(
-          (notification) => notification['id'] == notificationToMark['id'],
+      // 3. Mettre à jour les listes filtrées selon l'onglet actif
+      if (_tabController.index == 0) {
+        // Onglet "All" - mettre à jour le statut sans retirer
+        final allIndex = _filteredNotifications.indexWhere(
+          (n) => n['id'] == notificationToMark['id']
         );
-
-        // If on All tab, update the item in the filtered list if it exists
-        final filteredIndex = _filteredNotifications.indexWhere(
-          (notification) => notification['id'] == notificationToMark['id'],
-        );
-        if (filteredIndex != -1) {
-          _filteredNotifications[filteredIndex]['isRead'] = true;
+        if (allIndex != -1) {
+          _filteredNotifications[allIndex]['isRead'] = true;
         }
-
-        // If on Read tab, the item will be added if it wasn't there before
+      } 
+      else if (_tabController.index == 1) {
+        // Onglet "Unread" - retirer la notification
+        _filteredNotifications.removeWhere(
+          (n) => n['id'] == notificationToMark['id']
+        );
       }
-    });
-    print('Notification marked as read: ${notificationToMark['title']}');
-    // After marking as read, re-filter the list based on the current tab
-    // This ensures the UI updates correctly, especially for the Unread tab
-    _handleTabSelection();
-  }
+      else if (_tabController.index == 2) {
+        // Onglet "Read" - ajouter la notification si elle n'y est pas
+        final existsInRead = _filteredNotifications.any(
+          (n) => n['id'] == notificationToMark['id']
+        );
+        if (!existsInRead) {
+          _filteredNotifications.insert(0, _allNotifications[originalIndex]);
+        }
+      }
+
+      // 4. Forcer le rafraîchissement des autres onglets si nécessaire
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _handleTabSelection();
+        }
+      });
+    }
+  });
+}
 
   void _markAllAsRead() {
     setState(() {
@@ -964,7 +1099,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                     Text(
                       _selectedChatUserName,
                       style: GoogleFonts.montserrat(
-                        fontSize: 16,
+                        fontSize: 13,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1141,15 +1276,26 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     return AlertDialog(
       backgroundColor: const Color(0xFF1E2A3B),
       title: Text(
-        'Send Notification to All Users',
+        'Send Notification',
         style: GoogleFonts.montserrat(
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
       ),
-      content: Column(
+      content: SingleChildScrollView( 
+        child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Afficher les destinataires sélectionnés
+          Text(
+            'Recipients: ${_selectedUsers.isEmpty ? "All Users" : "${_selectedUsers.length} Selected Users"}',
+            style: GoogleFonts.montserrat(
+              color: Colors.white70,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 16),
           TextField(
             controller: _broadcastTitleController,
             style: GoogleFonts.montserrat(color: Colors.white),
@@ -1159,6 +1305,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
               border: OutlineInputBorder(),
               filled: true,
               fillColor: const Color(0xFF2A3B4E),
+              hintText: 'Enter notification title',
             ),
           ),
           const SizedBox(height: 16),
@@ -1171,21 +1318,36 @@ class _NotificationsScreenState extends State<NotificationsScreen>
               border: OutlineInputBorder(),
               filled: true,
               fillColor: const Color(0xFF2A3B4E),
+              hintText: 'Enter notification content',
             ),
             maxLines: 3,
           ),
         ],
+      ),
       ),
       actions: [
         TextButton(
           onPressed: () {
             setState(() {
               _showBroadcastDialog = false;
+              _selectedUsers = []; // Réinitialiser les utilisateurs sélectionnés
             });
           },
           child: Text(
             'Cancel',
             style: GoogleFonts.montserrat(color: Colors.white),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              _showBroadcastDialog = false;
+              _showUserSelectionDialog = true;
+            });
+          },
+          child: Text(
+            'Back to Recipients',
+            style: GoogleFonts.montserrat(color: Colors.blueAccent),
           ),
         ),
         ElevatedButton(
@@ -1257,17 +1419,15 @@ class _NotificationsScreenState extends State<NotificationsScreen>
             _deleteNotification(notification);
           },
           child: Card(
-            color:
-                isUnread
+            color: isUnread
                     ? const Color(0xFF1E2A3B)
                     : const Color(0xFF1E2A3B).withOpacity(0.7),
             margin: const EdgeInsets.only(bottom: 12.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
-              side:
-                  isUnread
+              side: isUnread
                       ? const BorderSide(color: Color(0xFFB19E44), width: 1.0)
-                      : BorderSide.none,
+                      : const BorderSide(color: Colors.grey, width: 0.5), // Subtle border for read
             ),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16.0),
@@ -1351,7 +1511,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                   _markAsRead(notification);
                   _openChat(
                     notification['senderId'],
-                    notification['title'].replaceFirst('New Message from ', ''),
+                    notification['title'].replaceFirst('New Message From ', ''),
                     notification['title'].contains('Admin'),
                   );
                 } else {
@@ -1367,6 +1527,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
 
   // Show notification details in a dialog
   void _showNotificationDetails(Map<String, dynamic> notification) {
+   _markAsRead(notification);
     showDialog(
       context: context,
       builder: (context) {
@@ -1515,6 +1676,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF121921),
+      resizeToAvoidBottomInset: true, // Add this line
       appBar: AppBar(
         backgroundColor: const Color(0xFF1E2A3B),
         title: Text(
@@ -1534,8 +1696,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
             icon: const Icon(Icons.campaign, color: Colors.white),
             onPressed: () {
               setState(() {
-                _showBroadcastDialog = true;
+                _broadcastTitleController.clear();
+                _broadcastMessageController.clear();
+                _selectedUsers = [];
+                _selectAllUsers = false;
+                _showUserSelectionDialog = true; // Ouvrir d'abord le dialogue de sélection d'utilisateurs
                 _showMessaging = false;
+                _showBroadcastDialog = false;
               });
             },
             tooltip: 'Broadcast notification',
@@ -1593,6 +1760,9 @@ class _NotificationsScreenState extends State<NotificationsScreen>
 
           // Chat Interface
           if (_showMessaging) _buildChatInterface(),
+
+          // User Selection Dialog (nouvel élément)
+          if (_showUserSelectionDialog) Center(child: _buildUserSelectionDialog()),
 
           // Broadcast Dialog
           if (_showBroadcastDialog) Center(child: _buildBroadcastDialog()),

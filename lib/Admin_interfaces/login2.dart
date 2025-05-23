@@ -68,7 +68,6 @@ else {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Admin Login'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(

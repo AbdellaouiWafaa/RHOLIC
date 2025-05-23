@@ -18,49 +18,49 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
     'Fiction',
     'Non-fiction',
     'Science',
+    'Technology',
+    'Adventure',
+    'Art',
+    'Health',
+    'Personal Development',
+    'Psychology',
+    'Philosophy',
+    'Horror',
+    'Business',
+    'Economics',
+    'Comics',
     'History',
     'Biography',
     'Children',
-    'Reference'
+    'Reference',
   ];
 
   bool _showLeftShadow = false;
   bool _showRightShadow = true;
 
-  final List<Map<String, dynamic>> _books = [
+  List<Map<String, dynamic>> _books = [
     {
-      'title': 'The Great Gatsby',
-      'author': 'F. Scott Fitzgerald',
+      'title': 'Alice in Wonderland',
+      'author': 'Lewis Carroll',
       'category': 'Fiction',
-      'available': true,
+      'totalCopies': 5,
+      'availableCopies': 3,
       'coverImage': 'assets/images/book1.jpg',
     },
     {
-      'title': 'To Kill a Mockingbird',
-      'author': 'Harper Lee',
+      'title': 'Frankenstein',
+      'author': 'Mary Shelley',
       'category': 'Fiction',
-      'available': false,
+      'totalCopies': 3,
+      'availableCopies': 1,
       'coverImage': 'assets/images/book2.jpg',
     },
     {
-      'title': 'A Brief History of Time',
-      'author': 'Stephen Hawking',
-      'category': 'Science',
-      'available': true,
-      'coverImage': 'assets/images/book3.jpg',
-    },
-    {
-      'title': 'The Diary of a Young Girl',
-      'author': 'Anne Frank',
-      'category': 'Biography',
-      'available': true,
-      'coverImage': 'assets/images/book4.jpg',
-    },
-    {
-      'title': 'Pride and Prejudice',
-      'author': 'Jane Austen',
+      'title': 'Dracula',
+      'author': 'Bram Stoker',
       'category': 'Fiction',
-      'available': true,
+      'totalCopies': 2,
+      'availableCopies': 2,
       'coverImage': 'assets/images/book5.jpg',
     },
   ];
@@ -102,229 +102,252 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   void _showAddBookDialog() {
     final titleController = TextEditingController();
     final authorController = TextEditingController();
-    String selectedCategory =
-        _categories[1]; // Default to first category after 'All'
-    bool isAvailable = true;
+    final totalCopiesController = TextEditingController(text: '1');
+    String selectedCategory = _categories[1]; // Fiction par défaut
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E2A3B),
-        title: Text(
-          'Add New Book',
-          style: GoogleFonts.montserrat(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                style: GoogleFonts.montserrat(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: 'Book Title',
-                  hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // 50% white
-                  filled: true,
-                  fillColor: const Color(0xFF121921),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+      builder:
+          (context) => StatefulBuilder(
+            builder:
+                (context, setDialogState) => AlertDialog(
+                  backgroundColor: const Color(0xFF1E2A3B),
+                  title: Text(
+                    'Add New Book',
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: authorController,
-                style: GoogleFonts.montserrat(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: 'Author Name',
-                  hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // 50% white
-                  filled: true,
-                  fillColor: const Color(0xFF121921),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: titleController,
+                          style: GoogleFonts.montserrat(color: Colors.white),
+                          decoration: InputDecoration(
+                            hintText: 'Book Title',
+                            hintStyle: const TextStyle(
+                              color: Color(0x80FFFFFF),
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFF121921),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: authorController,
+                          style: GoogleFonts.montserrat(color: Colors.white),
+                          decoration: InputDecoration(
+                            hintText: 'Author Name',
+                            hintStyle: const TextStyle(
+                              color: Color(0x80FFFFFF),
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFF121921),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: totalCopiesController,
+                          style: GoogleFonts.montserrat(color: Colors.white),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: 'Total Copies',
+                            hintStyle: const TextStyle(
+                              color: Color(0x80FFFFFF),
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFF121921),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF121921),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              dropdownColor: const Color(0xFF1E2A3B),
+                              value: selectedCategory,
+                              isExpanded: true,
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                color: Color(0xFFB19E44),
+                              ),
+                              style: GoogleFonts.montserrat(
+                                color: Colors.white,
+                              ),
+                              onChanged: (String? newValue) {
+                                if (newValue != null && newValue != 'All') {
+                                  setDialogState(() {
+                                    selectedCategory = newValue;
+                                  });
+                                }
+                              },
+                              items:
+                                  _categories
+                                      .where((category) => category != 'All')
+                                      .map<DropdownMenuItem<String>>((
+                                        String value,
+                                      ) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      })
+                                      .toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF121921),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    dropdownColor: const Color(0xFF1E2A3B),
-                    value: selectedCategory,
-                    isExpanded: true,
-                    icon: const Icon(Icons.arrow_drop_down,
-                        color: Color(0xFFB19E44)),
-                    style: GoogleFonts.montserrat(color: Colors.white),
-                    onChanged: (String? newValue) {
-                      if (newValue != null && newValue != 'All') {
-                        selectedCategory = newValue;
-                      }
-                    },
-                    items: _categories
-                        .where((category) => category != 'All')
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Text(
-                    'Available',
-                    style: GoogleFonts.montserrat(color: Colors.white),
-                  ),
-                  const Spacer(),
-                  Switch(
-                    value: isAvailable,
-                    onChanged: (value) {
-                      isAvailable = value;
-                    },
-                    activeColor: const Color(0xFFB19E44),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.montserrat(color: Colors.white),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFB19E44),
-            ),
-            onPressed: () {
-              if (titleController.text.isNotEmpty &&
-                  authorController.text.isNotEmpty) {
-                setState(() {
-                  _books.add({
-                    'title': titleController.text,
-                    'author': authorController.text,
-                    'category': selectedCategory,
-                    'available': isAvailable,
-                    'coverImage': 'assets/images/default_book.jpg',
-                  });
-                });
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Book added successfully!',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        'Cancel',
+                        style: GoogleFonts.montserrat(color: Colors.white),
                       ),
                     ),
-                    backgroundColor: Colors.green,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Please fill in all fields',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFB19E44),
+                      ),
+                      onPressed: () {
+                        if (titleController.text.isNotEmpty &&
+                            authorController.text.isNotEmpty &&
+                            totalCopiesController.text.isNotEmpty) {
+                          setState(() {
+                            _books.add({
+                              'title': titleController.text,
+                              'author': authorController.text,
+                              'category': selectedCategory,
+                              'totalCopies': int.parse(
+                                totalCopiesController.text,
+                              ),
+                              'availableCopies': int.parse(
+                                totalCopiesController.text,
+                              ),
+                              'coverImage': 'assets/images/default_book.jpg',
+                            });
+                          });
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Book added successfully!',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Please fill in all fields',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              backgroundColor: Colors.red,
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      child: Text(
+                        'Add',
+                        style: GoogleFonts.montserrat(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              }
-            },
-            child: Text(
-              'Add',
-              style: GoogleFonts.montserrat(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+                  ],
+                ),
           ),
-        ],
-      ),
     );
   }
 
   void _showDeleteConfirmDialog(int index) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E2A3B),
-        title: Text(
-          'Delete Book',
-          style: GoogleFonts.montserrat(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Text(
-          'Are you sure you want to delete "${_books[index]['title']}"?',
-          style: GoogleFonts.montserrat(color: Colors.white),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.montserrat(color: Colors.white),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
-            onPressed: () {
-              setState(() {
-                _books.removeAt(index);
-              });
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Book deleted successfully!',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  backgroundColor: Colors.red,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            },
-            child: Text(
-              'Delete',
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: const Color(0xFF1E2A3B),
+            title: Text(
+              'Delete Book',
               style: GoogleFonts.montserrat(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            content: Text(
+              'Are you sure you want to delete "${_books[index]['title']}"?',
+              style: GoogleFonts.montserrat(color: Colors.white),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Cancel',
+                  style: GoogleFonts.montserrat(color: Colors.white),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () {
+                  setState(() {
+                    _books.removeAt(index);
+                  });
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Book deleted successfully!',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Delete',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -356,13 +379,17 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: _searchController,
-                  style:
-                      GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
+                  style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
                   decoration: InputDecoration(
                     hintText: 'Search for books...',
-                    hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // 50% white
-                    prefixIcon:
-                        const Icon(Icons.search, color: Color(0xFFB19E44)),
+                    hintStyle: const TextStyle(color: Color(0x80FFFFFF)),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFFB19E44),
+                    ),
                     filled: true,
                     fillColor: const Color(0xFF1E2A3B),
                     border: OutlineInputBorder(
@@ -380,7 +407,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        color: const Color(0x1AFFFFFF), // 10% white
+                        color: const Color(0x1AFFFFFF),
                         width: 1,
                       ),
                     ),
@@ -392,7 +419,8 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                           controller: _categoryScrollController,
                           scrollDirection: Axis.horizontal,
                           physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
+                            parent: AlwaysScrollableScrollPhysics(),
+                          ),
                           child: Row(
                             children: [
                               const SizedBox(width: 10),
@@ -409,23 +437,27 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                   child: Container(
                                     margin: const EdgeInsets.only(right: 10),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
+                                      horizontal: 16,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? const Color(0xFFB19E44)
-                                          : const Color(0xFF1E2A3B),
+                                      color:
+                                          isSelected
+                                              ? const Color(0xFFB19E44)
+                                              : const Color(0xFF1E2A3B),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Center(
                                       child: Text(
                                         category,
                                         style: GoogleFonts.montserrat(
-                                          color: isSelected
-                                              ? Colors.black
-                                              : Colors.white,
-                                          fontWeight: isSelected
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
+                                          color:
+                                              isSelected
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                          fontWeight:
+                                              isSelected
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
                                         ),
                                       ),
                                     ),
@@ -451,7 +483,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                   end: Alignment.centerRight,
                                   colors: [
                                     Colors.transparent,
-                                    Color(0xCC121921), // 80% opacity
+                                    Color(0xCC121921),
                                   ],
                                 ),
                               ),
@@ -472,7 +504,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                   end: Alignment.centerLeft,
                                   colors: [
                                     Colors.transparent,
-                                    Color(0xCC121921), // 80% opacity
+                                    Color(0xCC121921),
                                   ],
                                 ),
                               ),
@@ -487,7 +519,12 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                bottom:
+                    100, // Padding en bas pour éviter le chevauchement avec le FloatingActionButton
+              ),
               itemCount: _books.length,
               itemBuilder: (context, index) {
                 final book = _books[index];
@@ -498,14 +535,12 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                 }
 
                 if (_searchController.text.isNotEmpty &&
-                    !book['title']
-                        .toString()
-                        .toLowerCase()
-                        .contains(_searchController.text.toLowerCase()) &&
-                    !book['author']
-                        .toString()
-                        .toLowerCase()
-                        .contains(_searchController.text.toLowerCase())) {
+                    !book['title'].toString().toLowerCase().contains(
+                      _searchController.text.toLowerCase(),
+                    ) &&
+                    !book['author'].toString().toLowerCase().contains(
+                      _searchController.text.toLowerCase(),
+                    )) {
                   return const SizedBox.shrink();
                 }
 
@@ -519,28 +554,26 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
+                    child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   confirmDismiss: (direction) async {
                     _showDeleteConfirmDialog(index);
-                    return false; // prevent dismiss, we'll handle it manually
+                    return false;
                   },
-                  child: Card(
+                  child: Container(
                     margin: const EdgeInsets.only(bottom: 16),
-                    color: const Color(0xFF1E2A3B),
-                    shape: RoundedRectangleBorder(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E2A3B),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
                       children: [
+                        // Couverture du livre
                         Container(
-                          width: 80,
-                          height: 120,
+                          width: 60,
+                          height: 90,
                           decoration: const BoxDecoration(
-                            color: Color(0x33808080), // 20% grey
+                            color: Color(0x33808080),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(12),
                               bottomLeft: Radius.circular(12),
@@ -550,70 +583,132 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                             child: Icon(
                               Icons.book,
                               color: Color(0xFFB19E44),
-                              size: 40,
+                              size: 30,
                             ),
                           ),
                         ),
+                        // Contenu principal
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
+                                // Titre
                                 Text(
                                   book['title'],
                                   style: GoogleFonts.montserrat(
-                                    fontSize: 18,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 3),
+                                // Auteur
                                 Text(
                                   'by ${book['author']}',
                                   style: GoogleFonts.montserrat(
-                                    fontSize: 14,
-                                    color: const Color(0xB3FFFFFF), // 70% white
+                                    fontSize: 11,
+                                    color: const Color(0xB3FFFFFF),
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 6),
+                                // Catégorie et contrôles
                                 Row(
                                   children: [
+                                    // Catégorie
                                     Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: const Color(0xFF121921),
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
                                         book['category'],
                                         style: GoogleFonts.montserrat(
-                                          fontSize: 12,
-                                          color: const Color(0xB3FFFFFF), // 70% white
+                                          fontSize: 9,
+                                          color: const Color(0xB3FFFFFF),
                                         ),
                                       ),
                                     ),
                                     const Spacer(),
+                                    // Compteur compact
                                     Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
+                                      height: 26,
                                       decoration: BoxDecoration(
-                                        color: book['available']
-                                            ? const Color(0x33008000) // 20% green
-                                            : const Color(0x33FF0000), // 20% red
-                                        borderRadius: BorderRadius.circular(12),
+                                        color: const Color(0xFF121921),
+                                        borderRadius: BorderRadius.circular(13),
                                       ),
-                                      child: Text(
-                                        book['available']
-                                            ? 'Available'
-                                            : 'Borrowed',
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 12,
-                                          color: book['available']
-                                              ? Colors.green
-                                              : Colors.red,
-                                        ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              if (book['availableCopies'] > 0) {
+                                                setState(() {
+                                                  _books[index]['availableCopies']--;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              width: 26,
+                                              height: 26,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: const Icon(
+                                                Icons.remove,
+                                                size: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            constraints: const BoxConstraints(
+                                              minWidth: 30,
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              '${book['availableCopies']}/${book['totalCopies']}',
+                                              style: GoogleFonts.montserrat(
+                                                fontSize: 9,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              if (book['availableCopies'] <
+                                                  book['totalCopies']) {
+                                                setState(() {
+                                                  _books[index]['availableCopies']++;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              width: 26,
+                                              height: 26,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: const Icon(
+                                                Icons.add,
+                                                size: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -622,11 +717,15 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                             ),
                           ),
                         ),
+                        // Bouton delete
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          width: 36,
+                          height: 90,
+                          alignment: Alignment.center,
                           child: IconButton(
                             icon: const Icon(
                               Icons.delete_outline,
+                              size: 16,
                               color: Colors.red,
                             ),
                             onPressed: () => _showDeleteConfirmDialog(index),
