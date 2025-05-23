@@ -211,7 +211,7 @@ class DashboardContent extends StatelessWidget {
                     children: [
                       Text('Welcome Back,',
                           style: welcomeBackStyle), // Basic TextStyle
-                      Text('Jane', style: adminNameStyle), // Basic TextStyle
+                      Text('Main Admin', style: adminNameStyle), // Basic TextStyle
                     ],
                   ),
                 ],

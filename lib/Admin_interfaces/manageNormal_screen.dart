@@ -70,14 +70,14 @@ class _ManageNormalScreenState extends State<ManageNormalScreen> {
       memberSince: DateTime.now().subtract(const Duration(days: 60)),
       loans: [
         BookLoan(
-          bookTitle: 'The Great Gatsby',
-          bookAuthor: 'F. Scott Fitzgerald',
+          bookTitle: 'Alice in WonderLand',
+          bookAuthor: 'Lewis Carroll',
           borrowDate: DateTime.now().subtract(const Duration(days: 10)),
           dueDate: DateTime.now().add(const Duration(days: 4)),
         ),
         BookLoan(
-          bookTitle: '1984',
-          bookAuthor: 'George Orwell',
+          bookTitle: 'Dracula',
+          bookAuthor: 'Bram Stoker',
           borrowDate: DateTime.now().subtract(const Duration(days: 20)),
           dueDate: DateTime.now().subtract(const Duration(days: 6)),
         ),
@@ -93,8 +93,8 @@ class _ManageNormalScreenState extends State<ManageNormalScreen> {
       isBlocked: true,
       loans: [
         BookLoan(
-          bookTitle: 'To Kill a Mockingbird',
-          bookAuthor: 'Harper Lee',
+          bookTitle: 'Frankenstein',
+          bookAuthor: 'Mary Shelley',
           borrowDate: DateTime.now().subtract(const Duration(days: 25)),
           dueDate: DateTime.now().subtract(const Duration(days: 11)),
         ),
