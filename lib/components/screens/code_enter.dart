@@ -1,6 +1,9 @@
+import 'package:RHOLIC/components/screens/password_reset.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/book_details.dart';
+
+const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
 class OtpScreen extends StatelessWidget {
   const OtpScreen({super.key});
@@ -34,7 +37,7 @@ class OtpScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 190), // Added SizedBox to push the container up
+          const SizedBox(height: 190),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -50,39 +53,10 @@ class OtpScreen extends StatelessWidget {
                     // Title Row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.email,
-                              color: Color.fromARGB(255, 165, 133, 36),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              "Check Your Email",
-                              style: GoogleFonts.poppins(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: const Icon(
-                            Icons.close,
-                            color: Color.fromARGB(255, 165, 133, 36),
-                          ),
-                        ),
-                      ],
+                      children: [],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      "We have sent you the verification code!",
-                      style: GoogleFonts.poppins(color: Colors.white70),
-                      textAlign: TextAlign.center,
-                    ),
+
                     const SizedBox(height: 20),
 
                     // Text input instead of OTP
@@ -118,23 +92,22 @@ class OtpScreen extends StatelessWidget {
                       },
                     ),
 
-                    const SizedBox(height: 10),
-
+                    const SizedBox(height: 15),
                     // Resend Text
                     GestureDetector(
                       onTap: () {
-                        // Here you trigger resend logic
-                        debugPrint("OTP Resent to email");
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("OTP resent")),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResetPasswordScreen(),
+                          ),
                         );
                       },
                       child: Text(
-                        "Didn't get a code? Click to resend",
+                        "Forget your code? Click here",
                         style: GoogleFonts.poppins(
                           color: Color.fromARGB(255, 165, 133, 36),
-                          fontSize: 14,
-                        ),
+                          fontSize: 17,),
                       ),
                     ),
 
@@ -148,7 +121,8 @@ class OtpScreen extends StatelessWidget {
                             onPressed: () => Navigator.pop(context),
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(
-                                  color: Color.fromARGB(255, 165, 133, 36)),
+                                color: Color.fromARGB(255, 165, 133, 36),
+                              ),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                             ),
                             child: const Text(
@@ -167,12 +141,19 @@ class OtpScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => getAliceInWonderlandDetailsScreen(),
+                                  builder:
+                                      (context) =>
+                                          getAliceInWonderlandDetailsScreen(),
                                 ),
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.fromARGB(255, 165, 133, 36),
+                              backgroundColor: const Color.fromARGB(
+                                255,
+                                165,
+                                133,
+                                36,
+                              ),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                             ),
                             child: const Text(
@@ -203,10 +184,7 @@ class SuccessScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.green[100],
       body: const Center(
-        child: Text(
-          "Verification Successful!",
-          style: TextStyle(fontSize: 22),
-        ),
+        child: Text("Verification Successful!", style: TextStyle(fontSize: 22)),
       ),
     );
   }

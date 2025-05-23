@@ -141,8 +141,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
               _buildLoanOption(
                 context: context,
                 icon: Icons.smartphone,
-                title: "Digital (5 days offline)",
-                description: "Download to read on this app",
+                title: "Digital",
+                description: "Click here to read on this app",
                 onTap: () {
                   setState(() {
                     selectedLoanType = LoanType.digital;
@@ -155,8 +155,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
               _buildLoanOption(
                 context: context,
                 icon: Icons.menu_book,
-                title: "Physical (Pick up at library)",
-                description: "Ready for pickup in 24h",
+                title: "Physical",
+                description: "Pick up at library in 24h",
                 onTap: () {
                   setState(() {
                     selectedLoanType = LoanType.physical;

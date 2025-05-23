@@ -1,9 +1,8 @@
+import 'package:RHOLIC/components/screens/documents.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:RHOLIC/components/screens/code_enter.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
-import 'package:RHOLIC/components/screens/documents.dart';
-import 'package:RHOLIC/components/screens/password_reset.dart';
+import 'package:RHOLIC/user_data.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -38,23 +37,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     super.dispose();
   }
 
-Future<void> saveUserInformation(Map<String, String> userInfo) async {
+Future<Map<String, dynamic>> saveUserInformation(Map<String, String> userInfo) async {
   final url = '$backendBaseUrl/api/create-account';
   debugPrint('Sending request to: $url');
-  
 
   final response = await http.post(
-  Uri.parse(url),
-  headers: {'Content-Type': 'application/json'},
-  body: jsonEncode(userInfo),
-).timeout(const Duration(seconds: 10));
-
+    Uri.parse(url),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(userInfo),
+  ).timeout(const Duration(seconds: 10));
 
   debugPrint('Status code: ${response.statusCode}');
   debugPrint('Raw response: ${response.body}');
 
-  if (response.statusCode != 200 && response.statusCode != 201)
- {
+  if (response.statusCode != 200 && response.statusCode != 201) {
     try {
       final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
       throw Exception(error);
@@ -62,6 +58,8 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
       throw Exception('Unexpected response format: ${response.body}');
     }
   }
+
+  return jsonDecode(response.body) as Map<String, dynamic>;
 }
 
 
@@ -81,14 +79,23 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
       };
 
       saveUserInformation(userInfo)
-          .then((_) {
+          .then((responseData) {
             setState(() {
               _isLoading = false;
             });
-           
-            Navigator.push(
+            // Extract username, email, and name from response
+            String username = responseData['username'] ?? userInfo['username'] ?? '';
+            String email = responseData['email'] ?? userInfo['email'] ?? '';
+            String name = responseData['name'] ?? userInfo['name'] ?? '';
+            UserData.setUserData(username: username, email: email, name: name);
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const UploadScreen()),
+              MaterialPageRoute(
+                builder: (context) => UploadScreen(
+                  username: username,
+                  
+                ),
+              ),
             );
           })
           .catchError((error) {
@@ -224,65 +231,6 @@ Future<void> saveUserInformation(Map<String, String> userInfo) async {
                                             style: GoogleFonts.poppins(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 19),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "you have account ?",
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 14,
-                                                color: Colors.black54,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const OtpScreen(),
-                                                  ),
-                                                );
-                                              },
-                                              child: Text(
-                                                " sign in",
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 15,
-                                                  color: const Color.fromARGB(
-                                                    255,
-                                                    198,
-                                                    120,
-                                                    2,
-                                                  ),
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const ResetPasswordScreen(),
-                                              ),
-                                            );
-                                          },
-                                          child: Text(
-                                            "forgot your password",
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 15,
-                                              color: Color.fromARGB(
-                                                  255, 198, 120, 2),
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),

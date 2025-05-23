@@ -36,11 +36,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
       'bookName': 'The Forth Wing',
       'coverImage': 'assets/images/forth_wing.png',
     },
-    {
-      'author': 'Carmen Maria Machado',
-      'bookName': 'Her Body And Other Parties',
-      'coverImage': 'assets/images/her_body.png',
-    },
+   
     {
       'author': 'Leo Tolstoy',
       'bookName': 'War and Peace',

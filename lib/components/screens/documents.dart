@@ -1,15 +1,13 @@
+import 'package:RHOLIC/components/screens/code_enter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
-import 'dart:convert';
 
-const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
 class UploadScreen extends StatefulWidget {
-  const UploadScreen({super.key});
+  final String? username;
+  const UploadScreen({super.key, this.username});
 
   @override
   State<UploadScreen> createState() => _UploadScreenState();
@@ -19,17 +17,16 @@ class _UploadScreenState extends State<UploadScreen> {
   final String paymentCode = "0023456789 45";
   final String mapsUrl = "https://maps.app.goo.gl/oKo7S2rS1sTKQZoL6";
   final ImagePicker _picker = ImagePicker();
-
+  
   bool showCodeBar = false;
   String? selectedFilePath;
   String? selectedFileName;
   String? receiptPath;
   String? receiptName;
 
-  bool _isUploading = false;
+  bool _isProcessing = false;
 
   bool _isPDF(String filePath) {
-    if (filePath == "email") return true;
     return filePath.toLowerCase().endsWith('.pdf');
   }
 
@@ -42,101 +39,39 @@ class _UploadScreenState extends State<UploadScreen> {
     );
   }
 
-  Future<void> uploadFileToBackend(String filePath, String fileName) async {
+  Future<void> processAndNavigate() async {
     setState(() {
-      _isUploading = true;
+      _isProcessing = true;
     });
 
-    final url = Uri.parse('$backendBaseUrl/api/upload-pdf');
-    final request = http.MultipartRequest('POST', url);
+    // Simulate processing time
+    await Future.delayed(const Duration(seconds: 2));
 
-    try {
-      // Debug the request details
-      debugPrint('Uploading to URL: ${request.url}');
-      
-      // Add PDF file
-      final pdfFile = await http.MultipartFile.fromPath('pdf', filePath);
-      request.files.add(pdfFile);
-      debugPrint('Adding PDF file: ${pdfFile.filename}, size: ${await File(filePath).length()} bytes');
-      
-      // Add receipt if available
-      if (receiptPath != null && receiptName != null) {
-        final receiptFile = await http.MultipartFile.fromPath('receipt', receiptPath!);
-        request.files.add(receiptFile);
-        debugPrint('Adding receipt file: ${receiptFile.filename}, size: ${await File(receiptPath!).length()} bytes');
-      }
-      
-      // Add fields
-      request.fields['fileName'] = fileName;
-      request.fields['email'] = 'RHOLIC@email.com';
-      // Add userId field - the server is likely looking for this based on the error
-      request.fields['userId'] = 'RHOLIC'; // Or use a real user ID if available
-      // Alternative user identifiers that might be expected
-      request.fields['username'] = 'RHOLIC';
-      request.fields['user'] = 'RHOLIC';
-      debugPrint('Request fields: ${request.fields}');
-      
-      // Add headers that might be useful
-      request.headers['Accept'] = 'application/json';
-      // Add authorization header if needed
-      // request.headers['Authorization'] = 'Bearer YOUR_TOKEN_HERE';
-      debugPrint('Request headers: ${request.headers}');
+    setState(() {
+      _isProcessing = false;
+    });
 
-      // Send request and get detailed response
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-      
-      // Debug the response
-      debugPrint('Response status: ${response.statusCode}');
-      debugPrint('Response body: ${response.body}');
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Documents processed successfully!"),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
 
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Files uploaded successfully!"),
-            backgroundColor: Colors.green,
-          ),
-        );
-        
-        // Clear the selected files on success if desired
-        setState(() {
-          selectedFileName = null;
-          selectedFilePath = null;
-          receiptName = null;
-          receiptPath = null;
-        });
-      } else {
-        String errorDetails = '';
-        try {
-          // Try to parse error details from JSON response
-          final errorJson = jsonDecode(response.body);
-          errorDetails = errorJson['message'] ?? errorJson['error'] ?? '';
-        } catch (e) {
-          // If not JSON or missing expected fields, use raw body
-          errorDetails = response.body;
-        }
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Upload failed (${response.statusCode}): $errorDetails"),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 5),
-          ),
-        );
-      }
-    } catch (error) {
-      debugPrint('Upload error: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("An error occurred during upload: $error"),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 5),
+    
+    
+    await Future.delayed(const Duration(seconds: 2));
+
+    
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const OtpScreen(),
         ),
       );
-    } finally {
-      setState(() {
-        _isUploading = false;
-      });
     }
   }
 
@@ -149,7 +84,7 @@ class _UploadScreenState extends State<UploadScreen> {
         
         debugPrint('Picked file: $fileName, path: $path');
         
-        if (path.toLowerCase().endsWith('.pdf')) {
+        if (_isPDF(path)) {
           setState(() {
             selectedFilePath = path;
             selectedFileName = fileName;
@@ -175,14 +110,14 @@ class _UploadScreenState extends State<UploadScreen> {
         
         debugPrint('Picked receipt: $fileName, path: $path');
         
-        if (path.toLowerCase().endsWith('.pdf')) {
+        if (_isPDF(path)) {
           setState(() {
             receiptPath = path;
             receiptName = fileName;
           });
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("Receipt uploaded successfully"),
+              content: Text("Receipt selected successfully"),
               duration: Duration(seconds: 2),
               behavior: SnackBarBehavior.floating,
             ),
@@ -202,13 +137,21 @@ class _UploadScreenState extends State<UploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromARGB(255, 10, 15, 58),
+      backgroundColor: const Color.fromARGB(255, 10, 15, 58),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 10, 15, 58),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
           onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          "Upload Documents", 
+          style: TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Stack(
@@ -281,8 +224,9 @@ class _UploadScreenState extends State<UploadScreen> {
                     title: "Please visit our library location",
                     linkText: "here",
                     onTap: () async {
-                      if (await canLaunchUrl(Uri.parse(mapsUrl))) {
-                        await launchUrl(Uri.parse(mapsUrl));
+                      final uri = Uri.parse(mapsUrl);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Could not open Google Maps")),
@@ -321,7 +265,7 @@ class _UploadScreenState extends State<UploadScreen> {
                         decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 20, 30, 80),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Color.fromARGB(255, 165, 133, 36), width: 1.5),
+                          border: Border.all(color: const Color.fromARGB(255, 165, 133, 36), width: 1.5),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -383,52 +327,12 @@ class _UploadScreenState extends State<UploadScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () async {
-                        if (selectedFilePath != null && selectedFileName != null) {
-                          if (selectedFilePath == "email") {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('You chose to email your document. No file to upload.')),
-                            );
-                            return;
-                          }
-                          if (!_isPDF(selectedFilePath!)) {
-                            _showNotPDFError();
-                            return;
-                          }
-                          
-                          // Check if file exists
-                          final file = File(selectedFilePath!);
-                          if (!await file.exists()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('File not found. Please select the file again.')),
-                            );
-                            return;
-                          }
-                          
-                          // Check file size
-                          final fileSize = await file.length();
-                          debugPrint('File size: ${fileSize / 1024 / 1024} MB');
-                          
-                          // Many servers have upload limits, warn if file is large
-                          if (fileSize > 10 * 1024 * 1024) { // 10MB
-                            // Show warning but allow upload
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Warning: File is large (>10MB). Upload may fail if server has size restrictions.'),
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
-                          }
-                          
-                          await uploadFileToBackend(selectedFilePath!, selectedFileName!);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('No file selected to upload.')),
-                          );
-                        }
-                      },
+                      onPressed: (selectedFilePath != null && selectedFileName != null) 
+                        ? processAndNavigate
+                        : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 165, 133, 36),
+                        disabledBackgroundColor: Colors.grey,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       ),
                       child: const Padding(
@@ -442,11 +346,21 @@ class _UploadScreenState extends State<UploadScreen> {
               ),
             ),
           ),
-          if (_isUploading)
+          if (_isProcessing)
             Container(
               color: Colors.black54,
               child: const Center(
-                child: CircularProgressIndicator(color: Color.fromARGB(255, 165, 133, 36)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(color: Color.fromARGB(255, 165, 133, 36)),
+                    SizedBox(height: 20),
+                    Text(
+                      "Processing documents...",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
             ),
         ],
@@ -524,16 +438,6 @@ class _UploadScreenState extends State<UploadScreen> {
                   await _pickPDF();
                 },
               ),
-              const Divider(color: Colors.white24),
-              _buildOptionTile(
-                icon: Icons.email,
-                title: "Email Your PDF Document",
-                description: "Send your PDF document to our email address",
-                onTap: () {
-                  Navigator.pop(context);
-                  _showEmailInstructionsDialog(context);
-                },
-              ),
             ],
           ),
         );
@@ -561,93 +465,7 @@ class _UploadScreenState extends State<UploadScreen> {
       onTap: onTap,
     );
   }
-
-  void _showEmailInstructionsDialog(BuildContext context) {
-    final String emailAddress = "RHOLIC@gmail.com";
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color.fromARGB(255, 20, 30, 80),
-        title: const Text("Email Your PDF Document", style: TextStyle(color: Colors.white)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Please send your PDF document to the following email address:",
-              style: TextStyle(color: Colors.white70),
-            ),
-            const SizedBox(height: 15),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 10, 15, 58),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Color.fromARGB(255, 165, 133, 36)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    emailAddress,
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 165, 133, 36),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.copy, color: Color.fromARGB(255, 165, 133, 36)),
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: emailAddress));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Email copied to clipboard")),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 15),
-            const Text(
-              "Include your full name and ID in the subject line. We'll process your PDF document within 24-48 hours.",
-              style: TextStyle(color: Colors.white70),
-            ),
-          ],
-        ),
-        actions: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 165, 133, 36),
-            ),
-            onPressed: () async {
-              Navigator.pop(context);
-              final Uri emailUri = Uri(
-                scheme: 'mailto',
-                path: emailAddress,
-                query: 'subject=PDF Document Upload - [Your Name]&body=Please find my PDF document attached.',
-              );
-              if (await canLaunchUrl(emailUri)) {
-                await launchUrl(emailUri);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Could not open email app")),
-                );
-              }
-            },
-            child: const Text("Open Email App", style: TextStyle(color: Colors.white)),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                selectedFileName = "Email PDF submission planned";
-                selectedFilePath = "email";
-              });
-              Navigator.pop(context);
-            },
-            child: const Text("I'll Email Later", style: TextStyle(color: Colors.white70)),
-          ),
-        ],
-      ),
-    );
-  }
 }
+
+
+ 

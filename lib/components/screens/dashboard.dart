@@ -5,9 +5,14 @@ import 'package:RHOLIC/components/screens/first_page.dart';
 import 'package:RHOLIC/components/screens/login.dart';
 import 'package:RHOLIC/components/screens/profile.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
+import 'package:RHOLIC/user_data.dart';
+
+const String backendBaseUrl =
+    'https://backendapp-production-3be4.up.railway.app';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final String? username;
+  const DashboardScreen({super.key, this.username});
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -49,7 +54,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       'author': 'Mary Shelley',
       'image': 'assets/images/frankenstein.png',
     },
-    
+    {
+      'title': 'War and Peace',
+      'author': 'Leo Tolstoy',
+      'image': 'assets/images/war_peace.png',
+    },
+    {
+      'author': 'Rebecca Yarrons',
+      'title': 'The Forth Wing',
+      'image': 'assets/images/forth_wing.png',
+    },
   ];
 
   // Map to track which books have been added
@@ -60,41 +74,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 10, 15, 58),
-appBar: AppBar( 
-  backgroundColor: const Color.fromARGB(255, 10, 15, 58),
-  elevation: 0,
-  leading: IconButton(
-    icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 165, 133, 36)),
-    onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const FirstpageScreen(),
-        ),
-      );
-    },
-  ),
-  title: Image.asset(
-    'assets/images/both.png', // change this path if needed
-    height:90, // adjust based on your logo size
-  ),
-  centerTitle: true,
-  actions: [
-    IconButton(
-      icon: const Icon(Icons.notifications_none, color: Color.fromARGB(255, 165, 133, 36)),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>  UserNotifScreen(),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 10, 15, 58),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 165, 133, 36),
           ),
-        );
-      },
-    ),
-  ],
-),
-
-
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FirstpageScreen()),
+            );
+          },
+        ),
+        title: Image.asset(
+          'assets/images/both.png', // change this path if needed
+          height: 90, // adjust based on your logo size
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.notifications_none,
+              color: Color.fromARGB(255, 165, 133, 36),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserNotifScreen()),
+              );
+            },
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Align(
@@ -106,10 +120,10 @@ appBar: AppBar(
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  Text(
-                    "Welcome Back, Ahlem",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
+                 Text(
+  "Welcome  ${UserData.username ?? widget.username ?? 'among us'}",
+  style: TextStyle(color: Colors.white, fontSize: 20),
+),
                   SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -122,8 +136,8 @@ appBar: AppBar(
                         filled: true,
                         fillColor: Colors.white12,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
                         ),
                       ),
                     ),
@@ -196,9 +210,10 @@ appBar: AppBar(
                         padding: const EdgeInsets.only(right: 0.0, left: 5.0),
                         icon: Image.asset(
                           'assets/images/white_logo.png',
-                          color: _selectedIndex == 0
-                              ? const Color.fromARGB(255, 165, 133, 36)
-                              : Colors.white,
+                          color:
+                              _selectedIndex == 0
+                                  ? const Color.fromARGB(255, 165, 133, 36)
+                                  : Colors.white,
                           width: 85,
                           height: 85,
                         ),
@@ -267,7 +282,7 @@ appBar: AppBar(
   Widget bookCard(BuildContext context, Map<String, String> book, int index) {
     // Default to false if not in map
     bool isAdded = addedBooks[index] ?? false;
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -298,24 +313,27 @@ appBar: AppBar(
           ),
           const SizedBox(height: 10),
           GestureDetector(
-            
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(book['image']!, height: 250, fit: BoxFit.cover),
+              child: Image.asset(
+                book['image']!,
+                height: 250,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(height: 10),
           Row(
             children: [
               TextButton(
-                onPressed: ()  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CreateAccountScreen(),
-                      ),
-                    );
-                  },
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CreateAccountScreen(),
+                    ),
+                  );
+                },
                 child: Text(
                   "View Details",
                   style: TextStyle(

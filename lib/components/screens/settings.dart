@@ -56,9 +56,9 @@ class SettingsScreen extends StatelessWidget {
             icon: Icons.share,
             title: 'Share app',
             onTap: () {
-              // --- Share Logic ---
             
-              const String appLink = "https://your-app-store-link.com"; // Replace this!
+            
+              const String appLink = "https://your-app-store-link.com"; 
               const String shareMessage = "Check out this amazing app: $appLink";
 
               Share.share(
@@ -69,16 +69,7 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           // --- End of Share App Item ---
-          const SettingsItem(
-            icon: Icons.info_outline,
-            title: 'About Application',
-            // onTap: () { /* Navigate to About Screen */ }, // Add onTap if needed
-          ),
-          const SettingsItem(
-            icon: Icons.help_outline,
-            title: 'Help',
-            // onTap: () { /* Navigate to Help Screen */ }, // Add onTap if needed
-          ),
+         
         ],
       ),
     );
