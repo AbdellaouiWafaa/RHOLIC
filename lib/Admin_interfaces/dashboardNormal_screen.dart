@@ -28,7 +28,7 @@ class _DashboardNormalScreenState extends State<DashboardNormalScreen> {
     // Initialiser les écrans ici
     _screens = [
       DashboardContent(), // Le contenu de votre tableau de bord actuel
-      ManageNormlScreen(), // Importé depuis manageMain_screen.dart
+      ManageNormalScreen(), // Importé depuis manageMain_screen.dart
       const CatalogueScreen(), // Importé depuis catalogue_screen.dart
       const ProfileNormalScreen(), // Importé depuis profile_screen.dart
     ];
