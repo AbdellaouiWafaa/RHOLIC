@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'notifications_screen.dart'; // Import to access DummyUserData
 
 // Modèles de données
 class User {
@@ -22,6 +23,18 @@ class User {
     this.isBlocked = false,
     this.loans = const [],
   });
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'] ?? '',
+      name: map['fullName'] ?? '',
+      email: map['email'] ?? '',
+      address: map['address'] ?? '',
+      phone: map['phone'] ?? '',
+      memberSince: DateTime.parse(map['memberSince'] ?? DateTime.now().toString()),
+      isBlocked: map['isBlocked'] ?? false,
+    );
+  }
 }
 
 class BookLoan {
@@ -44,21 +57,14 @@ class BookLoan {
   bool get isOverdue => !isReturned && DateTime.now().isAfter(dueDate);
 }
 
-class ManageNormalScreen extends StatefulWidget {
-  const ManageNormalScreen({Key? key}) : super(key: key);
+class ManageNormlScreen extends StatefulWidget {
+  const ManageNormlScreen({Key? key}) : super(key: key);
 
   @override
-  State<ManageNormalScreen> createState() => _ManageNormalScreenState();
+  State<ManageNormlScreen> createState() => _ManageScreenState();
 }
 
-class _ManageNormalScreenState extends State<ManageNormalScreen> {
-  void addUserDynamically(User newUser) {
-    setState(() {
-      users.add(newUser);
-    });
-  }
-
-  // Listes pour stocker les users
+class _ManageScreenState extends State<ManageNormlScreen> {
 
   List<User> users = [
     User(
@@ -110,6 +116,106 @@ class _ManageNormalScreenState extends State<ManageNormalScreen> {
       loans: [],
     ),
   ];
+  @override
+  void initState() {
+    super.initState();
+    _loadUsers();
+  }
+
+  void _loadUsers() {
+    final userMaps = DummyUserData.getExistingUsers();
+    setState(() {
+      users = userMaps.map((userMap) => User.fromMap(userMap)).toList();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadUsers(); // Refresh when returning to this screen
+  }
+
+  void _showExistingUsersDialog() {
+    _loadUsers(); // Refresh data before showing dialog
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E2A3B),
+        title: Text('Existing Users', style: cardTitleStyle),
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 500,
+          child: ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              final user = users[index];
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ElevatedButton(
+                  onPressed: () => _showUserDetails(user),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF121921),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.all(16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(
+                        color: user.isBlocked ? Colors.red : const Color(0xFFB19E44),
+                        width: 1.5,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: user.isBlocked ? Colors.red : const Color(0xFFB19E44),
+                        child: Text(
+                          user.name[0].toUpperCase(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(user.name, style: cardTitleStyle),
+                            const SizedBox(height: 4),
+                            Text(user.email, style: bodyTextStyle),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Icon(
+                            user.isBlocked ? Icons.block : Icons.check_circle,
+                            color: user.isBlocked ? Colors.red : Colors.green,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${user.loans.where((loan) => !loan.isReturned).length} loans',
+                            style: bodyTextStyle.copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Close', style: bodyTextStyle),
+          ),
+        ],
+      ),
+    );
+  }
 
   // Styles réutilisables
   TextStyle get sectionTitleStyle => GoogleFonts.montserrat(
@@ -349,95 +455,6 @@ class _ManageNormalScreenState extends State<ManageNormalScreen> {
 
   // (Toutes tes méthodes de dialogue et autres sont identiques à ton code d'origine, je les intègre ici sans changement)
   // Dialogs pour User Management
-  void _showExistingUsersDialog() {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            backgroundColor: const Color(0xFF1E2A3B),
-            title: Text('Existing Users', style: cardTitleStyle),
-            content: SizedBox(
-              width: double.maxFinite,
-              height: 500,
-              child: ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  final user = users[index];
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ElevatedButton(
-                      onPressed: () => _showUserDetails(user),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF121921),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.all(16.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color:
-                                user.isBlocked
-                                    ? Colors.red
-                                    : const Color(0xFFB19E44),
-                            width: 1.5,
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor:
-                                user.isBlocked
-                                    ? Colors.red
-                                    : const Color(0xFFB19E44),
-                            child: Text(
-                              user.name[0].toUpperCase(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(user.name, style: cardTitleStyle),
-                                const SizedBox(height: 4),
-                                Text(user.email, style: bodyTextStyle),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Icon(
-                                user.isBlocked
-                                    ? Icons.block
-                                    : Icons.check_circle,
-                                color:
-                                    user.isBlocked ? Colors.red : Colors.green,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '${user.loans.where((loan) => !loan.isReturned).length} loans',
-                                style: bodyTextStyle.copyWith(fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Close', style: bodyTextStyle),
-              ),
-            ],
-          ),
-    );
-  }
 
   void _showUserDetails(User user) {
     showDialog(
