@@ -142,7 +142,7 @@ class DashboardContent extends StatelessWidget {
   final int fineCollected = 2; // Example value, replace with your data source
   final int newUsers = 2; // Example value, replace with your data source
   final int inactiveUsers = 2; // Example value, replace with your data source
-  final int activeUsers = 5; // Example value, replace with your data source
+  final int activeUsers = 3; // Example value, replace with your data source
 
   // Styles pour Welcome section (basique comme demandé pour Welcome/Jane)
  final TextStyle welcomeBackStyle = GoogleFonts.islandMoments(

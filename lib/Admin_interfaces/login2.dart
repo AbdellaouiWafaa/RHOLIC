@@ -2,6 +2,8 @@ import 'package:RHOLIC/Admin_interfaces/dashboardNormal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dashboardMain_screen.dart'; // <-- Assurez-vous que ce fichier existe
+import 'dashboardNormal_screen.dart'; // <-- Assurez-vous que ce fichier existe
+
 
 class Login2 extends StatefulWidget {
   const Login2({super.key});
@@ -12,32 +14,32 @@ class Login2 extends StatefulWidget {
 
 class _Login2State extends State<Login2> {
   final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   void dispose() {
     _codeController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
   void _submitCode(String code) {
     print('Code submitted: $code');
-if (code == '077007') {
+    if (code == '077007') {
       print('Admin login successful!');
       _codeController.clear();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardNormalScreen()),
-      );}
-
-else if (code == 'admin123') {
+      );
+    } else if (code == 'admin123') {
       print('Admin login successful!');
       _codeController.clear();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardMainScreen()),
       );
-    } 
-else {
+    } else {
       print('Invalid code');
       _codeController.clear();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,6 +63,91 @@ else {
         ),
       );
     }
+  }
+
+  void _showForgotPasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black.withOpacity(0.8),
+          title: Text(
+            'Forgot Password',
+            style: GoogleFonts.montserrat(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: TextField(
+            controller: _emailController,
+            style: GoogleFonts.montserrat(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: 'Enter your email',
+              hintStyle: GoogleFonts.montserrat(color: Colors.white70),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+            ),
+            keyboardType: TextInputType.emailAddress,
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.montserrat(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                _emailController.clear();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Confirm',
+                style: GoogleFonts.montserrat(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                final email = _emailController.text.trim();
+                if (email.isNotEmpty) {
+                  print('Password reset email sent to: $email');
+                  _emailController.clear();
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Password reset link sent to $email',
+                        style: GoogleFonts.montserrat(),
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Please enter your email',
+                        style: GoogleFonts.montserrat(),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -141,6 +228,19 @@ else {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: _submitCode,
+                    ),
+                    const SizedBox(height: 20),
+                    TextButton(
+                      onPressed: _showForgotPasswordDialog,
+                      child: Text(
+                        'Forgot your password?',
+                        style: GoogleFonts.montserrat(
+                          color: Colors.white,
+                          fontSize: 16,
+                          decoration: TextDecoration.underline,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ],
                 ),

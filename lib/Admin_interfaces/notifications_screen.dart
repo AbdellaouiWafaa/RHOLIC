@@ -20,11 +20,7 @@ class DummyUserData {
   ];
 
   static final List<Map<String, dynamic>> _adminUsers = [
-    {
-      'fullName': 'Admin Beta',
-      'email': 'admin2@example.com',
-      'id': 'admin2',
-    },
+    {'fullName': 'Admin Beta', 'email': 'admin2@example.com', 'id': 'admin2'},
     {
       'fullName': 'Admin Charlie',
       'email': 'admin3@example.com',
@@ -62,7 +58,8 @@ class NotificationsScreen extends StatefulWidget {
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> with SingleTickerProviderStateMixin {
+class _NotificationsScreenState extends State<NotificationsScreen>
+    with SingleTickerProviderStateMixin {
   bool _showUserSelectionDialog =
       false; // Pour afficher la liste des utilisateurs
   List<Map<String, dynamic>> _selectedUsers =
@@ -643,14 +640,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> with SingleTi
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('User ${notification['details']['fullName']} rejected.'),
+          content: Text(
+            'User ${notification['details']['fullName']} rejected.',
+          ),
           backgroundColor: Colors.red,
         ),
       );
     }
 
     setState(() {
-      final index = _allNotifications.indexWhere((n) => n['id'] == notification['id']);
+      final index = _allNotifications.indexWhere(
+        (n) => n['id'] == notification['id'],
+      );
       if (index != -1) {
         _allNotifications[index]['needsAction'] = false;
         _allNotifications[index]['isRead'] = true;
@@ -658,6 +659,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> with SingleTi
       }
     });
   }
+
   void _handleTabSelection() {
     setState(() {
       switch (_tabController.index) {
