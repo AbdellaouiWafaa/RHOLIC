@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // Profile Info
                         Text(name ?? UserData.username ?? 'among us', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: textColor), textAlign: TextAlign.center),
                         SizedBox(height: 8),
-                        Text(userEmail ?? UserData.email ?? 'your@email.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
+                        Text(userEmail ?? UserData.email ?? UserData.username ?? 'your@email.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
                         SizedBox(height: 70),
                         // --- List Items ---
                         // Calls to _buildProfileListItem now handle navigation internally via onTap

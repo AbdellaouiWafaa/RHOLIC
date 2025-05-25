@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:io'; // For File class
 
 class ProfileNormalScreen extends StatefulWidget {
-  const ProfileNormalScreen({Key? key}) : super(key: key);
+  const ProfileNormalScreen({super.key});
 
   @override
   State<ProfileNormalScreen> createState() => _ProfileNormalScreenState();
@@ -297,7 +297,7 @@ class _ProfileNormalScreenState extends State<ProfileNormalScreen> {
           // Use StatefulBuilder to update dialog UI
           builder: (context, setState) {
             return SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 width: double.maxFinite,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

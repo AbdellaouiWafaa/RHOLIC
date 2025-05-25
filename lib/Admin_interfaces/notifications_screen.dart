@@ -57,7 +57,7 @@ class DummyUserData {
 }
 
 class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key});
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
@@ -496,7 +496,7 @@ Widget _buildUserSelectionDialog() {
         fontWeight: FontWeight.bold,
       ),
     ),
-    content: Container(
+    content: SizedBox(
       width: double.maxFinite,
       height: MediaQuery.of(context).size.height * 0.5,
       child: Column(

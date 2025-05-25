@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
-
+import 'package:RHOLIC/user_data.dart';
+const String backendBaseUrl =
+    'https://backendapp-production-3be4.up.railway.app';
 
 BookDetailsScreen getAliceInWonderlandDetailsScreen() {
   return BookDetailsScreen(
@@ -90,20 +92,19 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
   bool showAllReviews = false;
   final ScrollController _scrollController = ScrollController();
   
-  // Added state variables for loan functionality
   LoanType selectedLoanType = LoanType.none;
   LoanStatus loanStatus = LoanStatus.none;
   DateTime? expiryDate;
   
-  // Add controllers and state for new review
+ 
   final TextEditingController _commentController = TextEditingController();
   double _userRating = 0.0;
   bool _isSubmittingReview = false;
 
   // Placeholder for getting the logged-in user's name
   String getLoggedInUserName() {
-
-    return 'Current User';
+    // Use UserData.username if available, else fallback
+    return UserData.name ?? UserData.username ?? 'Current User';
   }
 
   void _scrollToReviews() {
@@ -420,16 +421,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
             );
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.bookmark_outline, color: Color.fromARGB(255, 165, 133, 36)),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Color.fromARGB(255, 165, 133, 36)),
-            onPressed: () {},
-          ),
-        ],
+        
       ),
       body: Stack(
         children: [
@@ -832,14 +824,16 @@ class _DigitalBookReaderScreenState extends State<DigitalBookReaderScreen> {
       return "Expired";
     }
     
-    final days = remaining.inDays;
-    final hours = remaining.inHours % 24;
-    
-    return "$days ${days == 1 ? 'day' : 'days'}, $hours ${hours == 1 ? 'hour' : 'hours'} remaining";
-  }
+  final DateTime oneMonthAgo = DateTime.now().subtract(Duration(days: 30));
+  final Duration elapsed = DateTime.now().difference(oneMonthAgo);
+  final days = elapsed.inDays;
+  final hours = elapsed.inHours % 24;
+  
+  return "$days ${days == 1 ? 'day' : 'days'}, $hours ${hours == 1 ? 'hour' : 'hours'} remaining";
+}
+  
+  
 
-  // Sample book content (first few paragraphs of Dracula)
-  // Sample book content from Alice in Wonderland
 String _getPageContent(int page) {
   final Map<String, dynamic> aliceBookData = {
     "title": "Alice's Adventures in Wonderland",
@@ -1230,7 +1224,7 @@ String _getPageContent(int page) {
                             setState(() {});
                           }
                         },
-                        items: <String>['Georgia', 'Roboto', 'Times New Roman', 'Open Sans']
+                        items: <String>['Georgia', 'Roboto']
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -1280,32 +1274,7 @@ String _getPageContent(int page) {
                   const SizedBox(height: 24),
                   
                   // Status information
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[900],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.info_outline,
-                          color: Color.fromARGB(255, 165, 133, 36),
-                          size: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            "This book has been securely downloaded in your app until ${widget.expiryDate.day}/${widget.expiryDate.month}/${widget.expiryDate.year}.",
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  
                 ],
               ),
             );
@@ -1452,13 +1421,7 @@ class _InteractiveReviewCardState extends State<InteractiveReviewCard> {
                 ),
               ),
               const SizedBox(width: 5),
-              Text(
-                likeCount.toString(),
-                style: TextStyle(
-                  color: isLiked ? Colors.blue : Colors.grey[500],
-                  fontSize: 13,
-                ),
-              ),
+              
               const SizedBox(width: 20),
               InkWell(
                 onTap: toggleReplyField,

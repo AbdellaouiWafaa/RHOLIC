@@ -67,7 +67,7 @@ class BookLoan {
 }
 
 class ManageMainScreen extends StatefulWidget {
-  const ManageMainScreen({Key? key}) : super(key: key);
+  const ManageMainScreen({super.key});
 
   @override
   State<ManageMainScreen> createState() => _ManageScreenState();
@@ -1186,7 +1186,7 @@ class _ManageScreenState extends State<ManageMainScreen> {
                             ),
                           ),
                         )
-                        .toList(),
+                        ,
                   ],
                 ],
               ),

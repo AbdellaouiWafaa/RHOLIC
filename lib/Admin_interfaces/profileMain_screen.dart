@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:io'; // For File class
 
 class ProfileMainScreen extends StatefulWidget {
-  const ProfileMainScreen({Key? key}) : super(key: key);
+  const ProfileMainScreen({super.key});
 
   @override
   State<ProfileMainScreen> createState() => _ProfileMainScreenState();

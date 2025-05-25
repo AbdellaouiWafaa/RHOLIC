@@ -38,9 +38,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
     },
    
     {
-      'author': 'Leo Tolstoy',
-      'bookName': 'War and Peace',
-      'coverImage': 'assets/images/war_peace.png',
+      'bookName': 'Frankenstein',
+      'author': 'Mary Shelley',
+      'coverImage': 'assets/images/frankenstein.png',
     },
   ];
 

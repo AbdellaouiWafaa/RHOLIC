@@ -38,7 +38,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   bool _showLeftShadow = false;
   bool _showRightShadow = true;
 
-  List<Map<String, dynamic>> _books = [
+  final List<Map<String, dynamic>> _books = [
     {
       'title': 'Alice in Wonderland',
       'author': 'Lewis Carroll',

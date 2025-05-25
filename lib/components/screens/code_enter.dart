@@ -5,8 +5,43 @@ import 'package:RHOLIC/components/screens/book_details.dart';
 
 const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
+
+  @override
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  final TextEditingController _otpController = TextEditingController();
+  String enteredOtp = '';
+
+  @override
+  void dispose() {
+    _otpController.dispose();
+    super.dispose();
+  }
+
+  void _verifyOtp() {
+    if (enteredOtp.isNotEmpty) {
+      // Here you can add your OTP verification logic
+      // For now, it will navigate if any code is entered
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => getAliceInWonderlandDetailsScreen(),
+        ),
+      );
+    } else {
+      // Show error if no code is entered
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter the verification code'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +96,7 @@ class OtpScreen extends StatelessWidget {
 
                     // Text input instead of OTP
                     TextField(
+                      controller: _otpController,
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         color: Colors.white,
@@ -88,6 +124,9 @@ class OtpScreen extends StatelessWidget {
                         ),
                       ),
                       onChanged: (text) {
+                        setState(() {
+                          enteredOtp = text;
+                        });
                         debugPrint("Text entered: $text");
                       },
                     ),
@@ -136,17 +175,7 @@ class OtpScreen extends StatelessWidget {
                         const SizedBox(width: 10),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              // Navigate to next screen
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          getAliceInWonderlandDetailsScreen(),
-                                ),
-                              );
-                            },
+                            onPressed: _verifyOtp,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color.fromARGB(
                                 255,
@@ -170,21 +199,6 @@ class OtpScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ✅ Temporary Success Screen
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.green[100],
-      body: const Center(
-        child: Text("Verification Successful!", style: TextStyle(fontSize: 22)),
       ),
     );
   }

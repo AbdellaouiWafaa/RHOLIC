@@ -6,6 +6,8 @@ import 'package:RHOLIC/components/screens/login.dart';
 import 'package:RHOLIC/components/screens/profile.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
 import 'package:RHOLIC/user_data.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 const String backendBaseUrl =
     'https://backendapp-production-3be4.up.railway.app';
@@ -45,14 +47,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       'image': 'assets/images/dracula.png',
     },
     {
-      'title': 'Alice Wonderlands',
-      'author': 'Lewis Carroll',
-      'image': 'assets/images/alice.png',
-    },
-    {
       'title': 'Frankenstein',
       'author': 'Mary Shelley',
       'image': 'assets/images/frankenstein.png',
+    },
+    {
+      'title': 'Alice Wonderlands',
+      'author': 'Lewis Carroll',
+      'image': 'assets/images/alice.png',
     },
     {
       'title': 'War and Peace',
@@ -66,8 +68,55 @@ class _DashboardScreenState extends State<DashboardScreen> {
     },
   ];
 
-  // Map to track which books have been added
   Map<int, bool> addedBooks = {};
+
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> searchResults = [];
+  bool isSearching = false;
+  bool hasSearched = false;
+
+  Future<void> searchBooks(String query) async {
+    setState(() {
+      isSearching = true;
+      hasSearched = true;
+    });
+    final url = Uri.parse('$backendBaseUrl/api/search?query=$query');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        searchResults = List<Map<String, dynamic>>.from(data);
+        isSearching = false;
+      });
+    } else {
+      setState(() {
+        searchResults = [];
+        isSearching = false;
+      });
+      // Show alert dialog when no books are found
+      _showNoBooksFoundAlert();
+    }
+  }
+
+  void _showNoBooksFoundAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('No Books Found'),
+          content: Text('Try searching with different keywords.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,33 +166,165 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                 Text(
-  "Welcome  ${UserData.username ?? widget.username ?? 'among us'}",
-  style: TextStyle(color: Colors.white, fontSize: 20),
-),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: "Search books, authors...",
-                        hintStyle: TextStyle(color: Colors.white70),
-                        prefixIcon: Icon(Icons.search, color: Colors.white),
-                        filled: true,
-                        fillColor: Colors.white12,
-                        border: OutlineInputBorder(
+              child: Column(children: [
+                const SizedBox(height: 20),
+                Text(
+                  "Welcome ${UserData.username ?? widget.username ?? 'among us'}",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                    controller: _searchController,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: "Search books...",
+                      hintStyle: TextStyle(color: Colors.white70),
+                      prefixIcon: Icon(Icons.search, color: Colors.white),
+                      filled: true,
+                      fillColor: Colors.white12,
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
-                        ),
                       ),
                     ),
+                    onSubmitted: (value) {
+                      if (value.isNotEmpty) {
+                        searchBooks(value);
+                      }
+                    },
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 5),
+                if (isSearching)
+                  SizedBox(
+                    width: 17,
+                    height: 17,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 165, 133, 36),
+                      ),
+                    ),
+                  )
+                else if (hasSearched)
+                  Container(
+                    height: 300,
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: searchResults.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: searchResults.length,
+                            itemBuilder: (context, index) {
+                              final book = searchResults[index];
+                              return Container(
+                                margin: EdgeInsets.symmetric(vertical: 8),
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white12,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    // Book Cover
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: book['cover'] != null && book['cover'].toString().isNotEmpty
+                                          ? Image.network(
+                                              book['cover'].toString(),
+                                              width: 60,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return Container(
+                                                  width: 60,
+                                                  height: 80,
+                                                  color: Colors.grey[300],
+                                                  child: Icon(
+                                                    Icons.book,
+                                                    color: Colors.grey[600],
+                                                    size: 30,
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Container(
+                                              width: 60,
+                                              height: 80,
+                                              color: Colors.grey[300],
+                                              child: Icon(
+                                                Icons.book,
+                                                color: Colors.grey[600],
+                                                size: 30,
+                                              ),
+                                            ),
+                                    ),
+                                    SizedBox(width: 12),
+                                    // Book Details
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            book['title']?.toString() ?? 'Unknown Title',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            book['author']?.toString() ?? 'Unknown Author',
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 14,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  color: Colors.white54,
+                                  size: 50,
+                                ),
+                                SizedBox(height: 16),
+                                Text(
+                                  'No books found',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Try searching with different keywords',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
+              ]),
             ),
           ),
           Positioned(

@@ -1,12 +1,12 @@
+import 'package:RHOLIC/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/personnel_infos.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const String backendBaseUrl ='https://backendapp-production-3be4.up.railway.app';
-
-
+const String backendBaseUrl =
+    'https://backendapp-production-3be4.up.railway.app';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -16,7 +16,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class EditProfileScreenState extends State<EditProfileScreen> {
-  int? userId; 
+  int? userId;
   String selectedCountry = 'Algeria';
   String countryCode = '+213';
   String countryFlag = '🇩🇿';
@@ -95,8 +95,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-  
-    userId = 97;
+    userId = UserData.userId; // Get it automatically
     fetchUserInfo();
   }
 
@@ -126,125 +125,127 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0F3A),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 20.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Color.fromARGB(255, 165, 133, 36),
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 20.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Color.fromARGB(255, 165, 133, 36),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          const ProfileSettingsScreen(),
+                                ),
+                              );
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => const ProfileSettingsScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              "Edit profile",
-                              style: GoogleFonts.poppins(
-                                fontSize: 27,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                "Edit profile",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 27,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 48),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    buildInputField("Full name", "", nameController),
-                    buildInputField("Nick name", "", usernameController),
-                    buildInputField(
-                      "Email",
-                      "xxxxxxxxxxx@gmail.com",
-                      emailController,
-                    ),
-                    buildPhoneField(phoneController),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: buildDropdown(
-                            "Country",
-                            ['Algeria', 'Morocco', 'Tunisia'],
-                            selectedCountry,
-                            (value) {
-                              setState(() {
-                                selectedCountry = value;
-                                countryCode = countryData[value]!;
-                                countryFlag = countryFlags[value]!;
-                              });
-                            },
+                          const SizedBox(width: 48),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      buildInputField("Full name", "", nameController),
+                      buildInputField("Nick name", "", usernameController),
+                      buildInputField(
+                        "Email",
+                        "xxxxxxxxxxx@gmail.com",
+                        emailController,
+                      ),
+                      buildPhoneField(phoneController),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: buildDropdown(
+                              "Country",
+                              ['Algeria', 'Morocco', 'Tunisia'],
+                              selectedCountry,
+                              (value) {
+                                setState(() {
+                                  selectedCountry = value;
+                                  countryCode = countryData[value]!;
+                                  countryFlag = countryFlags[value]!;
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: buildDropdown(
-                            "Gender",
-                            ['Male', 'Female'],
-                            selectedGender,
-                            (value) => setState(() => selectedGender = value),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: buildDropdown(
+                              "Gender",
+                              ['Male', 'Female'],
+                              selectedGender,
+                              (value) => setState(() => selectedGender = value),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    buildInputField(
-                      "Address",
-                      "80 rue national, Algeria",
-                      addressController,
-                    ),
-                    const SizedBox(height: 30),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: submitData,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(
-                            255,
-                            56,
-                            152,
-                            254,
+                        ],
+                      ),
+                      buildInputField(
+                        "Address",
+                        "80 rue national, Algeria",
+                        addressController,
+                      ),
+                      const SizedBox(height: 30),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: submitData,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              56,
+                              152,
+                              254,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 100,
+                              vertical: 10,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 100,
-                            vertical: 10,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          "SUBMIT",
-                          style: GoogleFonts.poppins(
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF0A0F3A),
+                          child: Text(
+                            "SUBMIT",
+                            style: GoogleFonts.poppins(
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF0A0F3A),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20), // Extra padding at bottom
-                  ],
+                      const SizedBox(height: 20), // Extra padding at bottom
+                    ],
+                  ),
                 ),
               ),
-            ),
     );
   }
 
@@ -351,15 +352,16 @@ class EditProfileScreenState extends State<EditProfileScreen> {
               icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
               style: const TextStyle(color: Colors.white),
               onChanged: (value) => onChanged(value!),
-              items: items.map((item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: GoogleFonts.poppins(color: Colors.white),
-                  ),
-                );
-              }).toList(),
+              items:
+                  items.map((item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        item,
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
             ),
           ),
         ),
