@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'notifications_screen.dart'; // Import to access DummyUserData
 
-// Modèles de données
 class Admin {
   final String id;
   final String name;
@@ -44,6 +44,18 @@ class User {
     this.isBlocked = false,
     this.loans = const [],
   });
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'] ?? '',
+      name: map['fullName'] ?? '',
+      email: map['email'] ?? '',
+      address: map['address'] ?? '',
+      phone: map['phone'] ?? '',
+      memberSince: DateTime.parse(map['memberSince'] ?? DateTime.now().toString()),
+      isBlocked: map['isBlocked'] ?? false,
+    );
+  }
 }
 
 class BookLoan {
@@ -74,13 +86,6 @@ class ManageMainScreen extends StatefulWidget {
 }
 
 class _ManageScreenState extends State<ManageMainScreen> {
-  void addUserDynamically(User newUser) {
-    setState(() {
-      users.add(newUser);
-    });
-  }
-
-  // Listes pour stocker les admins et users
   List<Admin> admins = [
     Admin(
       id: '1',
@@ -137,7 +142,7 @@ class _ManageScreenState extends State<ManageMainScreen> {
       loans: [
         BookLoan(
           bookTitle: 'Frankenstein',
-          bookAuthor: 'Mary Shelley',
+          bookAuthor: 'Mary Shelley ',
           borrowDate: DateTime.now().subtract(const Duration(days: 25)),
           dueDate: DateTime.now().subtract(const Duration(days: 11)),
         ),
@@ -153,6 +158,25 @@ class _ManageScreenState extends State<ManageMainScreen> {
       loans: [],
     ),
   ];
+  @override
+  void initState() {
+    super.initState();
+    _loadUsers();
+  }
+
+  void _loadUsers() {
+    final userMaps = DummyUserData.getExistingUsers();
+    setState(() {
+      users = userMaps.map((userMap) => User.fromMap(userMap)).toList();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadUsers(); // Refresh when returning to this screen
+  }
+
 
   // Controllers pour les formulaires
   final TextEditingController adminNameController = TextEditingController();

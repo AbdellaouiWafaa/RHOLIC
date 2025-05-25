@@ -137,12 +137,12 @@ class DashboardContent extends StatelessWidget {
   // Données depuis la maquette (kept user's data)
   final int borrowedCount = 1;
   final int overdueCount = 0;
-  final int totalTitles = 120; // Example value, replace with your data source
-  final int totalMembers = 45; // Example value, replace with your data source
-  final int fineCollected = 300; // Example value, replace with your data source
-  final int newUsers = 5; // Example value, replace with your data source
+  final int totalTitles = 2; // Example value, replace with your data source
+  final int totalMembers = 5 ; // Example value, replace with your data source
+  final int fineCollected = 2; // Example value, replace with your data source
+  final int newUsers = 2; // Example value, replace with your data source
   final int inactiveUsers = 2; // Example value, replace with your data source
-  final int activeUsers = 43; // Example value, replace with your data source
+  final int activeUsers = 5; // Example value, replace with your data source
 
   // Styles pour Welcome section (basique comme demandé pour Welcome/Jane)
  final TextStyle welcomeBackStyle = GoogleFonts.islandMoments(
