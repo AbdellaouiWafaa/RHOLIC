@@ -104,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('No Books Found'),
-          content: Text('Try searching with different keywords.'),
+          content: Text('Try searching with different keywords'),
           actions: [
             TextButton(
               onPressed: () {
@@ -404,50 +404,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         padding: const EdgeInsets.only(right: 20.0, left: 0.0),
                         icon: Icon(
                           Icons.menu_book_sharp,
-                          color: Colors.white,
+                          color: UserData.isOtpEntered ? Colors.white : Colors.white38,
                           size: 30,
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const BookListScreen(),
-                            ),
-                          );
-                          _onItemTapped(1);
-                        },
+                        onPressed: UserData.isOtpEntered
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const BookListScreen(),
+                                  ),
+                                );
+                                _onItemTapped(1);
+                              }
+                            : null,
                       ),
                       IconButton(
                         icon: Icon(
                           Icons.chat_bubble_outline,
-                          color: Colors.white,
+                          color: UserData.isOtpEntered ? Colors.white : Colors.white38,
                           size: 30,
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ChatBoxScreen(),
-                            ),
-                          );
-                          _onItemTapped(2);
-                        },
+                        onPressed: UserData.isOtpEntered
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ChatBoxScreen(),
+                                  ),
+                                );
+                                _onItemTapped(2);
+                              }
+                            : null,
                       ),
                       IconButton(
                         icon: Icon(
                           Icons.person_outline_rounded,
-                          color: Colors.white,
+                          color: UserData.isOtpEntered ? Colors.white : Colors.white38,
                           size: 30,
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProfileScreen(),
-                            ),
-                          );
-                          _onItemTapped(3);
-                        },
+                        onPressed: UserData.isOtpEntered
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ProfileScreen(),
+                                  ),
+                                );
+                                _onItemTapped(3);
+                              }
+                            : null,
                       ),
                     ],
                   ),

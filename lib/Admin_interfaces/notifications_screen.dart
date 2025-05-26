@@ -20,11 +20,7 @@ class DummyUserData {
   ];
 
   static final List<Map<String, dynamic>> _adminUsers = [
-    {
-      'fullName': 'Admin Beta',
-      'email': 'admin2@example.com',
-      'id': 'admin2',
-    },
+    {'fullName': 'Admin Beta', 'email': 'admin2@example.com', 'id': 'admin2'},
     {
       'fullName': 'Admin Charlie',
       'email': 'admin3@example.com',
@@ -56,13 +52,14 @@ class DummyUserData {
 }
 
 class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({super.key});
+  const NotificationsScreen({Key? key}) : super(key: key);
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> with SingleTickerProviderStateMixin {
+class _NotificationsScreenState extends State<NotificationsScreen>
+    with SingleTickerProviderStateMixin {
   bool _showUserSelectionDialog =
       false; // Pour afficher la liste des utilisateurs
   List<Map<String, dynamic>> _selectedUsers =
@@ -502,39 +499,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> with SingleTi
           fontWeight: FontWeight.bold,
         ),
       ),
-<<<<<<< HEAD
-      backgroundColor: Colors.green,
-    ),
-  );
-}
-
-// Ajoutez cette méthode pour construire le dialogue de sélection des utilisateurs
-Widget _buildUserSelectionDialog() {
-  // Obtenez la liste de tous les utilisateurs réguliers (non-admin)
-  final List<Map<String, dynamic>> allUsers = DummyUserData.getRegularUsers();
-  
-  return AlertDialog(
-    backgroundColor: const Color(0xFF1E2A3B),
-    title: Text(
-      'Select Recipients',
-      style: GoogleFonts.montserrat(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    content: SizedBox(
-      width: double.maxFinite,
-      height: MediaQuery.of(context).size.height * 0.5,
-      child: Column(
-        children: [
-          // Option to select all users
-          CheckboxListTile(
-            title: Text(
-              'Select All Users',
-              style: GoogleFonts.montserrat(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-=======
       content: Container(
         width: double.maxFinite,
         height: MediaQuery.of(context).size.height * 0.5,
@@ -548,7 +512,6 @@ Widget _buildUserSelectionDialog() {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
->>>>>>> 605db4422981b339a320f0811944b60c1fdcb78a
               ),
               value: _selectAllUsers,
               activeColor: const Color(0xFFB19E44),
@@ -677,14 +640,18 @@ Widget _buildUserSelectionDialog() {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('User ${notification['details']['fullName']} rejected.'),
+          content: Text(
+            'User ${notification['details']['fullName']} rejected.',
+          ),
           backgroundColor: Colors.red,
         ),
       );
     }
 
     setState(() {
-      final index = _allNotifications.indexWhere((n) => n['id'] == notification['id']);
+      final index = _allNotifications.indexWhere(
+        (n) => n['id'] == notification['id'],
+      );
       if (index != -1) {
         _allNotifications[index]['needsAction'] = false;
         _allNotifications[index]['isRead'] = true;
@@ -692,6 +659,7 @@ Widget _buildUserSelectionDialog() {
       }
     });
   }
+
   void _handleTabSelection() {
     setState(() {
       switch (_tabController.index) {
