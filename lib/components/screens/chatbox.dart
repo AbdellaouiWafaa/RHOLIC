@@ -6,6 +6,66 @@ import 'package:RHOLIC/components/screens/books_shelf.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
 import 'package:RHOLIC/components/screens/profile.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
+import 'package:RHOLIC/components/screens/user_session.dart';
+const String backendBaseUrl =
+    'https://backendapp-production-3be4.up.railway.app';
+
+// Persistent chat data storage
+class ChatData {
+  static List<Map<String, dynamic>> messages = [
+    <String, dynamic>{
+      "id": "1",
+      "user": "Chaimaa", 
+      "message": "The plot twist in chapter 7 was incredible!",
+      "reactions": <String, int>{"❤️": 2, "👍": 1},
+      "replies": <Map<String, String>>[
+        <String, String>{"user": "Wafaa", "message": "I know! I didn't see it coming!"}
+      ]
+    },
+    <String, dynamic>{
+      "id": "2",
+      "user": "Wafaa", 
+      "message": "The characters development is amazing",
+      "reactions": <String, int>{"👍": 3},
+      "replies": <Map<String, String>>[]
+    },
+  ];
+
+  static void addMessage(String message) {
+    messages.add(<String, dynamic>{
+      "id": (messages.length + 1).toString(),
+      "user": UserData.username ?? UserData.name ?? "You",
+      "message": message,
+      "reactions": <String, int>{},
+      "replies": <Map<String, String>>[],
+    });
+  }
+
+  static void addReply(String messageId, String reply) {
+    final messageIndex = messages.indexWhere((msg) => msg["id"] == messageId);
+    if (messageIndex != -1) {
+      final List<Map<String, String>> replies = List<Map<String, String>>.from(messages[messageIndex]["replies"] as List);
+      replies.add(<String, String>{
+        "user": UserData.username ?? UserData.name ?? "You",
+        "message": reply,
+      });
+      messages[messageIndex]["replies"] = replies;
+    }
+  }
+
+  static void addReaction(String messageId, String reaction) {
+    final messageIndex = messages.indexWhere((msg) => msg["id"] == messageId);
+    if (messageIndex != -1) {
+      final Map<String, int> reactions = Map<String, int>.from(messages[messageIndex]["reactions"] as Map);
+      if (reactions.containsKey(reaction)) {
+        reactions[reaction] = reactions[reaction]! + 1;
+      } else {
+        reactions[reaction] = 1;
+      }
+      messages[messageIndex]["reactions"] = reactions;
+    }
+  }
+}
 
 class ChatBoxScreen extends StatelessWidget {
   const ChatBoxScreen({super.key});
@@ -32,7 +92,7 @@ class ChatBoxScreen extends StatelessWidget {
               );
             },
         ),
-        actions: [//
+        actions: [
           IconButton(
             icon: const Icon(
               Icons.notifications_outlined,
@@ -145,42 +205,10 @@ class BookDiscussion extends StatefulWidget {
 
 class _BookDiscussionState extends State<BookDiscussion> {
   final TextEditingController messageController = TextEditingController();
-  // Enhanced message structure to include ID, reactions, and replies
-  final List<Map<String, dynamic>> messages = [
-    {
-      "id": "1",
-      "user": "Chaimaa", 
-      "message": "The plot twist in chapter 7 was incredible!",
-      "reactions": {"❤️": 2, "👍": 1},
-      "replies": [
-        {"user": "Wafaa", "message": "I know! I didn't see it coming!"}
-      ]
-    },
-    {
-      "id": "2",
-      "user": "Wafaa", 
-      "message": "The characters development is amazing",
-      "reactions": {"👍": 3},
-      "replies": []
-    },
-  ];
   
   // To track which message is being replied to
   String? replyingToId;
   String? replyingToUser;
-
-  void addReaction(String messageId, String reaction) {
-    setState(() {
-      final messageIndex = messages.indexWhere((msg) => msg["id"] == messageId);
-      if (messageIndex != -1) {
-        if (messages[messageIndex]["reactions"].containsKey(reaction)) {
-          messages[messageIndex]["reactions"][reaction]++;
-        } else {
-          messages[messageIndex]["reactions"][reaction] = 1;
-        }
-      }
-    });
-  }
 
   void setReplyTo(String messageId, String user) {
     setState(() {
@@ -201,25 +229,13 @@ class _BookDiscussionState extends State<BookDiscussion> {
       setState(() {
         if (replyingToId != null) {
           // Add reply to the specified message
-          final messageIndex = messages.indexWhere((msg) => msg["id"] == replyingToId);
-          if (messageIndex != -1) {
-            messages[messageIndex]["replies"].add({
-              "user": "You",
-              "message": messageController.text,
-            });
-          }
+          ChatData.addReply(replyingToId!, messageController.text);
           // Clear reply state
           replyingToId = null;
           replyingToUser = null;
         } else {
           // Add as a new message
-          messages.add({
-            "id": (messages.length + 1).toString(),
-            "user": "You",
-            "message": messageController.text,
-            "reactions": {},
-            "replies": [],
-          });
+          ChatData.addMessage(messageController.text);
         }
         messageController.clear();
       });
@@ -235,14 +251,18 @@ class _BookDiscussionState extends State<BookDiscussion> {
       ),
       child: Column(
         children: [
-          ...messages.map((msg) => DiscussionMessageCard(
-                messageId: msg["id"],
-                user: msg["user"],
-                message: msg["message"],
-                reactions: msg["reactions"],
-                replies: msg["replies"],
-                onReply: () => setReplyTo(msg["id"], msg["user"]),
-                onReaction: (reaction) => addReaction(msg["id"], reaction),
+          ...ChatData.messages.map((msg) => DiscussionMessageCard(
+                messageId: msg["id"] as String,
+                user: msg["user"] as String,
+                message: msg["message"] as String,
+                reactions: Map<String, int>.from(msg["reactions"] as Map),
+                replies: List<Map<String, String>>.from((msg["replies"] as List).map((reply) => Map<String, String>.from(reply as Map))),
+                onReply: () => setReplyTo(msg["id"] as String, msg["user"] as String),
+                onReaction: (reaction) {
+                  setState(() {
+                    ChatData.addReaction(msg["id"] as String, reaction);
+                  });
+                },
               )),
           if (replyingToUser != null)
             Container(
@@ -301,8 +321,8 @@ class DiscussionMessageCard extends StatelessWidget {
   final String messageId;
   final String user;
   final String message;
-  final Map<String, dynamic> reactions;
-  final List<dynamic> replies;
+  final Map<String, int> reactions;
+  final List<Map<String, String>> replies;
   final VoidCallback onReply;
   final Function(String) onReaction;
 
@@ -398,7 +418,7 @@ class DiscussionMessageCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          reply["user"],
+                          reply["user"]!,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 165, 133, 36),
@@ -406,7 +426,7 @@ class DiscussionMessageCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          reply["message"],
+                          reply["message"]!,
                           style: const TextStyle(fontSize: 12, color: Colors.white),
                         ),
                       ],

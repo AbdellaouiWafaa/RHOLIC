@@ -39,13 +39,14 @@ class _BookReaderScreenState extends State<BookReaderScreen> {
   }
   
   // Format time remaining
-  String _formatTimeRemaining() {
-    final Duration remaining = widget.expiryDate.difference(DateTime.now());
-    final days = remaining.inDays;
-    final hours = remaining.inHours % 24;
-    
-    return "$days ${days == 1 ? 'day' : 'days'}, $hours ${hours == 1 ? 'hour' : 'hours'} remaining";
-  }
+  String _formatTimeRemaining(){
+  final DateTime oneMonthAgo = DateTime.now().subtract(Duration(days: 30));
+  final Duration elapsed = DateTime.now().difference(oneMonthAgo);
+  final days = elapsed.inDays;
+  final hours = elapsed.inHours % 24;
+  
+  return "$days ${days == 1 ? 'day' : 'days'}, $hours ${hours == 1 ? 'hour' : 'hours'} remaining";
+}
 
   // Sample book content from Alice in Wonderland
   String _getPageContent(int page) {
@@ -401,7 +402,7 @@ class _BookReaderScreenState extends State<BookReaderScreen> {
                             setState(() {});
                           }
                         },
-                        items: <String>['Georgia', 'Roboto', 'Times New Roman', 'Open Sans']
+                        items: <String>['Georgia', 'Roboto']
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -449,34 +450,8 @@ class _BookReaderScreenState extends State<BookReaderScreen> {
                   ),
                   
                   const SizedBox(height: 24),
+                 
                   
-                  // Status information
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[900],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.info_outline,
-                          color: Color.fromARGB(255, 165, 133, 36),
-                          size: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            "This book has been securely downloaded in your app until ${widget.expiryDate.day}/${widget.expiryDate.month}/${widget.expiryDate.year}.",
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             );

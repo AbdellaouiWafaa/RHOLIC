@@ -13,18 +13,12 @@ const Color _appBackgroundColor =   Color.fromARGB(121, 32, 46, 172); // Dark bl
 // Ensure image paths match your assets folder structure
 final List<Map<String, dynamic>> recentlyRead = [
   {
-    'title': 'The Art of Silence',
-    'author': 'James Wilson',
+    'title': 'War and Peace',
+    'author': 'Leo Tolstoy',
     'progress': 0.67,
     'image': 'assets/images/war_peace.png' // Replace with your actual asset path
   },
-  {
-    'title': 'Mystic Realms',
-    'author': 'Luna Park',
-    'progress': 0.83,
-    'image': 'assets/images/her_body.png' // Replace with your actual asset path
-  },
-  // Add more recently read books if needed
+  
 ];
 
 class HistoryScreen extends StatelessWidget {

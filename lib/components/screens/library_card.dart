@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:RHOLIC/components/screens/user_session.dart';
 
 class CardScreen extends StatelessWidget {
   const CardScreen({super.key});
@@ -64,15 +65,7 @@ class CardScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            "Wafaa",
-                            style: GoogleFonts.ebGaramond( 
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 0), 
-                          Text(
-                            "Abdellaoui",
+                            (UserData.name ?? 'Your Name'),
                             style: GoogleFonts.ebGaramond( 
                               fontSize: 23,
                               fontWeight: FontWeight.bold,

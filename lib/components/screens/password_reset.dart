@@ -1,14 +1,9 @@
+import 'package:RHOLIC/components/screens/code_enter_user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:RHOLIC/components/screens/login.dart';
 
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ResetPasswordScreen(),
-  ));
-}
+
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key});
@@ -32,7 +27,7 @@ class ResetPasswordScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CreateAccountScreen(),
+                        builder: (context) => const OtpuserScreen(),
                       ),
                     );
                   },

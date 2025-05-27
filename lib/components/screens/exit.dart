@@ -78,8 +78,7 @@ class ConfirmLogoutScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15), // Space between buttons
-
-              SizedBox(
+SizedBox(
                 width: double.infinity, // Button takes full constrained width
                 child: ElevatedButton(
                    onPressed: () {

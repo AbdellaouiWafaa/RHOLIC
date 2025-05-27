@@ -10,12 +10,11 @@ import 'package:RHOLIC/components/screens/library_card.dart';
 import 'package:RHOLIC/components/screens/personnel_infos.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
 import 'package:RHOLIC/components/screens/wishlist.dart';
+// import 'package:RHOLIC/user_data.dart';
+// If user_data.dart exists in lib/, use the following import:
+// import '../../user_data.dart'; // Removed because the file does not exist or path is incorrect
 
-
-
-void main() {
-  runApp(MyApp());
-}
+const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,6 +47,16 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 3;
 
+  String? name;
+  String? userEmail;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    name = args?['name'] as String? ?? 'Your Name';
+    userEmail = args?['email'] as String? ?? 'your@email.com';
+  }
 
   final Color primaryColor = const Color.fromARGB(255, 10, 15, 58);
   final Color accentColor = Color.fromARGB(255, 165, 133, 36);
@@ -56,14 +65,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final Color subduedTextColor = Color(0xB3FFFFFF);
   final Color subduedIconColor= Color(0xB3FFFFFF);
 
-  // --- Navigation Logic for Bottom Bar ---
+   // --- Navigation Logic for Bottom Bar ---
   void _onItemTapped(int index) {
     // ... (Bottom nav logic remains the same) ...
      if (_selectedIndex != index) {
       setState(() { _selectedIndex = index; });
       switch (index) {
-         case 0: Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (_,__,___) => const DashboardScreen(), transitionDuration: Duration.zero, reverseTransitionDuration: Duration.zero)); break;
-         case 1: Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (_,__,___) => const BookListScreen(), transitionDuration: Duration.zero, reverseTransitionDuration: Duration.zero)); break;
+         case 0: Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (_,_,___) => const DashboardScreen(), transitionDuration: Duration.zero, reverseTransitionDuration: Duration.zero)); break;
+         case 1: Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (_,_,___) => const BookListScreen(), transitionDuration: Duration.zero, reverseTransitionDuration: Duration.zero)); break;
          case 2: debugPrint("Navigate to Bookmark (Index 2) - Implement navigation"); break; // Add BookmarkScreen navigation if needed
          case 3: break; // Already here
        }
@@ -94,14 +103,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             // Layer 1: Background
             Container(color: primaryColor),
-
-            // Layer 2: Main Rounded Content Area
+// Layer 2: Main Rounded Content Area
             Positioned(
               top: contentContainerTopPosition, left: 0, right: 0, bottom: 0,
               child: ClipRRect(
                  borderRadius: BorderRadius.only(topLeft: Radius.circular(60.0), topRight: Radius.circular(60.0)),
-                child: Container(
-                  color: const Color(0xFF0A0A32), // Use primary color for the content background too
+                child: Container(color: const Color(0xFF0A0A32), // Use primary color for the content background too
                   child: SingleChildScrollView(
                     physics: ClampingScrollPhysics(),
                     padding: EdgeInsets.only(
@@ -113,16 +120,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         // Profile Info
-                        Text('Wafaa Abdellaoui', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: textColor), textAlign: TextAlign.center),
+                        Text(name ?? 'among us', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: textColor), textAlign: TextAlign.center),
                         SizedBox(height: 8),
-                        Text('w.abdellaoui90@gmail.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
+                        Text(userEmail ?? 'your@email.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
                         SizedBox(height: 70),
                         // --- List Items ---
                         // Calls to _buildProfileListItem now handle navigation internally via onTap
                         _buildProfileListItem(context, Icons.person_outline, 'Personnal infos', accentColor, textColor, subduedIconColor),
                         _buildProfileListItem(context, Icons.badge, 'Library card', accentColor, textColor, subduedIconColor), 
                         _buildProfileListItem(context, Icons.history, 'History', accentColor, textColor, subduedIconColor),
-                        _buildProfileListItem(context, Icons.list_alt, 'book loan list', accentColor, textColor, subduedIconColor),
                         _buildProfileListItem(context, Icons.checklist_rtl, 'Wishlist', accentColor, textColor, subduedIconColor),
                         _buildProfileListItem(context, Icons.chat_bubble_outline, 'Admin Chat', accentColor, textColor, subduedIconColor),
                       ],
@@ -166,9 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               top: avatarTopPosition,
               child: CircleAvatar(radius: avatarRadius, backgroundColor: accentColor),
             ), // End Layer 4
-
-
-            // Layer 5: Custom Bottom Navigation Bar
+// Layer 5: Custom Bottom Navigation Bar
             Positioned(
             bottom: 0,
             left: 0,
@@ -262,8 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: () {
         // Navigation logic based on the list item title
         Widget? targetScreen; // Use nullable Widget type
-
-        // Determine the target screen based on the title
+// Determine the target screen based on the title
         // !! REPLACE THESE WITH YOUR ACTUAL SCREEN WIDGETS !!
         switch (title) {
           case 'Personnal infos':
@@ -275,10 +278,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           case 'History':
             targetScreen = const HistoryScreen(); // Assumes HistoryScreen is imported
             break;
-           case 'book loan list':
-             // Maybe this should navigate to BookListScreen? Or a specific loan list screen?
-            targetScreen = const BookListScreen(); // Assumes BookLoanListScreen is imported
-              break;
           case 'Wishlist':
             targetScreen = const WishListScreen(); // Assumes WishlistScreen is imported
             break;
@@ -297,9 +296,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             MaterialPageRoute(builder: (context) => targetScreen!),
           );
         } else {
-           debugPrint('Tapped on $title, but targetScreen was null.');
+          debugPrint('Tapped on $title, but targetScreen was null.');
         }
       },
     );
   }
 } // End _ProfileScreenState
+final url = Uri.parse('$backendBaseUrl/api/register');

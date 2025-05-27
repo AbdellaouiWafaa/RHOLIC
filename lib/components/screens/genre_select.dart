@@ -1,5 +1,5 @@
+import 'package:RHOLIC/components/screens/code_enter_user.dart';
 import 'package:flutter/material.dart';
-import 'package:RHOLIC/components/screens/code_enter.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
 
 class GenreSelectionScreen extends StatefulWidget {
@@ -144,7 +144,7 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const OtpScreen(),
+            builder: (context) => const OtpuserScreen(),
           ),
         );
       },

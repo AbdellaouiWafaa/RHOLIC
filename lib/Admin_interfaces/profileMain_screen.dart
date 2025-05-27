@@ -14,12 +14,12 @@ class ProfileMainScreen extends StatefulWidget {
 
 class _ProfileMainScreenState extends State<ProfileMainScreen> {
   // Données fictives pour l'exemple
-  String userName = "Jane Doe";
-  String userRole = "Administrator";
-  String email = "jane.doe@gmail.com";
-  String phone = "+213 5 12 99 **";
+  String userName = "Jaden Doez";
+  String userRole = "Main Administrator";
+  String email = "chaimaabouzerouata81@gmail.com";
+  String phone = "0543213267";
   String joinDate = "15/03/2022";
-  String address = "123 Library Street, Algiers";
+  String address = "Tlemcen";
 
   // Simulate profile image path (can be asset or a file path if using image_picker)
   String _profileImagePath = 'assets/images/admin.png'; // Initial image

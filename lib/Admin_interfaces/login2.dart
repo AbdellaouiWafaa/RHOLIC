@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dashboardMain_screen.dart'; // <-- Assurez-vous que ce fichier existe
 import 'dashboardNormal_screen.dart'; // <-- Assurez-vous que ce fichier existe
 
-
 class Login2 extends StatefulWidget {
   const Login2({super.key});
 
@@ -25,14 +24,14 @@ class _Login2State extends State<Login2> {
 
   void _submitCode(String code) {
     print('Code submitted: $code');
-    if (code == '077007') {
+    if (code == 'ADM-347481' || code == 'ADM-537895' || code == '077007') {
       print('Admin login successful!');
       _codeController.clear();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardNormalScreen()),
       );
-    } else if (code == 'admin123') {
+    } else if (code == 'ADMIn-5286' || code == 'ADMIn-9104' || code == 'admin123') {
       print('Admin login successful!');
       _codeController.clear();
       Navigator.pushReplacement(

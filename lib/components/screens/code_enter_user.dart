@@ -1,18 +1,20 @@
+import 'package:RHOLIC/components/screens/genre_select.dart';
+import 'package:RHOLIC/components/screens/password_reset.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/book_details.dart';
-import 'package:RHOLIC/components/screens/user_session.dart';
+import 'package:RHOLIC/components/screens/dashboard.dart';
 
 const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
-class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+class OtpuserScreen extends StatefulWidget {
+  const OtpuserScreen({super.key});
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  State<OtpuserScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends State<OtpuserScreen> {
   final TextEditingController _otpController = TextEditingController();
   String enteredOtp = '';
 
@@ -24,13 +26,19 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _verifyOtp() {
     if (enteredOtp.isNotEmpty) {
-      UserData.isOtpEntered = true; // Mark OTP as entered
       // Here you can add your OTP verification logic
       // For now, it will navigate if any code is entered
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => getAliceInWonderlandDetailsScreen(),
+        ),
+      );
+      // Navigate to DashboardScreen after OTP verification
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const DashboardScreen(),
         ),
       );
     } else {
@@ -58,7 +66,14 @@ class _OtpScreenState extends State<OtpScreen> {
             size: 30,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GenreSelectionScreen(),
+                      ),
+                    );
+                  
           },
         ),
         title: Text(
@@ -87,10 +102,10 @@ class _OtpScreenState extends State<OtpScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Title Row
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [],
-                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [],
+                    ),
                     const SizedBox(height: 8),
 
                     const SizedBox(height: 20),
@@ -127,9 +142,6 @@ class _OtpScreenState extends State<OtpScreen> {
                       onChanged: (text) {
                         setState(() {
                           enteredOtp = text;
-                          if (enteredOtp.isEmpty) {
-                            UserData.isOtpEntered = false;
-                          }
                         });
                         debugPrint("Text entered: $text");
                       },
@@ -137,7 +149,22 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     const SizedBox(height: 15),
                     // Resend Text
-                   
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResetPasswordScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Forget your code? Click here",
+                        style: GoogleFonts.poppins(
+                          color: Color.fromARGB(255, 165, 133, 36),
+                          fontSize: 17,),
+                      ),
+                    ),
 
                     const SizedBox(height: 20),
 
