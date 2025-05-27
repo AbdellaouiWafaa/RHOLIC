@@ -1,12 +1,12 @@
+import 'package:RHOLIC/Admin_interfaces/book_service.dart';
+import 'package:RHOLIC/components/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:RHOLIC/components/screens/books_shelf.dart';
 import 'package:RHOLIC/components/screens/chatbox.dart';
 import 'package:RHOLIC/components/screens/first_page.dart';
-import 'package:RHOLIC/components/screens/login.dart';
 import 'package:RHOLIC/components/screens/profile.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
-import 'package:RHOLIC/components/screens/user_session.dart';
-import 'package:RHOLIC/Admin_interfaces/book_service.dart';
+import 'package:RHOLIC/user_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -25,9 +25,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late PageController _pageController;
   final BookService _bookService = BookService();
   final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> searchResults = [];
   bool isSearching = false;
   bool hasSearched = false;
-  List<Map<String, dynamic>> searchResults = [];
   Map<int, bool> addedBooks = {};
 
   @override
@@ -50,7 +50,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _onBooksChanged() {
     if (mounted) {
-      setState(() {});
+      setState(() {
+        // Reset page controller when books change
+        _pageController = PageController(
+          viewportFraction: 0.6,
+          initialPage: (_bookService.userBooks.length / 2).floor(),
+        );
+      });
     }
   }
 
@@ -65,35 +71,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
       isSearching = true;
       hasSearched = true;
     });
-
-    try {
-      final localResults = _bookService.searchBooks(query);
-      if (localResults.isNotEmpty) {
-        setState(() {
-          searchResults = localResults;
-          isSearching = false;
-        });
-        return;
-      }
-
-      final url = Uri.parse('$backendBaseUrl/api/search?query=$query');
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        setState(() {
-          searchResults = List<Map<String, dynamic>>.from(data);
-          isSearching = false;
-        });
-      } else {
-        _showNoBooksFoundAlert();
-      }
-    } catch (e) {
-      _showErrorAlert('Search error: ${e.toString()}');
-    } finally {
-      if (mounted) {
-        setState(() => isSearching = false);
-      }
+    final url = Uri.parse('$backendBaseUrl/api/search?query=$query');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        searchResults = List<Map<String, dynamic>>.from(data);
+        isSearching = false;
+      });
+    } else {
+      setState(() {
+        searchResults = [];
+        isSearching = false;
+      });
+      _showNoBooksFoundAlert();
     }
   }
 
@@ -104,24 +95,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return AlertDialog(
           title: const Text('No Books Found'),
           content: const Text('Try searching with different keywords'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showErrorAlert(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -167,8 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: Color.fromARGB(255, 165, 133, 36),
             ),
             onPressed: () {
-              Navigator.push(
-                context,
+              Navigator.push(context,
                 MaterialPageRoute(builder: (context) => UserNotifScreen()),
               );
             },
@@ -183,163 +155,164 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    "Welcome ${UserData.username ?? widget.username ?? 'among us'}",
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextField(
-                      controller: _searchController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: "Search books...",
-                        hintStyle: const TextStyle(color: Colors.white70),
-                        prefixIcon: const Icon(Icons.search, color: Colors.white),
-                        filled: true,
-                        fillColor: Colors.white12,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
+              child: Column(children: [
+                const SizedBox(height: 20),
+                Text(
+                  "Welcome ${UserData.username ?? widget.username ?? 'Guest'}",
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                    controller: _searchController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: "Search books...",
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      prefixIcon: const Icon(Icons.search, color: Colors.white),
+                      filled: true,
+                      fillColor: Colors.white12,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
                       ),
-                      onSubmitted: searchBooks,
                     ),
+                    onSubmitted: (value) {
+                      if (value.isNotEmpty) {
+                        searchBooks(value);
+                      }
+                    },
                   ),
-                  const SizedBox(height: 5),
-                  if (isSearching)
-                    const SizedBox(
-                      width: 17,
-                      height: 17,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color.fromARGB(255, 165, 133, 36),
-                        ),
+                ),
+                const SizedBox(height: 5),
+                if (isSearching)
+                  const SizedBox(
+                    width: 17,
+                    height: 17,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 165, 133, 36),
                       ),
-                    )
-                  else if (hasSearched)
-                    Container(
-                      height: 300,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: searchResults.isNotEmpty
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: searchResults.length,
-                              itemBuilder: (context, index) {
-                                final book = searchResults[index];
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 8),
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white12,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: book['image'] != null &&
-                                                book['image'].toString().isNotEmpty
-                                            ? Image.network(
-                                                book['image'].toString(),
-                                                width: 60,
-                                                height: 80,
-                                                fit: BoxFit.cover,
-                                                errorBuilder:
-                                                    (context, error, stackTrace) {
-                                                  return Container(
-                                                    width: 60,
-                                                    height: 80,
-                                                    color: Colors.grey[300],
-                                                    child: Icon(
-                                                      Icons.book,
-                                                      color: Colors.grey[600],
-                                                      size: 30,
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                            : Container(
-                                                width: 60,
-                                                height: 80,
-                                                color: Colors.grey[300],
-                                                child: Icon(
-                                                  Icons.book,
-                                                  color: Colors.grey[600],
-                                                  size: 30,
-                                                ),
-                                              ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              book['title']?.toString() ??
-                                                  'Unknown Title',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                    ),
+                  )
+                else if (hasSearched)
+                  Container(
+                    height: 300,
+                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: searchResults.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: searchResults.length,
+                            itemBuilder: (context, index) {
+                              final book = searchResults[index];
+                              return Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white12,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: book['image'] != null && book['image'].toString().isNotEmpty
+                                          ? Image.network(
+                                              book['image'].toString(),
+                                              width: 60,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return Container(
+                                                  width: 60,
+                                                  height: 80,
+                                                  color: Colors.grey[300],
+                                                  child: const Icon(
+                                                    Icons.book,
+                                                    color: Colors.grey,
+                                                    size: 30,
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Container(
+                                              width: 60,
+                                              height: 80,
+                                              color: Colors.grey[300],
+                                              child: const Icon(
+                                                Icons.book,
+                                                color: Colors.grey,
+                                                size: 30,
                                               ),
                                             ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              book['author']?.toString() ??
-                                                  'Unknown Author',
-                                              style: const TextStyle(
-                                                color: Colors.white70,
-                                                fontSize: 14,
-                                              ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            book['title']?.toString() ?? 'Unknown Title',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                          ],
-                                        ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            book['author']?.toString() ?? 'Unknown Author',
+                                            style: const TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 14,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.search_off,
-                                    color: Colors.white54,
-                                    size: 50,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    'No books found',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
                                     ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.search_off,
+                                  color: Colors.white54,
+                                  size: 50,
+                                ),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  'No books found',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Try searching with different keywords',
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 14,
-                                    ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Try searching with different keywords',
+                                  style:
+                                   TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                    ),
-                ],
-              ),
+                          ),
+                  ),
+              ]),
             ),
           ),
           Positioned(
@@ -375,7 +348,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         }
                         return Transform.scale(
                           scale: value,
-                          child: bookCard(context, books[index], index),
+                          child: _buildBookCard(books[index], index),
                         );
                       },
                     );
@@ -418,9 +391,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         padding: const EdgeInsets.only(right: 20.0, left: 0.0),
                         icon: Icon(
                           Icons.menu_book_sharp,
-                          color: UserData.isOtpEntered
-                              ? Colors.white
-                              : Colors.white38,
+                          color: UserData.isOtpEntered ? Colors.white : Colors.white38,
                           size: 30,
                         ),
                         onPressed: UserData.isOtpEntered
@@ -436,11 +407,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             : null,
                       ),
                       IconButton(
-                        icon: Icon(
+                          icon: Icon(
                           Icons.chat_bubble_outline,
-                          color: UserData.isOtpEntered
-                              ? Colors.white
-                              : Colors.white38,
+                          color: UserData.isOtpEntered ? Colors.white : Colors.white38,
                           size: 30,
                         ),
                         onPressed: UserData.isOtpEntered
@@ -458,9 +427,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       IconButton(
                         icon: Icon(
                           Icons.person_outline_rounded,
-                          color: UserData.isOtpEntered
-                              ? Colors.white
-                              : Colors.white38,
+                          color: UserData.isOtpEntered ? Colors.white : Colors.white38,
                           size: 30,
                         ),
                         onPressed: UserData.isOtpEntered
@@ -486,7 +453,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget bookCard(BuildContext context, Map<String, dynamic> book, int index) {
+  Widget _buildBookCard(Map<String, dynamic> book, int index) {
     bool isAdded = addedBooks[index] ?? false;
 
     return Padding(
@@ -495,7 +462,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "RECOMMENDED FOR YOU",
+            "BASED ON YOUR PREFERENCES",
             style: TextStyle(
               color: const Color.fromARGB(179, 0, 0, 0),
               fontSize: 15,

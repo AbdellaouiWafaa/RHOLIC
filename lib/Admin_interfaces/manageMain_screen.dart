@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'notifications_screen.dart'; // Import to access DummyUserData
+import 'notifications_screen.dart';
 
 class Admin {
   final String id;

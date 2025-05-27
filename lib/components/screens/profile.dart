@@ -10,9 +10,7 @@ import 'package:RHOLIC/components/screens/library_card.dart';
 import 'package:RHOLIC/components/screens/personnel_infos.dart';
 import 'package:RHOLIC/components/screens/user_notif.dart';
 import 'package:RHOLIC/components/screens/wishlist.dart';
-// import 'package:RHOLIC/user_data.dart';
-// If user_data.dart exists in lib/, use the following import:
-// import '../../user_data.dart'; // Removed because the file does not exist or path is incorrect
+import 'package:RHOLIC/user_data.dart';
 
 const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
@@ -54,8 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    name = args?['name'] as String? ?? 'Your Name';
-    userEmail = args?['email'] as String? ?? 'your@email.com';
+    name = args?['name'] as String? ?? UserData.name;
+    userEmail = args?['email'] as String? ?? UserData.email;
   }
 
   final Color primaryColor = const Color.fromARGB(255, 10, 15, 58);
@@ -120,9 +118,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         // Profile Info
-                        Text(name ?? 'among us', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: textColor), textAlign: TextAlign.center),
+                        Text(name ?? UserData.username ?? 'among us', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: textColor), textAlign: TextAlign.center),
                         SizedBox(height: 8),
-                        Text(userEmail ?? 'your@email.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
+                        Text(userEmail ?? UserData.email ?? UserData.username ?? 'your@email.com', style: TextStyle(fontSize: 20, color: subduedTextColor), textAlign: TextAlign.center),
                         SizedBox(height: 70),
                         // --- List Items ---
                         // Calls to _buildProfileListItem now handle navigation internally via onTap

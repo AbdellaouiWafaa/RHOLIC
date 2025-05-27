@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:RHOLIC/components/screens/dashboard.dart';
-import 'package:RHOLIC/components/screens/user_session.dart';
+import 'package:RHOLIC/user_data.dart';
 const String backendBaseUrl =
     'https://backendapp-production-3be4.up.railway.app';
 
@@ -12,40 +12,25 @@ BookDetailsScreen getAliceInWonderlandDetailsScreen() {
     coverImageAsset: 'assets/images/alice.png',
     description: "Alice's Adventures in Wonderland by Lewis Carroll is a classic children's novel written in the mid-19th century. The story follows a young girl named Alice who, feeling bored and sleepy while sitting by a riverbank, encounters a White Rabbit and follows it down a rabbit hole, plunging into a fantastical world filled with curious creatures and whimsical adventures. The opening of the book introduces Alice as she daydreams about her surroundings before spotting the White Rabbit, who is both flustered and animated. Curious, Alice pursues the Rabbit and finds herself tumbling down a deep rabbit hole, leading to a curious hall filled with doors, all locked. After experiencing a series of bizarre changes in size from eating and drinking mysterious substances, she begins exploring this new world, initially frustrated by her newfound challenges as she navigates her size and the peculiar inhabitants she meets. The narrative sets the tone for Alice's whimsical and often nonsensical adventures that characterize the entire tale.",
     rating: 4.7,
-    totalRatings: 4,
+    totalRatings: 2,
     reviews: [
       ReviewModel(
-        userName: "Emma T.",
-        userAvatarUrl: "https://example.com/avatar1.jpg",
-        date: "March 15, 2025",
-        rating: 4.5,
-        comment: "I couldn't put this book down! The world-building is incredible and the characters are so well developed. The romance subplot adds just the right amount of tension to the story.",
-        likes: 28,
-      ),
-      ReviewModel(
-        userName: "James R.",
+        userName: "Mohammed Rouchedi",
         userAvatarUrl: "https://example.com/avatar2.jpg",
-        date: "March 10, 2025",
+        date: "2025-5-10",
         rating: 5.0,
         comment: "One of the best fantasy books I've read this year. The dragon training sequences are thrilling and the political intrigue keeps you guessing until the end.",
         likes: 43,
       ),
       ReviewModel(
-        userName: "Sarah M.",
+        userName: "Sarah Mrabet",
         userAvatarUrl: "https://example.com/avatar3.jpg",
-        date: "March 5, 2025",
+        date: "2025-5-18",
         rating: 4.8,
         comment: "The character development in this book is phenomenal. I love how the protagonist grows throughout the story and faces her fears.",
         likes: 35,
       ),
-      ReviewModel(
-        userName: "David L.",
-        userAvatarUrl: "https://example.com/avatar4.jpg",
-        date: "February 28, 2025",
-        rating: 4.7,
-        comment: "The action scenes are so well written! I felt like I was right there with the characters during the dragon flights.",
-        likes: 22,
-      ),
+      
     ],
   );
 }
@@ -399,6 +384,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         _commentController.clear();
         _isSubmittingReview = false;
         showAllReviews = true;
+        // Undo: Remove increment of totalRatings
       });
       _showNotification('Thank you for your review!');
     });

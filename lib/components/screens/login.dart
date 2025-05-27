@@ -4,7 +4,7 @@ import 'package:RHOLIC/components/screens/dashboard.dart';
 import 'package:RHOLIC/components/screens/documents.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:RHOLIC/components/screens/user_session.dart';
+import 'package:RHOLIC/user_data.dart';
 
 final backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
