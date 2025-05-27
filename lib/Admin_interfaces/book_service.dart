@@ -6,16 +6,8 @@ class BookService extends ChangeNotifier {
   BookService._internal();
 
   // Liste des livres pour l'admin (catalogue complet)
-  List<Map<String, dynamic>> _adminBooks = [
-    {
-      'title': 'Alice in Wonderland',
-      'author': 'Lewis Carroll',
-      'category': 'Fiction',
-      'totalCopies': 5,
-      'availableCopies': 3,
-      'coverImage': 'assets/images/book1.jpg',
-      'image': 'assets/images/alice.png',
-    },
+   List<Map<String, dynamic>> _adminBooks = [
+    
     {
       'title': 'Frankenstein',
       'author': 'Mary Shelley',
@@ -33,6 +25,15 @@ class BookService extends ChangeNotifier {
       'availableCopies': 2,
       'coverImage': 'assets/images/book5.jpg',
       'image': 'assets/images/dracula.png',
+    },
+    {
+      'title': 'Alice Wonderland',
+      'author': 'Lewis Carroll',
+      'category': 'Fiction',
+      'totalCopies': 5,
+      'availableCopies': 3,
+      'coverImage': 'assets/images/book1.jpg',
+      'image': 'assets/images/alice.png',
     },
     {
       'title': 'War and Peace',

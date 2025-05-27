@@ -158,7 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Column(children: [
                 const SizedBox(height: 20),
                 Text(
-                  "Welcome ${UserData.username ?? widget.username ?? 'Guest'}",
+                  "Welcome ${UserData.username ?? widget.username ?? 'among us'}",
                   style: const TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 const SizedBox(height: 20),
