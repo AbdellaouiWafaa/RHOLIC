@@ -65,6 +65,13 @@ class ChatData {
       messages[messageIndex]["reactions"] = reactions;
     }
   }
+
+  static void reportMessage(String messageId, String reason) {
+    // Here you would typically send the report to your backend
+    // For now, we'll just print it (you can integrate with your backend)
+    print("Message $messageId reported for: $reason");
+    // You could also add a "reported" flag to the message if needed
+  }
 }
 
 class ChatBoxScreen extends StatelessWidget {
@@ -242,6 +249,160 @@ class _BookDiscussionState extends State<BookDiscussion> {
     }
   }
 
+  void _showReportDialog(String messageId, String user, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 30, 35, 78),
+          title: const Text(
+            'Report Message',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Why are you reporting this message?',
+                style: TextStyle(color: Colors.white70),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white10,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 165, 133, 36),
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      message,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showReportReasons(messageId);
+              },
+              child: const Text(
+                'Continue',
+                style: TextStyle(color: Color.fromARGB(255, 165, 133, 36)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showReportReasons(String messageId) {
+    final reasons = [
+      'Spam',
+      'Harassment or bullying',
+      'Hate speech or symbols',
+      'Violence or dangerous organizations',
+      'Inappropriate content',
+      'False information',
+      'Intellectual property violation',
+      'Sale of illegal or regulated goods',
+      'Nudity or sexual activity',
+      'Something else',
+    ];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 30, 35, 78),
+          title: const Text(
+            'Report',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: reasons.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    reasons[index],
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {
+                    ChatData.reportMessage(messageId, reasons[index]);
+                    Navigator.of(context).pop();
+                    _showReportConfirmation();
+                  },
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showReportConfirmation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 30, 35, 78),
+          title: const Text(
+            'Thanks for letting us know',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: const Text(
+            'Your feedback is important in helping us keep our community safe.',
+            style: TextStyle(color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'Close',
+                style: TextStyle(color: Color.fromARGB(255, 165, 133, 36)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -263,6 +424,11 @@ class _BookDiscussionState extends State<BookDiscussion> {
                     ChatData.addReaction(msg["id"] as String, reaction);
                   });
                 },
+                onReport: () => _showReportDialog(
+                  msg["id"] as String,
+                  msg["user"] as String,
+                  msg["message"] as String,
+                ),
               )),
           if (replyingToUser != null)
             Container(
@@ -325,6 +491,7 @@ class DiscussionMessageCard extends StatelessWidget {
   final List<Map<String, String>> replies;
   final VoidCallback onReply;
   final Function(String) onReaction;
+  final VoidCallback onReport;
 
   const DiscussionMessageCard({
     super.key, 
@@ -335,6 +502,7 @@ class DiscussionMessageCard extends StatelessWidget {
     required this.replies,
     required this.onReply,
     required this.onReaction,
+    required this.onReport,
   });
 
   @override
@@ -363,12 +531,42 @@ class DiscussionMessageCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      user,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 165, 133, 36),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          user,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 165, 133, 36),
+                          ),
+                        ),
+                        PopupMenuButton<String>(
+                          icon: const Icon(
+                            Icons.more_horiz,
+                            color: Colors.white70,
+                            size: 20,
+                          ),
+                          color: const Color.fromARGB(255, 30, 35, 78),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: 'report',
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.flag, color: Colors.red, size: 18),
+                                  SizedBox(width: 8),
+                                  Text('Report', style: TextStyle(color: Colors.white)),
+                                ],
+                              ),
+                            ),
+                          ],
+                          onSelected: (value) {
+                            if (value == 'report') {
+                              onReport();
+                            }
+                          },
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
                     Text(message, style: GoogleFonts.poppins(fontSize: 14, color: Colors.white)),
