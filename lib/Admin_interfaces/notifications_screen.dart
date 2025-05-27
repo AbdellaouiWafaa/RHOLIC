@@ -8,26 +8,30 @@ import 'manageMain_screen.dart'; // Import the manage screen
 class DummyUserData {
   static final List<Map<String, dynamic>> _existingUsers = [
     {
-      'fullName': 'User One',
-      'email': 'user1@example.com',
+      'fullName': 'Alice Johnson',
+      'email': 'abdmira43@gmail.com',
       'id': 'user_existing_1',
     },
     {
-      'fullName': 'User Two',
-      'email': 'user2@example.com',
-      'id': 'user_existing_2',
+      'fullName': 'Wafaa Abdellaoui',
+      'email': 'w.abdellaoui90@gmail.com',
+      'id': 'user_existing_3',
     },
   ];
 
   static final List<Map<String, dynamic>> _adminUsers = [
-    {'fullName': 'Admin Beta', 'email': 'admin2@example.com', 'id': 'admin2'},
     {
-      'fullName': 'Admin Charlie',
-      'email': 'admin3@example.com',
+      'fullName': 'Jaden Doez',
+      'email': 'chaimaabouzerouata81@gmail.com',
+      'id': 'admin2',
+    },
+    {
+      'fullName': 'Amey Stone ',
+      'email': 'ahlemboudaoud7gmail.com',
       'id': 'admin3',
     },
     {
-      'fullName': 'Admin Moi',
+      'fullName': 'Me',
       'email': 'admin_me@example.com',
       'id': 'admin_user_me',
     },
@@ -52,14 +56,13 @@ class DummyUserData {
 }
 
 class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({super.key});
+  const NotificationsScreen({Key? key}) : super(key: key);
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen>
-    with SingleTickerProviderStateMixin {
+class _NotificationsScreenState extends State<NotificationsScreen> with SingleTickerProviderStateMixin {
   bool _showUserSelectionDialog =
       false; // Pour afficher la liste des utilisateurs
   List<Map<String, dynamic>> _selectedUsers =
@@ -86,7 +89,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
 
   // Simulate the current logged-in user ID (assuming it's an admin ID)
   final String _currentUserId = 'admin_user_me';
-  final String _currentUserName = 'Admin Moi'; // Name for the logged-in admin
+  final String _currentUserName = 'Me'; // Name for the logged-in admin
 
   // Conversations (organisation des messages par utilisateur)
   Map<String, List<Map<String, dynamic>>> _conversations = {};
@@ -96,7 +99,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     // Messages from a regular user to admin
     {
       'senderId': 'user_existing_1',
-      'senderName': 'Existing User One',
+      'senderName': 'Alice Johnson',
       'message': 'Hello, I have a problem with my account.',
       'time': 'Yesterday 2:00 PM',
       'isCurrentUser': false,
@@ -105,8 +108,8 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     {
       'senderId': 'admin_user_me',
-      'senderName': 'Admin Me',
-      'message': 'Hello User One, how can I help you?',
+      'senderName': 'Me',
+      'message': 'Hello Alice Johnson, how can I help you?',
       'time': 'Yesterday 2:05 PM',
       'isCurrentUser': true,
       'isStaff': true,
@@ -115,7 +118,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     {
       'senderId': 'user_existing_1',
-      'senderName': 'Existing User One',
+      'senderName': 'Alice Johnson',
       'message': "I can't renew a book.",
       'time': 'Yesterday 2:10 PM',
       'isCurrentUser': false,
@@ -124,8 +127,8 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     {
       'senderId': 'admin2',
-      'senderName': 'Admin Beta',
-      'message': 'Hi Admin Me, did you see the new procedure for borrowing?',
+      'senderName': 'Jaden Doez',
+      'message': 'Hi, did you see the new procedure for borrowing?',
       'time': 'This morning 9:30 AM',
       'isCurrentUser': false,
       'isStaff': true,
@@ -133,7 +136,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     {
       'senderId': 'admin_user_me',
-      'senderName': 'Admin Me',
+      'senderName': 'Me',
       'message': "Yes, I'm reading it. It seems more efficient.",
       'time': 'This morning 9:35 AM',
       'isCurrentUser': true,
@@ -143,7 +146,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     {
       'senderId': 'admin2',
-      'senderName': 'Admin Beta',
+      'senderName': 'Jaden Doez',
       'message': 'Indeed. We should discuss it during the meeting.',
       'time': 'This morning 9:40 AM',
       'isCurrentUser': false,
@@ -153,7 +156,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     // Messages from user two
     {
       'senderId': 'user_existing_2',
-      'senderName': 'Existing User Two',
+      'senderName': 'Bob Wilson',
       'message': "Hello, I'm interested in a book about machine learning.",
       'time': 'Yesterday 3:30 PM',
       'isCurrentUser': false,
@@ -162,7 +165,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     {
       'senderId': 'admin_user_me',
-      'senderName': 'Admin Me',
+      'senderName':  ' Me',
       'message':
           'We have several books on machine learning. What specific topic are you interested in?',
       'time': 'Yesterday 3:35 PM',
@@ -174,7 +177,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     // Messages from admin three
     {
       'senderId': 'admin3',
-      'senderName': 'Admin Charlie',
+      'senderName': 'Amey Stone',
       'message': 'Hello, we have a new shipment of books arriving next week.',
       'time': 'Today 10:15 AM',
       'isCurrentUser': false,
@@ -183,7 +186,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     },
     {
       'senderId': 'admin_user_me',
-      'senderName': 'Admin Me',
+      'senderName': 'Me',
       'message': 'Great! I will prepare the space in the storage room.',
       'time': 'Today 10:20 AM',
       'isCurrentUser': true,
@@ -204,12 +207,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
       'isRead': false,
       'details': {
         // Store user details in details map
-        'fullName': 'Amine Benali',
-        'email': 'amine.benali@example.com',
-        'address': '123 Rue de l\'Indépendance, Alger',
-        'phone': '+213 123 456 789',
-        'ccp': '0078541258-65',
-        'documentName': 'Amine_Benali_ID.pdf', // Added document name
+        'fullName': 'Wafaa Abdellaoui',
+        'username': 'mira',
+        'email': 'w.abdellaoui@gmail.com',
+        'address': 'Rue Pasteur, Tlemcen',
+        'phone': '0773272931',
+        'ccp': '1425369 42',
+        'documentName': 'Wafaa_Abdellaoui_ID.pdf', // Added document name
         // Use a placeholder URL for the document. A real app would need a valid URL.
         'documentUrl':
             'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
@@ -221,7 +225,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
       'type': 'borrow_request',
       'title': 'Book Borrow Request',
       'message':
-          'Sophie Martin wants to borrow "The Alchemist" by Paulo Coelho',
+          'Bob Wilson wants to borrow "The Alchemist" by Paulo Coelho',
       'time': '3h ago',
       'isRead': false,
       'details':
@@ -233,7 +237,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     // Example of a notification for a new message from a regular user (User-to-Admin)
     {
       "type": "chat_message",
-      "title": "New Message from User One",
+      "title": "New Message from Alice Johnson",
       "message": "I can't renew a book.",
       "time": "Yesterday 2:10 PM",
       "isRead": false,
@@ -246,7 +250,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     // Example of a notification for a new message from another admin (Admin-to-Admin)
     {
       "type": "chat_message",
-      "title": "New Message from Admin Beta",
+      "title": "New Message from Jaden Doez",
       "message": "Indeed. We should discuss it during the meeting.",
       "time": "This morning 9:40 AM",
       "isRead": false,
@@ -259,7 +263,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     {
       'type': 'borrow_request',
       'title': 'Book Borrow Request',
-      'message': 'Thomas Dubois wants to borrow "Sapiens" by Yuval Noah Harari',
+      'message': 'Alice Jhonson wants to borrow "Sapiens" by Yuval Noah Harari',
       'time': '1d ago',
       'isRead': false,
       'details':
@@ -499,7 +503,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
           fontWeight: FontWeight.bold,
         ),
       ),
-      content: SizedBox(
+      content: Container(
         width: double.maxFinite,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Column(
@@ -640,18 +644,14 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'User ${notification['details']['fullName']} rejected.',
-          ),
+          content: Text('User ${notification['details']['fullName']} rejected.'),
           backgroundColor: Colors.red,
         ),
       );
     }
 
     setState(() {
-      final index = _allNotifications.indexWhere(
-        (n) => n['id'] == notification['id'],
-      );
+      final index = _allNotifications.indexWhere((n) => n['id'] == notification['id']);
       if (index != -1) {
         _allNotifications[index]['needsAction'] = false;
         _allNotifications[index]['isRead'] = true;
@@ -659,7 +659,6 @@ class _NotificationsScreenState extends State<NotificationsScreen>
       }
     });
   }
-
   void _handleTabSelection() {
     setState(() {
       switch (_tabController.index) {

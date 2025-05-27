@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:io'; // For File class
 
 class ProfileNormalScreen extends StatefulWidget {
-  const ProfileNormalScreen({super.key});
+  const ProfileNormalScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileNormalScreen> createState() => _ProfileNormalScreenState();
@@ -16,10 +16,10 @@ class _ProfileNormalScreenState extends State<ProfileNormalScreen> {
   // Données fictives pour l'exemple
   String userName = "Amey Stone";
   String userRole = "Administrator";
-  String email = "amey.stone@gmail.com";
-  String phone = "+213 5 12 77 **";
-  String joinDate = "25/03/2022";
-  String address = "123 Library Street, Algiers";
+  String email = "ahlemboudaoud7@gmail.com";
+  String phone = "0559620001";
+  String joinDate = "28/03/2022";
+  String address = "Tlemcen";
 
   // Simulate profile image path (can be asset or a file path if using image_picker)
   String _profileImagePath = 'assets/images/admin2.png'; // Initial image
@@ -297,7 +297,7 @@ class _ProfileNormalScreenState extends State<ProfileNormalScreen> {
           // Use StatefulBuilder to update dialog UI
           builder: (context, setState) {
             return SingleChildScrollView(
-              child: SizedBox(
+              child: Container(
                 width: double.maxFinite,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

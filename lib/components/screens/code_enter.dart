@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/book_details.dart';
-import 'package:RHOLIC/user_data.dart';
+import 'package:RHOLIC/components/screens/user_session.dart';
 
 const String backendBaseUrl = 'https://backendapp-production-3be4.up.railway.app';
 
@@ -23,8 +23,10 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _verifyOtp() {
-    if (enteredOtp == '12348') {
+    if (enteredOtp.isNotEmpty) {
       UserData.isOtpEntered = true; // Mark OTP as entered
+      // Here you can add your OTP verification logic
+      // For now, it will navigate if any code is entered
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -32,9 +34,10 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       );
     } else {
+      // Show error if no code is entered
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(enteredOtp.isEmpty ? 'Please enter the verification code' : 'Invalid verification code'),
+        const SnackBar(
+          content: Text('Please enter the verification code'),
           backgroundColor: Colors.red,
         ),
       );
@@ -84,10 +87,10 @@ class _OtpScreenState extends State<OtpScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Title Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [],
+                    // ),
                     const SizedBox(height: 8),
 
                     const SizedBox(height: 20),

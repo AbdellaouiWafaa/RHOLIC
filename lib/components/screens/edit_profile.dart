@@ -1,4 +1,4 @@
-import 'package:RHOLIC/user_data.dart';
+import 'package:RHOLIC/components/screens/user_session.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:RHOLIC/components/screens/personnel_infos.dart';

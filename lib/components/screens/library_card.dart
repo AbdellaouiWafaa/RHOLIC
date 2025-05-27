@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:RHOLIC/user_data.dart';
+import 'package:RHOLIC/components/screens/user_session.dart';
 
 class CardScreen extends StatelessWidget {
   const CardScreen({super.key});

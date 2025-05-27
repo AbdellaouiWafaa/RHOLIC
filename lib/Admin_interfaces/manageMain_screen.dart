@@ -79,7 +79,7 @@ class BookLoan {
 }
 
 class ManageMainScreen extends StatefulWidget {
-  const ManageMainScreen({super.key});
+  const ManageMainScreen({Key? key}) : super(key: key);
 
   @override
   State<ManageMainScreen> createState() => _ManageScreenState();
@@ -89,19 +89,19 @@ class _ManageScreenState extends State<ManageMainScreen> {
   List<Admin> admins = [
     Admin(
       id: '1',
-      name: 'Jane Doe',
-      email: 'jane@library.com',
-      address: '456 Elm St',
-      phone: '+0987654321',
-      role: 'Super Admin',
+      name: 'Jaden Doez',
+      email: 'chaimaabouzerouata81@gmail.com',
+      address: 'Tlemcen',
+      phone: '0559620001',
+      role: 'Main Admin',
       createdAt: DateTime.now().subtract(const Duration(days: 30)),
     ),
     Admin(
       id: '2',
       name: 'John Smith',
-      email: 'john@library.com',
-      address: '123 Main St',
-      phone: '+1234567890',
+      email: 'armych9707@gmail.com',
+      address: 'Tlemcen',
+      phone: '0654321098',
       role: 'Admin',
       createdAt: DateTime.now().subtract(const Duration(days: 15)),
       isBlocked: true,
@@ -1210,7 +1210,7 @@ class _ManageScreenState extends State<ManageMainScreen> {
                             ),
                           ),
                         )
-                        ,
+                        .toList(),
                   ],
                 ],
               ),

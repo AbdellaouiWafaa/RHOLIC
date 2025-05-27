@@ -69,7 +69,7 @@ class BookLoan {final String bookTitle;
 }
 
 class ManageNormalScreen extends StatefulWidget {
-  const ManageNormalScreen({super.key});
+  const ManageNormalScreen({Key? key}) : super(key: key);
 
   @override
   State<ManageNormalScreen> createState() => _ManageNormalScreenState();
@@ -558,7 +558,7 @@ class _ManageNormalScreenState extends State<ManageNormalScreen> {
                             ),
                           ),
                         )
-                        ,
+                        .toList(),
                   ],
                 ],
               ),

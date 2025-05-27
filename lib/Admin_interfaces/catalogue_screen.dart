@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'book_service.dart'; // Importer le service
 
 class CatalogueScreen extends StatefulWidget {
   const CatalogueScreen({super.key});
@@ -12,6 +13,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _selectedCategory = 'All';
   final ScrollController _categoryScrollController = ScrollController();
+  final BookService _bookService = BookService();
 
   final List<String> _categories = [
     'All',
@@ -38,37 +40,18 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   bool _showLeftShadow = false;
   bool _showRightShadow = true;
 
-  final List<Map<String, dynamic>> _books = [
-    {
-      'title': 'Alice in Wonderland',
-      'author': 'Lewis Carroll',
-      'category': 'Fiction',
-      'totalCopies': 5,
-      'availableCopies': 3,
-      'coverImage': 'assets/images/book1.jpg',
-    },
-    {
-      'title': 'Frankenstein',
-      'author': 'Mary Shelley',
-      'category': 'Fiction',
-      'totalCopies': 3,
-      'availableCopies': 1,
-      'coverImage': 'assets/images/book2.jpg',
-    },
-    {
-      'title': 'Dracula',
-      'author': 'Bram Stoker',
-      'category': 'Fiction',
-      'totalCopies': 2,
-      'availableCopies': 2,
-      'coverImage': 'assets/images/book5.jpg',
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
     _categoryScrollController.addListener(_updateShadows);
+    // Écouter les changements du service
+    _bookService.addListener(_onBooksChanged);
+  }
+
+  void _onBooksChanged() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _updateShadows() {
@@ -84,6 +67,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   void dispose() {
     _searchController.dispose();
     _categoryScrollController.dispose();
+    _bookService.removeListener(_onBooksChanged);
     super.dispose();
   }
 
@@ -107,227 +91,158 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
 
     showDialog(
       context: context,
-      builder:
-          (context) => StatefulBuilder(
-            builder:
-                (context, setDialogState) => AlertDialog(
-                  backgroundColor: const Color(0xFF1E2A3B),
-                  title: Text(
-                    'Add New Book',
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: const Color(0xFF1E2A3B),
+          title: Text(
+            'Add New Book',
+            style: GoogleFonts.montserrat(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: titleController,
+                  style: GoogleFonts.montserrat(color: Colors.white),
+                  decoration: InputDecoration(
+                    hintText: 'Book Title',
+                    hintStyle: const TextStyle(
+                      color: Color(0x80FFFFFF),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFF121921),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
                   ),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: titleController,
-                          style: GoogleFonts.montserrat(color: Colors.white),
-                          decoration: InputDecoration(
-                            hintText: 'Book Title',
-                            hintStyle: const TextStyle(
-                              color: Color(0x80FFFFFF),
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFF121921),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
-                          controller: authorController,
-                          style: GoogleFonts.montserrat(color: Colors.white),
-                          decoration: InputDecoration(
-                            hintText: 'Author Name',
-                            hintStyle: const TextStyle(
-                              color: Color(0x80FFFFFF),
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFF121921),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
-                          controller: totalCopiesController,
-                          style: GoogleFonts.montserrat(color: Colors.white),
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: 'Total Copies',
-                            hintStyle: const TextStyle(
-                              color: Color(0x80FFFFFF),
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFF121921),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF121921),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              dropdownColor: const Color(0xFF1E2A3B),
-                              value: selectedCategory,
-                              isExpanded: true,
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                color: Color(0xFFB19E44),
-                              ),
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                              ),
-                              onChanged: (String? newValue) {
-                                if (newValue != null && newValue != 'All') {
-                                  setDialogState(() {
-                                    selectedCategory = newValue;
-                                  });
-                                }
-                              },
-                              items:
-                                  _categories
-                                      .where((category) => category != 'All')
-                                      .map<DropdownMenuItem<String>>((
-                                        String value,
-                                      ) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      })
-                                      .toList(),
-                            ),
-                          ),
-                        ),
-                      ],
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: authorController,
+                  style: GoogleFonts.montserrat(color: Colors.white),
+                  decoration: InputDecoration(
+                    hintText: 'Author Name',
+                    hintStyle: const TextStyle(
+                      color: Color(0x80FFFFFF),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFF121921),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        'Cancel',
-                        style: GoogleFonts.montserrat(color: Colors.white),
-                      ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: totalCopiesController,
+                  style: GoogleFonts.montserrat(color: Colors.white),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: 'Total Copies',
+                    hintStyle: const TextStyle(
+                      color: Color(0x80FFFFFF),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFB19E44),
+                    filled: true,
+                    fillColor: const Color(0xFF121921),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF121921),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      dropdownColor: const Color(0xFF1E2A3B),
+                      value: selectedCategory,
+                      isExpanded: true,
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Color(0xFFB19E44),
                       ),
-                      onPressed: () {
-                        if (titleController.text.isNotEmpty &&
-                            authorController.text.isNotEmpty &&
-                            totalCopiesController.text.isNotEmpty) {
-                          setState(() {
-                            _books.add({
-                              'title': titleController.text,
-                              'author': authorController.text,
-                              'category': selectedCategory,
-                              'totalCopies': int.parse(
-                                totalCopiesController.text,
-                              ),
-                              'availableCopies': int.parse(
-                                totalCopiesController.text,
-                              ),
-                              'coverImage': 'assets/images/default_book.jpg',
-                            });
+                      style: GoogleFonts.montserrat(
+                        color: Colors.white,
+                      ),
+                      onChanged: (String? newValue) {
+                        if (newValue != null && newValue != 'All') {
+                          setDialogState(() {
+                            selectedCategory = newValue;
                           });
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Book added successfully!',
-                                style: GoogleFonts.montserrat(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              backgroundColor: Colors.green,
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Please fill in all fields',
-                                style: GoogleFonts.montserrat(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              backgroundColor: Colors.red,
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
                         }
                       },
-                      child: Text(
-                        'Add',
-                        style: GoogleFonts.montserrat(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      items: _categories
+                          .where((category) => category != 'All')
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
                     ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
           ),
-    );
-  }
-
-  void _showDeleteConfirmDialog(int index) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            backgroundColor: const Color(0xFF1E2A3B),
-            title: Text(
-              'Delete Book',
-              style: GoogleFonts.montserrat(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.montserrat(color: Colors.white),
               ),
             ),
-            content: Text(
-              'Are you sure you want to delete "${_books[index]['title']}"?',
-              style: GoogleFonts.montserrat(color: Colors.white),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(
-                  'Cancel',
-                  style: GoogleFonts.montserrat(color: Colors.white),
-                ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFB19E44),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                onPressed: () {
-                  setState(() {
-                    _books.removeAt(index);
+              onPressed: () {
+                if (titleController.text.isNotEmpty &&
+                    authorController.text.isNotEmpty &&
+                    totalCopiesController.text.isNotEmpty) {
+                  
+                  // Ajouter le livre via le service
+                  _bookService.addBook({
+                    'title': titleController.text,
+                    'author': authorController.text,
+                    'category': selectedCategory,
+                    'totalCopies': int.parse(totalCopiesController.text),
+                    'availableCopies': int.parse(totalCopiesController.text),
+                    'coverImage': 'assets/images/default_book.jpg',
+                    'image': 'assets/images/default_book.jpg',
                   });
+                  
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Book deleted successfully!',
+                        'Book added successfully!',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      backgroundColor: Colors.green,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Please fill in all fields',
                         style: GoogleFonts.montserrat(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -337,22 +252,104 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                       duration: const Duration(seconds: 2),
                     ),
                   );
-                },
-                child: Text(
-                  'Delete',
-                  style: GoogleFonts.montserrat(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                }
+              },
+              child: Text(
+                'Add',
+                style: GoogleFonts.montserrat(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  void _showDeleteConfirmDialog(int index) {
+    final books = _bookService.adminBooks;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E2A3B),
+        title: Text(
+          'Delete Book',
+          style: GoogleFonts.montserrat(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to delete "${books[index]['title']}"?',
+          style: GoogleFonts.montserrat(color: Colors.white),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.montserrat(color: Colors.white),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              _bookService.removeBook(index);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Book deleted successfully!',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            },
+            child: Text(
+              'Delete',
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Map<String, dynamic>> _getFilteredBooks() {
+    List<Map<String, dynamic>> books = _bookService.adminBooks;
+
+    // Filtrer par catégorie
+    if (_selectedCategory != 'All') {
+      books = books.where((book) => book['category'] == _selectedCategory).toList();
+    }
+
+    // Filtrer par recherche
+    if (_searchController.text.isNotEmpty) {
+      final query = _searchController.text.toLowerCase();
+      books = books.where((book) {
+        return book['title'].toString().toLowerCase().contains(query) ||
+               book['author'].toString().toLowerCase().contains(query);
+      }).toList();
+    }
+
+    return books;
   }
 
   @override
   Widget build(BuildContext context) {
+    final filteredBooks = _getFilteredBooks();
+    final allBooks = _bookService.adminBooks;
+
     return Scaffold(
       backgroundColor: const Color(0xFF121921),
       floatingActionButton: FloatingActionButton(
@@ -425,8 +422,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                             children: [
                               const SizedBox(width: 10),
                               ..._categories.map((category) {
-                                final isSelected =
-                                    category == _selectedCategory;
+                                final isSelected = category == _selectedCategory;
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -440,24 +436,21 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                       horizontal: 16,
                                     ),
                                     decoration: BoxDecoration(
-                                      color:
-                                          isSelected
-                                              ? const Color(0xFFB19E44)
-                                              : const Color(0xFF1E2A3B),
+                                      color: isSelected
+                                          ? const Color(0xFFB19E44)
+                                          : const Color(0xFF1E2A3B),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Center(
                                       child: Text(
                                         category,
                                         style: GoogleFonts.montserrat(
-                                          color:
-                                              isSelected
-                                                  ? Colors.black
-                                                  : Colors.white,
-                                          fontWeight:
-                                              isSelected
-                                                  ? FontWeight.bold
-                                                  : FontWeight.normal,
+                                          color: isSelected
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
                                         ),
                                       ),
                                     ),
@@ -522,30 +515,15 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
               padding: const EdgeInsets.only(
                 left: 20,
                 right: 20,
-                bottom:
-                    100, // Padding en bas pour éviter le chevauchement avec le FloatingActionButton
+                bottom: 100,
               ),
-              itemCount: _books.length,
+              itemCount: filteredBooks.length,
               itemBuilder: (context, index) {
-                final book = _books[index];
-
-                if (_selectedCategory != 'All' &&
-                    book['category'] != _selectedCategory) {
-                  return const SizedBox.shrink();
-                }
-
-                if (_searchController.text.isNotEmpty &&
-                    !book['title'].toString().toLowerCase().contains(
-                      _searchController.text.toLowerCase(),
-                    ) &&
-                    !book['author'].toString().toLowerCase().contains(
-                      _searchController.text.toLowerCase(),
-                    )) {
-                  return const SizedBox.shrink();
-                }
+                final book = filteredBooks[index];
+                final originalIndex = allBooks.indexOf(book);
 
                 return Dismissible(
-                  key: Key(book['title'] + index.toString()),
+                  key: Key(book['title'] + originalIndex.toString()),
                   direction: DismissDirection.endToStart,
                   background: Container(
                     alignment: Alignment.centerRight,
@@ -557,7 +535,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   confirmDismiss: (direction) async {
-                    _showDeleteConfirmDialog(index);
+                    _showDeleteConfirmDialog(originalIndex);
                     return false;
                   },
                   child: Container(
@@ -653,9 +631,10 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                           InkWell(
                                             onTap: () {
                                               if (book['availableCopies'] > 0) {
-                                                setState(() {
-                                                  _books[index]['availableCopies']--;
-                                                });
+                                                _bookService.updateBookCopies(
+                                                  originalIndex,
+                                                  book['availableCopies'] - 1,
+                                                );
                                               }
                                             },
                                             child: Container(
@@ -690,9 +669,10 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                                             onTap: () {
                                               if (book['availableCopies'] <
                                                   book['totalCopies']) {
-                                                setState(() {
-                                                  _books[index]['availableCopies']++;
-                                                });
+                                                _bookService.updateBookCopies(
+                                                  originalIndex,
+                                                  book['availableCopies'] + 1,
+                                                );
                                               }
                                             },
                                             child: Container(
@@ -728,7 +708,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                               size: 16,
                               color: Colors.red,
                             ),
-                            onPressed: () => _showDeleteConfirmDialog(index),
+                            onPressed: () => _showDeleteConfirmDialog(originalIndex),
                           ),
                         ),
                       ],

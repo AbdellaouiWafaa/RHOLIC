@@ -8,7 +8,7 @@ import 'notifications_screen.dart';
 
 // Convertir en StatefulWidget
 class DashboardNormalScreen extends StatefulWidget {
-  const DashboardNormalScreen({super.key});
+  const DashboardNormalScreen({Key? key}) : super(key: key);
 
   @override
   State<DashboardNormalScreen> createState() => _DashboardNormalScreenState();
@@ -133,7 +133,7 @@ class _DashboardNormalScreenState extends State<DashboardNormalScreen> {
 // Voici la classe DashboardContent (que vous pouvez garder ici ou
 // également déplacer dans un fichier séparé si nécessaire)
 class DashboardContent extends StatelessWidget {
-  DashboardContent({super.key});
+  DashboardContent({Key? key}) : super(key: key);
 
   // Déplacer les données et les styles de texte spécifiques au dashboard ici
   // Données depuis la maquette (kept user's data)

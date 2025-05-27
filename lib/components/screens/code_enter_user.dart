@@ -25,13 +25,16 @@ class _OtpScreenState extends State<OtpuserScreen> {
   }
 
   void _verifyOtp() {
-    if (enteredOtp == '12348') {
+    if (enteredOtp.isNotEmpty) {
+      // Here you can add your OTP verification logic
+      // For now, it will navigate if any code is entered
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => getAliceInWonderlandDetailsScreen(),
         ),
       );
+      // Navigate to DashboardScreen after OTP verification
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -39,9 +42,10 @@ class _OtpScreenState extends State<OtpuserScreen> {
         ),
       );
     } else {
+      // Show error if no code is entered
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Invalid verification code'),
+          content: Text('Please enter the verification code'),
           backgroundColor: Colors.red,
         ),
       );
