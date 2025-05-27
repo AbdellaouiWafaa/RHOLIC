@@ -23,10 +23,8 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _verifyOtp() {
-    if (enteredOtp.isNotEmpty) {
+    if (enteredOtp == '12348') {
       UserData.isOtpEntered = true; // Mark OTP as entered
-      // Here you can add your OTP verification logic
-      // For now, it will navigate if any code is entered
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -34,10 +32,9 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       );
     } else {
-      // Show error if no code is entered
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter the verification code'),
+        SnackBar(
+          content: Text(enteredOtp.isEmpty ? 'Please enter the verification code' : 'Invalid verification code'),
           backgroundColor: Colors.red,
         ),
       );

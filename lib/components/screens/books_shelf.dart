@@ -219,14 +219,17 @@ class _BookListScreenState extends State<BookListScreen> {
     );
   }
 
-  Widget _buildChip(String label, Color textColor, Color backgroundColor, {VoidCallback? onTap}) {
+  Widget _buildChip(String label, Color textColor, Color backgroundColor, {VoidCallback? onTap, double fontSize = 16}) {
   return InkWell(
     onTap: onTap,
     borderRadius: BorderRadius.circular(20),
     child: Chip(
-      label: Text(label, style: TextStyle(color: textColor)),
+      label: Text(
+        label,
+        style: TextStyle(color: textColor, fontSize: fontSize),
+      ),
       backgroundColor: backgroundColor,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 9),
     ),
   );
 }
@@ -303,7 +306,7 @@ class _BookListScreenState extends State<BookListScreen> {
                         ),
                       ),
                       Text(
-                        "Due in $daysLeft days",
+                        "Due in 30 days",
                         style: const TextStyle(color: Color.fromARGB(195, 101, 19, 13)),
                       ),
                     ],

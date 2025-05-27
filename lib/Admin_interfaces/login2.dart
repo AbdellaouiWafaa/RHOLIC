@@ -2,7 +2,7 @@ import 'package:RHOLIC/Admin_interfaces/dashboardNormal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dashboardMain_screen.dart'; // <-- Assurez-vous que ce fichier existe
-import 'dashboardNormal_screen.dart'; // <-- Assurez-vous que ce fichier existe
+// <-- Assurez-vous que ce fichier existe
 
 
 class Login2 extends StatefulWidget {
