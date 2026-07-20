@@ -1,4 +1,4 @@
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/889d3f67-2cb3-46ad-b9b4-12ed86405680" /># 📚 RHOLIC
+# 📚 RHOLIC
 
 A Flutter-based Library Management mobile application developed as a final-year Computer Science team project.
 
