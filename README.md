@@ -1,16 +1,69 @@
-# rholic
+# 📚 RHOLIC
 
-A new Flutter project.
+A Flutter-based Library Management mobile application developed as a final-year Computer Science team project.
 
-## Getting Started
+## 🎥 Demo Video
 
-This project is a starting point for a Flutter application.
+Watch the application demo here:
 
-A few resources to get you started if this is your first Flutter project:
+https://youtube.com/shorts/p73tKXb40Hg?feature=share
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ✨ Features
+
+### Reader
+- User Registration
+- Secure Login
+- Browse and Search Books
+- Book Reservations
+- Wishlist
+- Book Reviews
+- Notifications
+
+### Administrator
+- Dashboard
+- Manage Books
+- Manage Users
+- Validate Registrations
+- Manage Borrowing Requests
+- Send Notifications
+
+---
+
+## 👩‍💻 My Contribution
+
+This was a collaborative university project developed by a team of three students.
+
+My responsibilities focused on the **Admin Frontend**, including:
+
+- Admin Dashboard
+- Book Management Interfaces
+- User Management Interfaces
+- Registration Validation Screens
+- Administrative Navigation
+- UI Design and Implementation
+
+---
+
+## 🛠 Technologies
+
+- Flutter
+- Dart
+- Firebase
+- Git & GitHub
+- Material Design
+
+---
+
+## 👥 Team Project
+
+This application was developed as a Bachelor's final-year project by a team of three Computer Science students.
+
+The repository contains the complete project, while the contribution section above describes my personal work.
+
+---
+
+## 📄 License
+
+This project is shared for educational and portfolio purposes.
