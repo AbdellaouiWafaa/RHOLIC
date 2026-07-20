@@ -6,7 +6,7 @@ A Flutter-based Library Management mobile application developed as a final-year 
 
 Watch the application demo here:
 
-https://youtube.com/shorts/p73tKXb40Hg?feature=share
+https://www.youtube.com/watch?v=p73tKXb40Hg
 
 ---
 
